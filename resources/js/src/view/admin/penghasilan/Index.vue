@@ -1,0 +1,602 @@
+<template>
+
+    <!-- Document Table List -->
+    <div class="container-fluid py-4 px-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border shadow-xs mb-4">
+                    <div class="card-header border-bottom pb-0">
+                        <div class="d-sm-flex flex-column align-items-center">
+                            <h4 class="font-weight-bold mb-0 text-dark text-xl">Koperasi Nusa Sejahtera</h4>
+                            <h5 class="font-weight-semibold mb-0 text-dark text-md">Perhitungan Hasil Usaha</h5>
+                            <!-- <p class="font-weight-semibold text-dark text-sm">Untuk Periode 1 Januari 2021 s/d 31
+                                Desember 2021</p> -->
+                            <div class="d-flex flex-row align-items-center justify-content-center mb-4">
+                                <!-- <p class="font-weight-semibold text-dark text-sm"> -->
+                                <p class="font-weight-semibold text-dark text-nowrap mb-0 mx-2 text-md"> Untuk Periode </p>
+                                <VueDatePicker v-model="start_date" hide-input-icon format="dd MMMM yyyy" :enable-time-picker="false" placeholder="Start Date"></VueDatePicker>
+                                <p class="font-weight-semibold text-dark text-nowrap mb-0 mx-2 text-md">s/d</p>
+                                <VueDatePicker v-model="end_date" hide-input-icon format="dd MMMM yyyy" :enable-time-picker="false" placeholder="End Date"></VueDatePicker>
+                                <!-- </p> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive d-flex justify-content-center">
+                        <table class="table table-borderless table-hover align-items-center mb-0 w-50">
+                            <tbody>
+                                <tr class="bg-secondary">
+                                    <td colspan="2" class="w-25">
+                                        <p class="font-weight-semibold text-dark text-md mb-0 text-white">Penghasilan</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Pendapatan Bunga Pinjaman</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0">{{ report.data ? formatRupiah(report.data.total_cicilan_bunga) : ''}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Pendapatan Jasa</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Pendapatan Inventaris</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Pendapatan Lainnya</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr class="bg-secondary">
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-md mb-0 text-white ms-5">Jumlah Penghasilan</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr class="bg-secondary">
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-md mb-0 text-white">Beban Operasi</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr class="bg-secondary">
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-md mb-0 ms-4 text-white">Beban Usaha</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Beban Bunga</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Beban Gaji</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Beban Pemasaran</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Beban Transport</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Beban ATK</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Beban Sewa</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Beban Listrik, Telpon, Air</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Beban Penyisihan Piutang</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">- Pendapatan Penyusutan AT</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr class="bg-secondary">
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-md mb-0 ms-4 text-white">Beban Perkoperasian</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">Jumlah Beban Operasi</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0">Pendapatan (beban) lain-lain</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">-Pendapatan lain-lain</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0 ms-5">-Beban lain-lain</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0">SHU Sebelum Pajak</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0">PPH</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0">SHU Setelah Pajak</p>
+                                    </td>
+                                    <td class="w-25">
+                                        <p class="font-weight-semibold text-dark text-sm mb-0"></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import { emitter } from '../../../../eventEmitter.js';
+import $ from "jquery";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+import Swal from 'sweetalert2';
+import QRCode from 'qrcode';
+import html2pdf from 'html2pdf.js';
+window.BASEURL = ''
+
+export default {
+    components: { VueDatePicker },
+    created() {
+        // emitter.on('fetchNasabahList', this.fetchNasabahList);
+    },
+    name: "Admin.Index",
+    data() {
+        const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+        return {
+            start_date: formatDate(startOfMonth),
+      end_date: formatDate(endOfMonth),
+            report: '',
+            loadContent: true,
+            meta: {
+                user: '',
+                page: {
+                    nasabahList: {
+                        current_page: '',
+                        last_page: '',
+                    }
+                },
+                search: '',
+                requestStatus: '',
+                total: 0
+            },
+            collection: {
+                documents: '',
+                nasabah: '',
+            },
+            qrcode: '',
+            qrCodeImage: '',
+            currentPrintDet: '',
+        }
+    },
+
+    async mounted() {
+        await this.fetchIndex();
+        
+    },
+
+    methods: {
+        asset(path) {
+            return `${BASEURL}${path}`
+        },
+        formatRupiah(value) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                currencyDisplay: 'symbol',
+                maximumFractionDigits: 0
+            }).format(value);
+        },
+        async fetchCurrentUser() {
+
+            let endpoint = `${BASEURL}/api/user`
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    }
+                })
+                if (response.data) {
+                    this.meta.user = response.data
+                }
+            } catch (error) {
+                console.log('User error: ', error)
+            }
+        },
+        async fetchIndex() {
+            let endpoint = `${BASEURL}/api/penghasilan`;
+            try {
+                this.loadContent = true
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'is_executing': this.is_executing,
+                        'start_date': this.start_date,
+                        'end_date': this.end_date
+                    }
+                })
+                console.log(response.data)
+                this.loadContent = false
+            } catch (error) {
+                console.error("Error fetching document list: ", error);
+            }
+        },
+        async fetchNasabahList() {
+            let endpoint = `${BASEURL}/api/nasabah`;
+            try {
+                this.loadContent = true
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search,
+                        'status': this.meta.requestStatus
+                    }
+                });
+                this.collection.nasabah = response.data.data
+                console.log(this.collection.nasabah)
+                this.total = response.data.data.total
+                this.meta.page.nasabahList.current_page = this.collection.nasabah.current_page
+                this.meta.page.nasabahList.last_page = this.collection.nasabah.last_page
+                this.loadContent = false
+            } catch (error) {
+                console.error("Error fetching document list: ", error);
+            }
+        },
+        detailNasabah(id) {
+            emitter.emit('detailNasabah', [id, this.meta.user.role]);
+        },
+        // editDocument(id, status_id) {
+        //     if (status_id != 1 && status_id != 3) {
+        //         Swal.fire({
+        //             icon: "error",
+        //             title: "Gagal",
+        //             text: "Document sudah diproses",
+        //             showConfirmButton: false,
+        //             timer: 1500
+        //         });
+        //         return false
+        //     }
+
+        //     emitter.emit('editDocument', [id, this.meta.user.role]);
+        // },
+        addNasabah() {
+            emitter.emit('AddNasabah', this.meta.user);
+        },
+        getQRCode(item) {
+            this.currentPrintDet = ''
+            this.currentPrintDet = item
+            var opts = {
+                errorCorrectionLevel: "H",
+                type: "image/jpeg",
+                width: 500,
+                rendererOpts: {
+                    quality: 0.5,
+                },
+            };
+
+            this.qrcode = this.currentPrintDet.number;
+
+            QRCode.toDataURL(this.qrcode, opts, (err, url) => {
+                if (err) throw err;
+                this.qrCodeImage = url;
+                var svgimg = document.createElementNS("http://www.w3.org/2000/svg", "image");
+                svgimg.setAttribute("width", "94");
+                svgimg.setAttribute("height", "94");
+                svgimg.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", url);
+                document.getElementById("myIndexSvg").appendChild(svgimg);
+                // $("#qr-download").attr("href", url);
+            });
+        },
+        generatePDF() {
+            Swal.fire({
+                timer: 2000,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            })
+            const element = document.getElementById('pdfContent');
+            html2pdf()
+                .from(element)
+                // .save('qrcode.pdf');
+                .toPdf()
+                .get('pdf')
+                .then((pdf) => {
+                    const blob = pdf.output('blob');
+                    const url = URL.createObjectURL(blob);
+
+                    const newTab = window.open(url);
+
+                    newTab.onload = () => {
+                        newTab.print();
+                    };
+                });
+        },
+        async deleteDocument(id, status_id) {
+            if (status_id != 1) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: "Document sudah diproses",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                return false
+            }
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#f19937",
+                confirmButtonText: "Yes, delete it!"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    let endpoint = `${BASEURL}/api/edocs/${id}`;
+
+                    try {
+                        let response = await axios.delete(endpoint, {
+                            headers: {
+                                Authorization: 'Bearer ' + this.$token()
+                            }
+                        });
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                        this.fetchNasabahList();
+                    } catch (error) {
+                        console.log(error.response.data.message);
+                        this.$swal.fire('Failed!', error.response.data.message, 'error');
+                    }
+
+                }
+            });
+        },
+        async changePageNasabahList(url) {
+            if (url == null) {
+                return false
+            }
+            try {
+                Swal.fire({
+                    background: '#ffffff00',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                })
+                let response = await axios.get(url, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    }
+                });
+                this.collection.documents = response.data.data
+                this.meta.page.nasabahList.current_page = this.collection.documents.current_page
+                this.meta.page.nasabahList.last_page = this.collection.documents.last_page
+                Swal.close()
+            } catch (error) {
+                console.error("Error fetching document list: ", error);
+            }
+        },
+        formatCreatedAt(dateString) {
+            const date = new Date(dateString);
+
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            };
+
+            return date.toLocaleString('id-ID', options);
+        },
+    },
+    watch: {
+        // 'meta.search': 'fetchNasabahList',
+        // 'meta.requestStatus': function (newVal, oldVal) {
+        //     this.fetchNasabahList();
+        // },
+        // 'meta.search': function (newVal, oldVal) {
+        //     this.fetchNasabahList();
+        // }
+        'start_date': function () {
+            this.end_date != '' ? this.fetchReport():'';
+        },
+        'end_date': function () {
+            this.start_date != '' ? this.fetchReport():'';
+        },
+    },
+}
+</script>
+
+<style scoped>
+.badge.bg-primary {
+    background: rgb(119, 77, 211) !important;
+}
+
+.list-doc li,
+.list-doc li p {
+    white-space: normal;
+    float: left;
+    width: 100%;
+    height: auto;
+    word-wrap: break-word;
+}
+
+.responsive-description {
+    vertical-align: middle;
+    word-wrap: break-word;
+    min-width: 160px;
+    max-width: 100%;
+    white-space: normal;
+    padding-right: 20px;
+}
+
+@media (min-width: 768px) {
+    .responsive-description {
+        min-width: 200px;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 425px) {
+    .responsive-description {
+        min-width: 150px;
+        max-width: 200px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .responsive-description {
+        min-width: 250px;
+        max-width: 400px;
+    }
+}
+
+</style>

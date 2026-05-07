@@ -1,0 +1,17 @@
+{
+    "name": "Admin EDOC Tracking",
+    "short_name": "A-EDOC Tracking",
+    "start_url": "/dashboard",
+    "background_color": "#6777ef",
+    "description": "Admin EDOC Tracking",
+    "display": "fullscreen",
+    "theme_color": "#6777ef",
+    "icons": [
+        {
+            "src": "logo.PNG",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

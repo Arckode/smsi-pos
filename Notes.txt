@@ -1,0 +1,66 @@
+ASET LANCAR:
+Kas -> inputan di menu neraca
+Bank -> inputan di menu neraca
+Persediaan ATK -> inputan di menu neraca
+Pokok -> Piutang usaha di aktiva pasiva
+
+Hasil usaha -> laporan rugi laba
+
+
+
+12.07
+(DONE)      - flagging nasabah Executing(untuk external) / Channeling(internal)
+(DONE)      - LAPORAN NERACA akan terbagi 2 Executing & all
+(PENDING)   - LAPORAN HASIL USAHA akan terbagi 2 Executing & all
+(DONE)      - tabel aktiva
+(DONE)      - tabel pasiva
+(DONE)   - modul angsuran tunggakan(pembayaran) centang list user
+                List tunggakan
+                    - List (DONE)
+                    - Search by Nomor Pensian/Nama/Norek
+                        - FE (DONE)
+                BE Save (DONE)
+                History
+                    FE (DONE)
+                    BE (DONE)
+
+13.07
+(DONE)      - (BUG) tgl store asset ngaco, contoh kalau pilih 1 july masuknya ke bulan juni
+
+12.08
+(DONE)      - (BUG) Modul Nasabah habis CREATE/EDIT belum reset
+(PENDING)   - FEAT Edit upload foto nasabah belum ada fx nya
+
+19.08
+(PENDING)   - FEAT Index Pinjaman untuk Status Pembayaran angsuran
+(PENDING)   - FEAT edit Pinjaman
+(PENDING)   - FEAT delete Pinjaman
+
+02.09
+(Done)      - Norek , Nomor pensiun di angsuran
+                DB (Done)
+                BE (Done)
+                UI Create/Edit Nasabah (Done)
+                UI Create/Edit Angsuran (Done)
+(DONE)      - Norek , Nomor pensiun, tenor, plafond di table tunggakan
+
+23.09
+(DONE)      - Btn Login kasih loading
+(PENDING)   - Modul pinjaman, setelah save metodnya belum dibetulkan termasuk load ulang index & modal sukses
+
+02.10
+(DONE)      - Download to Excel report neraca
+
+25.10
+(DONE)      - Status pembayaran di detail angsuran yg list belum
+(DONE)      - status angsuran, kalau udah statusnya nominalnya 0, kalau belum nominal 1x angsuran 
+(DONE)      - pembayaran bisa terpecah
+(DONE)      - asset tetap kendaraan + inven - ak penyusutan
+(DONE)      - inputan tabel belum sesuai,
+
+(PENDING)   - report tunggakan dibikin per bulan dgn filter start bulan hingga end bulan
+(PENDING)   - list tunggakan ada filter by bulan
+
+15.11
+(DONE)      - Singular import
+(PENDING)   - Change Import File, modal status singular import & return data imported for remote viewing, batch import
