@@ -16,7 +16,7 @@ const Login = () => import("../Auth.vue");
 import AdminIndex from "../view/admin/Index.vue";
 import A_UserListsIndex from "../view/admin/users/userlist/Index.vue";
 import A_UserAccessIndex from "../view/admin/users/useraccess/Index.vue";
-import A_BooksIndex from "../view/admin/book/Index.vue";
+// import A_BooksIndex from "../view/admin/book/Index.vue";
 
 import A_NasabahListIndex from "../view/admin/nasabah/list/Index.vue";
 import A_PinjamanListIndex from "../view/admin/angsuran/pinjaman/list/Index.vue";
@@ -82,7 +82,7 @@ const router = createRouter({
             },
         },
         //-----------------------------------------------------------------------------------------------------------------------------------
-        //Bookstore Start
+        //SMSi POS Start
         //-----------------------------------------------------------------------------------------------------------------------------------
         {
             path: "/users",
@@ -101,15 +101,15 @@ const router = createRouter({
             },
         },
         {
-            path: "/books",
-            name: "admin.books",
-            component: A_BooksIndex,
+            path: "/nasabah/lists",
+            name: "admin.nasabahlist",
+            component: A_NasabahListIndex,
             meta: {
-                breadcrumb: "Book Lists"
+                breadcrumb: "Nasabah",
             },
         },
         //-----------------------------------------------------------------------------------------------------------------------------------
-        //Bookstore End
+        //SMSi POS End
         //-----------------------------------------------------------------------------------------------------------------------------------
         {
             path: "/user/document/list",
@@ -143,14 +143,7 @@ const router = createRouter({
                 breadcrumb: "User Lists",
             },
         },
-        {
-            path: "/nasabah/list",
-            name: "admin.nasabahlist",
-            component: A_NasabahListIndex,
-            meta: {
-                breadcrumb: "Nasabah",
-            },
-        },
+        
         {
             path: "/angsuran/pinjaman/list",
             name: "admin.pinjamanlist",

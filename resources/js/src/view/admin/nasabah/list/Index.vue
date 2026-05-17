@@ -1,15 +1,11 @@
 <template>
 
-    <!-- offcanvas Add New Document -->
-    <add-nasabah-offcanvas ref="addNasabah"></add-nasabah-offcanvas>
+    <!-- Modal Add -->
+    <add-modal ref="addUser"></add-modal>
 
-    <!-- offcanvas Edit New Document -->
-    <edit-document-offcanvas ref="editDocument"></edit-document-offcanvas>
+    <!-- Modal Edit -->
+    <edit-modal ref="editNasabah"></edit-modal>
 
-    <!-- offcanvas detail Document -->
-    <detail-nasabah-offcanvas ref="detailNasabah"></detail-nasabah-offcanvas>
-
-    <!-- Document Table List -->
     <div class="container-fluid py-4 px-5">
         <div class="row">
             <div class="col-12">
@@ -17,11 +13,11 @@
                     <div class="card-header border-bottom pb-0">
                         <div class="d-sm-flex align-items-center">
                             <div>
-                                <h6 class="font-weight-semibold text-lg mb-0">Nasabah list</h6>
-                                <p class="text-sm">Informasi tentang semua Nasabah</p>
+                                <h6 class="font-weight-semibold text-lg mb-0">Nasabah lists</h6>
+                                <p class="text-sm">Informasi Nasabah yang sudah diverifikasi</p>
                             </div>
                             <div class="ms-auto d-flex">
-                                <button @click.prevent="addNasabah"
+                                <button v-if="canCreateNasabah" @click.prevent="addUser"
                                     class="btn btn-sm btn-primary d-flex align-items-center me-2" type="button"
                                     :disabled="loadContent">
                                     <span class="btn-inner--icon">
@@ -37,33 +33,68 @@
                         </div>
                     </div>
                     <div class="card-body px-0 py-0">
-                        <div class="border-bottom py-3 px-3 d-sm-flex align-items-center">
-                            <div class="d-flex flex-column">
-                                <p class="text-sm mb-1 text-dark text-bold">Status Angsuran Pinjaman</p>
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable1"
-                                        autocomplete="off" checked v-model="meta.requestStatus" value="">
-                                    <label class="btn btn-white px-3 mb-0" for="btnradiotable1">All</label>
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable2"
-                                        autocomplete="off" v-model="meta.requestStatus" value="pending">
-                                    <label class="btn btn-white px-3 mb-0" for="btnradiotable2">Terbit</label>
-                                    <input type="radio" class="btn-check" name="btnradiotable" id="btnradiotable3"
-                                        autocomplete="off" v-model="meta.requestStatus" value="completed">
-                                    <label class="btn btn-white px-3 mb-0" for="btnradiotable3">Belum Terbit</label>
+                        <div class="px-3 pt-3">
+                            <div class="filter-wrapper">
+                                <div class="filter-sidebar p-2 border border-radius-lg"
+                                    :class="{ 'hidden': filterisHidden }">
+                                    <div class="d-flex justify-content-between gx-2 gy-2 align-items-center filter-toolbar"
+                                        ref="filterToolbar">
+                                        <div class="d-flex gx-3 gy-2 align-items-center w-70 overflow-x">
+                                            <div class="m-0">
+                                                <label class="form-label visually-hidden"
+                                                    for="user-search">Search</label>
+                                                <input id="user-search" type="text" class="form-control form-control-sm"
+                                                    placeholder="Search name or email" v-model="meta.search" />
+                                            </div>
+                                            <!-- <div class="ms-2">
+                                                <label class="form-label visually-hidden" for="filter-role">Role</label>
+                                                <select id="filter-role"
+                                                    class="form-select form-select-sm select2-filter"
+                                                    v-model="meta.role" @change="fetchUserList"
+                                                    aria-label="Filter Role">
+                                                    <option value="">All Role</option>
+                                                    <option v-for="role in collection.roles" :key="role.id"
+                                                        :value="role.name">
+                                                        {{ role.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="ms-2">
+                                                <label class="form-label visually-hidden" for="filter-unit">Unit</label>
+                                                <select id="filter-unit"
+                                                    class="form-select form-select-sm select2-filter"
+                                                    v-model="meta.unit" @change="fetchUserList"
+                                                    aria-label="Filter Unit">
+                                                    <option value="">All Unit</option>
+                                                    <option v-for="unit in collection.units" :key="unit.id"
+                                                        :value="unit.name">
+                                                        {{ unit.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="ms-2">
+                                                <label class="form-label visually-hidden"
+                                                    for="filter-status">Status</label>
+                                                <select id="filter-status"
+                                                    class="form-select form-select-sm select2-filter"
+                                                    v-model="meta.status" @change="fetchUserList"
+                                                    aria-label="Filter Status">
+                                                    <option value="">All Status</option>
+                                                    <option value="Active">Active</option>
+                                                    <option value="Inactive">Inactive</option>
+                                                </select>
+                                            </div> -->
+                                        </div>
+                                        <div class=" m-0 me-0 btn border-none shadow-none color-primary text-md h-100 px-0 d-flex justify-content-between align-items-center"
+                                            id="filter-toggleBtn" @click="filtertoggleSidebar">
+                                            <h6 class="text-sm m-0 ms-2 fw-normal">Filter</h6>
+                                            <i class="me-2"
+                                                :class="filterisHidden ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="input-group w-sm-25 ms-auto">
-                                <span class="input-group-text text-body">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="none"
-                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
-                                        </path>
-                                    </svg>
-                                </span>
-                                <input type="text" class="form-control" placeholder="Nama / HP / NIK / Alamat"
-                                    v-model="meta.search">
-                            </div>
+
                         </div>
                         <div class="table-responsive p-0">
                             <div v-if="loadContent" class="d-flex justify-content-center p-4">
@@ -71,105 +102,54 @@
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </div>
-                            <h6 class="align-middle text-center text-lg pt-3 text-muted"
-                                v-else-if="collection.nasabah && collection.nasabah.data.length == 0">Tidak ada data
-                            </h6>
-                            <table v-else class="table align-items-center mb-0">
+                            <div v-else-if="accessDenied" class="text-center p-5">
+                                <h6 class="text-danger">Anda tidak memiliki izin untuk melihat data pada halaman ini.
+                                </h6>
+                            </div>
+                            <table v-else ref="userTable"
+                                class="table table-striped table-hover align-items-center mb-0">
                                 <thead class="bg-gray-100">
                                     <tr>
-                                        <th class="text-sm font-weight-semibold opacity-7">Nama Nasabah</th>
-                                        <th class="text-sm font-weight-semibold opacity-7">Tempat / Tanggal lahir</th>
-                                        <th class="text-sm font-weight-semibold opacity-7">Nomor Telepon / Alamat</th>
-                                        <!-- <th class="text-sm font-weight-semibold opacity-7">Alamat</th> -->
-                                        <th class="text-center text-sm font-weight-semibold opacity-7">Status
-                                            <br>Angsuran Pinjaman
+                                        <th class="text-sm font-weight-semibold opacity-7">Nama Nasabah <br> Affiliasi
                                         </th>
-                                        <!-- <th class="text-center text-xs font-weight-semibold opacity-7">Aksi</th> -->
+                                        <!-- <th class="text-sm font-weight-semibold opacity-7">Role</th>
+                                        <th class="text-sm font-weight-semibold opacity-7">unit</th> -->
+                                        <th class="text-sm font-weight-semibold opacity-7">Status</th>
+                                        <!-- <th class="text-sm font-weight-semibold opacity-7">Action</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="item in collection.nasabah.data" :key="item.id">
+                                    <tr v-for="item in collection.users.data" :key="item.id">
                                         <td class="align-middle text-lg">
                                             <div class="d-flex px-3 py-1">
                                                 <div class="d-flex flex-column justify-content-start ms-1">
-                                                    <a class="mb-0 text-sm font-weight-semibold text-primary text-bold" @click.prevent="detailNasabah(item.id)">
+                                                    <a class="mb-0 text-sm font-weight-semibold text-primary text-bold"
+                                                        @click.prevent="editNasabah(item.id)">
                                                         {{ item.nama_lengkap }}
                                                     </a>
                                                     <p class="text-sm text-secondary mb-0">
-                                                        {{item.nik ? item.nik : '-' }}
+                                                        {{ item.affiliasi_id }}
                                                     </p>
                                                 </div>
                                             </div>
+                                        </td>
+                                        <!-- <td class="align-middle text-lg">
+                                            <p class="text-sm text-secondary mb-0">
+                                                {{ item.role.name }}
+                                            </p>
                                         </td>
                                         <td class="align-middle text-lg">
-                                            <div class="d-flex px-3 py-1">
-                                                <div class="d-flex flex-column justify-content-start ms-1">
-                                                    <h6 class="mb-0 text-sm font-weight-semibold">
-                                                        {{ item.tempat_lahir ? item.tempat_lahir : '-' }}
-                                                    </h6>
-                                                    <p class="text-sm text-secondary mb-0">
-                                                        {{ item.tanggal_lahir ? new Date(item.tanggal_lahir).toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '-' }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <!-- <td class="align-middle text-lg">
-                                            <div class="d-flex px-3 py-1">
-                                                <h6 class="mb-0 text-sm font-weight-semibold">
-                                                    {{ item.no_telepon }}
-                                                </h6>
-                                            </div>
+                                            <p class="text-sm text-secondary mb-0">
+                                                {{ item.unit.name }}
+                                            </p>
                                         </td> -->
-
-                                        <td class="responsive-description">
-                                            <div class="d-flex px-2 py-1">
-                                                <div class="d-flex flex-column justify-content-start ms-1">
-                                                    <h6 class="mb-0 text-sm font-weight-semibold">
-                                                    {{ item.no_telepon ? item.no_telepon : '-' }}
-                                                </h6>
-                                                    <h6 class="mb-0 text-sm font-weight-semibold responsive-description">
-                                                        {{ item.alamat ?item.alamat.length > 50 ? item.alamat.substring(0, 50) + '.....' : item.alamat : '-' }}
-                                                    </h6>
-                                                </div>
-                                            </div>
+                                        <td class="align-middle text-lg">
+                                            <a class="btn btn-sm mb-0 btn-info" @click="changeStatus(item.id)">
+                                                {{ item.status_pengajuan }}</a>
+                                            <a class="btn btn-sm btn-danger mb-0" @click="preview(item.id)">Preview</a>
                                         </td>
-                                        <td class="align-middle text-center text-lg">
-                                            <span v-if="item.angsuran_pinjaman.length > 0"
-                                                class="badge badge-sm border border-success text-success bg-success">
-                                                Terbit
-                                            </span>
-                                            <span v-else
-                                                class="badge badge-sm border border-danger text-danger bg-danger">
-                                                Belum Terbit
-                                            </span>
-                                        </td>
-                                        <!-- <td class="align-middle text-center">
-                                            <a @click.prevent="editDocument(item.id, item.status.status_id); $event.stopPropagation()"
-                                                class="text-info fs-5 m-2" type="button" title="Edit Document">
-                                                <i class="fas fa-pencil-alt" alt="Edit" aria-hidden="true">
-                                                    <span class="sr-only text-sm">
-                                                        Edit
-                                                    </span>
-                                                </i>
-                                            </a>
-                                            <a @click.prevent="deleteDocument(item.id, item.status.status_id); $event.stopPropagation()"
-                                                class="text-danger fs-5 m-2" type="button" title="Delete Document">
-                                                <i class="fas fa-trash" alt="Delete">
-                                                    <span class="sr-only text-sm">
-                                                        Delete
-                                                    </span>
-                                                </i>
-                                            </a>
-                                            <a @click.prevent="getQRCode(item); $event.stopPropagation()"
-                                                data-bs-toggle="modal" data-bs-target="#viewQrCode" title="View QrCode"
-                                                type="button" class="text-primary fs-5 m-2">
-                                                <i class="fas fa-qrcode" alt="QR Code">
-                                                    <span class="sr-only text-sm">
-                                                        QR Code
-                                                    </span>
-                                                </i>
-                                            </a>
+                                        <!-- <td>
+                                            
                                         </td> -->
                                     </tr>
                                 </tbody>
@@ -178,15 +158,16 @@
                         <div class="border-top py-3 px-3 d-flex align-items-center flex-wrap">
                             <div class="d-flex flex-column">
                                 <p class="font-weight-semibold mb-0 text-dark text-sm">Halaman {{
-                                    meta.page.nasabahList.current_page }} dari {{ meta.page.nasabahList.last_page
+                                    meta.page.userList.current_page }} dari {{ meta.page.userList.last_page
                                     }}
                                 </p>
-                                <p class="font-weight-semibold mb-0 text-secondary text-sm">Total: {{ meta.total }} Nasabah
+                                <p class="font-weight-semibold mb-0 text-secondary text-sm">Total: {{ meta.total }}
+                                    Users
                                 </p>
                             </div>
                             <div class="ms-auto">
                                 <button v-for="(link, index) in collection.nasabah.links"
-                                    v-on:click="changePageNasabahList(link.url)" class="btn btn-sm btn-white mb-0"
+                                    v-on:click="changePageUserList(link.url)" class="btn btn-sm btn-white mb-0"
                                     :disabled="link.active">
                                     <span v-if="index === 0">
                                         <i class="fas fa-chevron-left">
@@ -214,11 +195,13 @@
 </template>
 
 <script>
-import AddNasabahOffcanvas from './component/Add.vue';
-import EditDocumentOffcanvas from './component/Edit.vue';
-import DetailNasabahOffcanvas from './component/Detail.vue';
+import AddUserModal from './component/Add.vue';
+import EditNasabahModal from './component/Edit.vue';
 import { emitter } from '../../../../../eventEmitter.js';
-import $ from "jquery";
+import $ from 'jquery';
+window.$ = window.jQuery = $;
+import 'select2/dist/js/select2.full.min.js';
+import 'select2/dist/css/select2.min.css';
 import Swal from 'sweetalert2';
 import QRCode from 'qrcode';
 import html2pdf from 'html2pdf.js';
@@ -226,65 +209,222 @@ window.BASEURL = ''
 
 export default {
     created() {
-        emitter.on('fetchNasabahList', this.fetchNasabahList);
+        emitter.on('fetchUserList', this.fetchUserList);
+
+
     },
-    name: "Admin.Index",
+    name: "UserList.Index",
     components: {
-        'add-nasabah-offcanvas': AddNasabahOffcanvas,
-        'edit-document-offcanvas': EditDocumentOffcanvas,
-        'detail-nasabah-offcanvas': DetailNasabahOffcanvas
+        'add-modal': AddUserModal,
+        'edit-modal': EditNasabahModal,
     },
     data() {
         return {
             loadContent: true,
+            filterisHidden: false,
             meta: {
                 user: '',
                 page: {
-                    nasabahList: {
+                    userList: {
                         current_page: '',
                         last_page: '',
                     }
                 },
                 search: '',
+                role: '',
+                unit: '',
+                status: '',
                 requestStatus: '',
-                total: 0
+                total: 0,
+                accesses: [],
             },
             collection: {
                 documents: '',
                 nasabah: '',
+                users: null,
             },
+            dataTable: null,
+            requestCounter: 0,
+            searchTimer: null,
             qrcode: '',
             qrCodeImage: '',
             currentPrintDet: '',
+            accessDenied: false,
         }
     },
 
     async mounted() {
         await this.fetchCurrentUser();
-        await this.fetchNasabahList();
+
+        if (this.canReadNasabah) {
+            this.accessDenied = false;
+            await this.fetchRoleList();
+            await this.fetchUnitList();
+            await this.fetchUserList();
+        } else {
+            this.loadContent = false;
+            this.accessDenied = true;
+        }
+    },
+
+    beforeUnmount() {
+        this.destroyDataTable();
     },
 
     methods: {
         asset(path) {
             return `${BASEURL}${path}`
         },
+        addUser() {
+            emitter.emit('AddNasabah', this.canCreateNasabah);
+        },
+        editNasabah(id) {
+            emitter.emit('EditNasabah', [this.canUpdateNasabah, id]);
+        },
+        filtertoggleSidebar() {
+            this.filterisHidden = !this.filterisHidden;
+        },
         async fetchCurrentUser() {
-
-            let endpoint = `${BASEURL}/api/user`
+            let endpoint = `${BASEURL}/api/current-user`
             try {
                 let response = await axios.get(endpoint, {
                     headers: {
                         Authorization: 'Bearer ' + this.$token(),
                     }
                 })
+
                 if (response.data) {
-                    this.meta.user = response.data
+                    this.meta.user = response.data.user || response.data;
+                    console.log('User accesses:', response.data.accesses);
+                    this.meta.accesses = response.data.accesses ?? [];
                 }
             } catch (error) {
                 console.log('User error: ', error)
             }
         },
-        async fetchNasabahList() {
+        async preview(id) {
+            let endpoint = `${BASEURL}/api/preview/${id}`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: { Authorization: 'Bearer ' + this.$token() }
+                });
+
+                const blob = new Blob([response.data], { type: 'text/html' });
+
+                const url = URL.createObjectURL(blob);
+
+                window.open(url, '_blank');
+            } catch (error) {
+                console.error('Preview error: ', error);
+            }
+        },
+
+        async fetchRoleList() {
+            let endpoint = `${BASEURL}/api/role/options`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                this.collection.roles = response.data.data
+                console.log('Role list:', this.collection.roles);
+            } catch (error) {
+                console.error("Error fetching role list: ", error);
+            }
+        },
+
+        async fetchUnitList() {
+            let endpoint = `${BASEURL}/api/unit/options`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                this.collection.units = response.data.data
+                console.log('Unit list:', this.collection.units);
+            } catch (error) {
+                console.error("Error fetching unit list: ", error);
+            }
+        },
+
+        destroySelect2() {
+            const selectElements = $(this.$el).find('select.select2-filter');
+            if (!selectElements.length) {
+                return;
+            }
+
+            selectElements.each(function () {
+                if ($(this).data('select2')) {
+                    $(this).select2('destroy');
+                }
+            });
+        },
+
+        destroyDataTable() {
+            this.destroySelect2();
+
+            if (this.dataTable) {
+                this.dataTable.destroy();
+                this.dataTable = null;
+            }
+        },
+
+        debounceSearchFetch() {
+            if (this.searchTimer) {
+                clearTimeout(this.searchTimer);
+            }
+            this.searchTimer = setTimeout(() => {
+                this.fetchUserList();
+            }, 400);
+        },
+
+        initSelect2Filters() {
+            const selectElements = $(this.$el).find('select.select2-filter');
+            if (!selectElements.length || typeof $.fn.select2 !== 'function') {
+                return;
+            }
+            selectElements.select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: 'All',
+                allowClear: true,
+                // minimumResultsForSearch: 0,
+                // dropdownParent: $(this.$el),
+            });
+        },
+
+        initDataTable() {
+            this.$nextTick(() => {
+                if (!this.collection.users || !Array.isArray(this.collection.users.data)) {
+                    return;
+                }
+
+                this.destroyDataTable();
+
+                this.dataTable = $(this.$refs.userTable).DataTable({
+                    dom: 't',
+                    responsive: true,
+                    autoWidth: false,
+                    paging: false,
+                    searching: false,
+                    ordering: true,
+                    info: false,
+                    lengthChange: false,
+                    language: {
+                        zeroRecords: "Tidak ada data yang cocok",
+                    }
+                });
+
+                this.initSelect2Filters();
+            });
+        },
+
+        async fetchUserList() {
+            this.destroyDataTable();
+            this.loadContent = false;
+            const requestId = ++this.requestCounter;
             let endpoint = `${BASEURL}/api/nasabah`;
             try {
                 this.loadContent = true
@@ -294,133 +434,73 @@ export default {
                     },
                     params: {
                         'search': this.meta.search,
-                        'status': this.meta.requestStatus
+                        // 'role': this.meta.role,
+                        // 'unit': this.meta.unit,
+                        // 'status': this.meta.status,
                     }
                 });
-                this.collection.nasabah = response.data.data
-                console.log(this.collection.nasabah)
+
+                if (requestId !== this.requestCounter) {
+                    return;
+                }
+
+                this.collection.users = response.data.data
+                console.log(this.collection.users)
                 this.meta.total = response.data.data.total
-                this.meta.page.nasabahList.current_page = this.collection.nasabah.current_page
-                this.meta.page.nasabahList.last_page = this.collection.nasabah.last_page
+                this.meta.page.userList.current_page = this.collection.users.current_page
+                this.meta.page.userList.last_page = this.collection.users.last_page
                 this.loadContent = false
+                this.initDataTable();
             } catch (error) {
                 console.error("Error fetching document list: ", error);
+                if (requestId === this.requestCounter) {
+                    this.loadContent = false
+                }
             }
         },
-        detailNasabah(id) {
-            emitter.emit('detailNasabah', id);
-        },
-        // editDocument(id, status_id) {
-        //     if (status_id != 1 && status_id != 3) {
-        //         Swal.fire({
-        //             icon: "error",
-        //             title: "Gagal",
-        //             text: "Document sudah diproses",
-        //             showConfirmButton: false,
-        //             timer: 1500
-        //         });
-        //         return false
-        //     }
-
-        //     emitter.emit('editDocument', [id, this.meta.user.role]);
-        // },
-        addNasabah() {
-            emitter.emit('AddNasabah', this.meta.user);
-        },
-        getQRCode(item) {
-            this.currentPrintDet = ''
-            this.currentPrintDet = item
-            var opts = {
-                errorCorrectionLevel: "H",
-                type: "image/jpeg",
-                width: 500,
-                rendererOpts: {
-                    quality: 0.5,
-                },
-            };
-
-            this.qrcode = this.currentPrintDet.number;
-
-            QRCode.toDataURL(this.qrcode, opts, (err, url) => {
-                if (err) throw err;
-                this.qrCodeImage = url;
-                var svgimg = document.createElementNS("http://www.w3.org/2000/svg", "image");
-                svgimg.setAttribute("width", "94");
-                svgimg.setAttribute("height", "94");
-                svgimg.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", url);
-                document.getElementById("myIndexSvg").appendChild(svgimg);
-                // $("#qr-download").attr("href", url);
-            });
-        },
-        generatePDF() {
-            Swal.fire({
-                timer: 2000,
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            })
-            const element = document.getElementById('pdfContent');
-            html2pdf()
-                .from(element)
-                // .save('qrcode.pdf');
-                .toPdf()
-                .get('pdf')
-                .then((pdf) => {
-                    const blob = pdf.output('blob');
-                    const url = URL.createObjectURL(blob);
-
-                    const newTab = window.open(url);
-
-                    newTab.onload = () => {
-                        newTab.print();
-                    };
+        async changeStatus(id) {
+            let endpoint = `${BASEURL}/api/change/status/${id}`;
+            try {
+                let response = await axios.post(endpoint, {}, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    }
                 });
-        },
-        async deleteDocument(id, status_id) {
-            if (status_id != 1) {
                 Swal.fire({
-                    icon: "error",
-                    title: "Gagal",
-                    text: "Document sudah diproses",
+                    icon: "success",
+                    title: "Sukses",
+                    text: response.data.message,
                     showConfirmButton: false,
                     timer: 1500
                 });
-                return false
+                this.fetchUserList();
+            } catch (error) {
+                console.log(error.response.data.message);
+                this.$swal.fire('Failed!', error.response.data.message, 'error');
             }
-
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#f19937",
-                confirmButtonText: "Yes, delete it!"
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    let endpoint = `${BASEURL}/api/edocs/${id}`;
-
-                    try {
-                        let response = await axios.delete(endpoint, {
-                            headers: {
-                                Authorization: 'Bearer ' + this.$token()
-                            }
-                        });
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "Your file has been deleted.",
-                            icon: "success"
-                        });
-                        this.fetchNasabahList();
-                    } catch (error) {
-                        console.log(error.response.data.message);
-                        this.$swal.fire('Failed!', error.response.data.message, 'error');
-                    }
-
-                }
-            });
         },
-        async changePageNasabahList(url) {
+        async resetPassword(id) {
+            let endpoint = `${BASEURL}/api/reset-password/${id}`;
+            try {
+                let response = await axios.post(endpoint, {}, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    }
+                });
+                Swal.fire({
+                    icon: "success",
+                    title: "Sukses",
+                    text: response.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } catch (error) {
+                console.log(error.response.data.message);
+                this.$swal.fire('Failed!', error.response.data.message, 'error');
+            }
+        },
+
+        async changePageUserList(url) {
             if (url == null) {
                 return false
             }
@@ -436,38 +516,79 @@ export default {
                         Authorization: 'Bearer ' + this.$token(),
                     }
                 });
-                this.collection.documents = response.data.data
-                this.meta.page.nasabahList.current_page = this.collection.documents.current_page
-                this.meta.page.nasabahList.last_page = this.collection.documents.last_page
+                this.collection.users = response.data.data
+                this.meta.page.userList.current_page = this.collection.users.current_page
+                this.meta.page.userList.last_page = this.collection.users.last_page
                 Swal.close()
+                this.initDataTable();
             } catch (error) {
                 console.error("Error fetching document list: ", error);
             }
         },
-        formatCreatedAt(dateString) {
-            const date = new Date(dateString);
 
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            };
 
-            return date.toLocaleString('id-ID', options);
+        getSubmoduleAccessByUrl(url) {
+            console.log('Checking access for URL:', this.meta.accesses);
+            if (!Array.isArray(this.meta.accesses)) {
+                return null;
+            }
+
+            for (const module of this.meta.accesses) {
+                if (!Array.isArray(module.submodules)) {
+                    continue;
+                }
+
+                const subModule = module.submodules.find(sub => sub.url === url);
+                if (subModule) {
+                    return subModule;
+                }
+            }
+
+            return null;
+        },
+
+        canPerformAction(action) {
+            console.log('Checking access for action:', action, this.userSubmoduleAccess?.actions?.includes(action) ?? false);
+            return this.userSubmoduleAccess?.actions?.includes(action) ?? false;
         },
     },
-    watch: {
-        'meta.search': 'fetchNasabahList',
-        'meta.requestStatus': function (newVal, oldVal) {
-            this.fetchNasabahList();
+    beforeUnmount() {
+        if (this.searchTimer) {
+            clearTimeout(this.searchTimer);
+            this.searchTimer = null;
+        }
+        this.destroyDataTable();
+    },
+    computed: {
+        userSubmoduleAccess() {
+            return this.getSubmoduleAccessByUrl('/nasabah/lists');
         },
-        // 'meta.search': function (newVal, oldVal) {
-        //     this.fetchNasabahList();
-        // }
+
+        canCreateNasabah() {
+            return this.canPerformAction('create');
+        },
+
+        canReadNasabah() {
+            return this.canPerformAction('read');
+        },
+
+        canUpdateNasabah() {
+            return this.canPerformAction('update');
+        },
+
+        canDeleteNasabah() {
+            return this.canPerformAction('delete');
+        },
+    },
+
+    watch: {
+        'meta.search': 'debounceSearchFetch',
+        'meta.role': 'fetchUserList',
+        'meta.unit': 'fetchUserList',
+        'meta.status': 'fetchUserList',
+        'meta.requestStatus': function (newVal, oldVal) {
+            this.fetchUserList();
+        },
     },
 }
 </script>
@@ -514,5 +635,36 @@ export default {
         min-width: 250px;
         max-width: 400px;
     }
+}
+
+.overflow-x {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-x: scroll;
+}
+
+.filter-toolbar input.form-control-sm,
+.filter-toolbar select.form-select-sm {
+    min-width: 120px;
+    width: 100%;
+}
+
+.filter-wrapper {
+    display: flex;
+    overflow: hidden;
+}
+
+.filter-sidebar {
+    width: 100%;
+    transition: margin 0.8s ease-in-out;
+}
+
+.filter-sidebar.hidden {
+    margin-left: -90%;
+    transition: margin 1s ease-in-out;
+}
+
+#filter-toggleBtn {
+    width: 100px;
 }
 </style>

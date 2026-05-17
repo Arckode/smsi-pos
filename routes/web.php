@@ -56,6 +56,9 @@ Route::get('/nasabah', function () {
 Route::get('/neraca', function () {
     return view('admin');
 });
+Route::get('/preview', function () {
+    return view('preview');
+});
 Route::get('/nasabah/{any}', function () {
     return view('admin');
 })->where('any', '^(?!api\/)(?!storage\/)[\/\w\.-]*');

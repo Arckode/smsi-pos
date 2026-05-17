@@ -6,18 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
-// category_id (Primary Key)
-// category_name (e.g., Fiction, Non-fiction, Science, History, Children, etc.)
-
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('book_categories', function (Blueprint $table) {
-            $table->id('category_id');
-            $table->string('category_name')->unique();
+        Schema::create('affiliasi', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_affiliasi')->nullable();
+            $table->string('kota')->nullable();
+            $table->string('no_telepon')->nullable();
+            $table->string('email')->nullable();
+            $table->string('pic_name')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_categories');
+        Schema::dropIfExists('affiliasi');
     }
 };

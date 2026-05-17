@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\UserListController;
 use App\Http\Controllers\Api\UserAccessController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\UserRolesController;
+use App\Http\Controllers\Api\NasabahController;
 
 
 
@@ -22,7 +23,6 @@ use App\Http\Controllers\Api\UserRolesController;
 
 use App\Http\Controllers\Api\AngsuranPinjamanController;
 use App\Http\Controllers\Api\AngsuranPembayaranController;
-use App\Http\Controllers\Api\NasabahController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\AssetsController;
 use App\Http\Controllers\Api\PenghasilanController;
@@ -70,6 +70,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/role/options', [UserRolesController::class, 'options']);
     Route::get('/unit/options', [UnitController::class, 'options']);
+
+    Route::get('/nasabah/options', [NasabahController::class, 'options']);
+    Route::get('/preview/{id}', [NasabahController::class, 'showPreview']);
+    Route::post('/nasabah/upload', [NasabahController::class, 'upload']);
+
+    Route::apiResource('/nasabah', NasabahController::class);
 // ----------------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------------
@@ -79,9 +85,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/change-password', [AuthController::class, 'changePassword']);
 
     Route::get('/unit/options', [UnitController::class, 'options']);
-
-    Route::get('/nasabah/options', [NasabahController::class, 'options']);
-    Route::apiResource('/nasabah', NasabahController::class);
 
     Route::post('/simulation', [AngsuranPinjamanController::class, 'scheduleSimulation']);
     Route::post('/angsuran-pinjaman/{id}', [AngsuranPinjamanController::class, 'store']);

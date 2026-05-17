@@ -11,17 +11,17 @@ class ModuleSeeder extends Seeder
     {
         // Modules
         DB::table('menu_modules')->insert([
-            ['name' => 'User Management', 'icon' => 'fas fa-users'],
-            ['name' => 'Product Management', 'icon' => 'fas fa-box'],
+            ['name' => 'Management', 'icon' => 'fas fa-users'],
+            ['name' => 'Nasabah Management', 'icon' => 'fas fa-box'],
             ['name' => 'Settings', 'icon' => 'fas fa-cog'],
         ]);
 
         // Sub-modules
         DB::table('menu_submodules')->insert([
-            ['module_id' => 1, 'sub_module_name' => 'User List', 'url' => '/users/lists'],
+            ['module_id' => 1, 'sub_module_name' => 'User List', 'url' => '/users'],
             ['module_id' => 1, 'sub_module_name' => 'Manage User Access', 'url' => '/users/access'],
-            ['module_id' => 2, 'sub_module_name' => 'Book Lists', 'url' => '/books'],
-            ['module_id' => 2, 'sub_module_name' => 'Create Product', 'url' => '/products/create'],
+            ['module_id' => 2, 'sub_module_name' => 'Nasabah Lists', 'url' => '/nasabah/lists'],
+            ['module_id' => 2, 'sub_module_name' => 'Pengajuan BI Check', 'url' => '/nasabah/submit/request'],
             ['module_id' => 3, 'sub_module_name' => 'General Settings', 'url' => '/settings'],
         ]);
 

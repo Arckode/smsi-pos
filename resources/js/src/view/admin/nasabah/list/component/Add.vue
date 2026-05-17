@@ -1,896 +1,1251 @@
 <template>
-  <!-- offcanvas Add New Document -->
-  <div class="offcanvas offcanvas-end responsive-offcanvas" tabindex="-1" id="offcanvasAddRight"
-    data-bs-keyboard="false" aria-labelledby="offcanvasAddRightLabel">
-    <div class="offcanvas-header">
-      <h5 id="offcanvasAddRightLabel">Tambah Nasabah Baru</h5>
-      <button type="button" class="btn-close btn-close-white" @click.prevent="closeComponent"
-        aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <form>
-        <div class="accordion" id="accordionDocumentLabels">
-          <div class="accordion-item mb-3">
-            <h5 class="accordion-header" id="headingOne">
-              <button class="accordion-button border-bottom font-weight-bold collapsed" type="button"
-                data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
-                aria-controls="collapseOne">
-                <div class="m-0 flex-grow-1">
-                  <h6 class="m-0">Biodata</h6>
-                  <p class="m-0 text-sm">Informasi mengenai nasabah</p>
-                </div>
-                <i class="fas fa-chevron-down position-absolute end-0 me-3"></i>
-              </button>
-            </h5>
-            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-              data-bs-parent="#accordionDocumentLabels">
-              <div class="accordion-body text-sm">
-                <div class="form-check form-switch ms-1">
-                  <input class="form-check-input d-flex align-items-center" style="height: 20px;" type="checkbox"
-                    id="flexSwitchCheckCheckedExecuting" v-model="model.nasabah.is_executing">
-                  <label class="form-check-label" for="flexSwitchCheckCheckedExecuting">{{ model.nasabah.is_executing ?
-                    'Executing' : 'Channeling' }}</label>
-                </div>
-                <div class="row g-3 mb-3">
-                  <div class="col-md">
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="floatingLabel" placeholder="Judul Document"
-                        v-model="model.nasabah.nik" />
-                      <label for="floatingLabel">NIK<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="floatingLabel" placeholder="Judul Document"
-                        v-model="model.nasabah.nama_lengkap" />
-                      <label for="floatingLabel">Nama Lengkap<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="row g-2 mb-3">
-                      <div class="col-md">
-                        <div class="form-floating">
-                          <input type="email" class="form-control" id="floatingLabel" placeholder="Kota lahir"
-                            v-model="model.nasabah.tempat_lahir">
-                          <label for="floatingInputGrid">Kota<span class="text-danger"> *</span></label>
+    <!-- offcanvas Add New Document -->
+    <div class="offcanvas offcanvas-end responsive-offcanvas p-6" tabindex="-1" id="offcanvasAddRight"
+        data-bs-keyboard="false" aria-labelledby="offcanvasAddRightLabel">
+
+        <div class="offcanvas-header">
+            <h5 id="offcanvasAddRightLabel">Tambah Nasabah Baru</h5>
+            <button type="button" class="btn-close btn-close-white" @click.prevent="closeComponent" aria-label="Close">
+            </button>
+        </div>
+        <div class="offcanvas-body p-6 mx-3 border rounded-3 overflowy-hidden-style">
+
+            <div class="entry-content">
+                <ol>
+                    <li id="data-pemohon" :class="data_model_data_pemohon">
+                        <div class="accordion" id="accordionFlush-data-pemohon">
+                            <div class="accordion-item card shadow-md border-3 rounded-3 p-3"
+                                :class="data_model_data_pemohon == 'kosong' ? 'border-danger' : data_model_data_pemohon == 'lengkap' ? 'border-info' : 'border-warning'">
+                                <h2 class="accordion-header" id="flush-heading-data-pemohon">
+                                    <button class="accordion-button collapsed mb-0" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapse-data-pemohon"
+                                        aria-expanded="false" aria-controls="flush-collapse-data-pemohon">
+                                        <h5 class="text-xl mb-0"
+                                            :class="data_model_data_pemohon == 'kosong' ? 'text-danger' : data_model_data_pemohon == 'lengkap' ? 'text-info' : 'text-warning'">
+                                            Data Pemohon
+                                        </h5>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse-data-pemohon" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-heading-data-pemohon"
+                                    data-bs-parent="#accordionFlush-data-pemohon">
+                                    <hr class="border border-bottom border-primary mt-0 pt-0 mx-3">
+                                    <div class="accordion-body">
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Nama Lengkap</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pemohon.nama_lengkap" name="name"
+                                                    class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>NIK / No. KTP</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pemohon.nik" name="nik"
+                                                    class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Tempat Lahir</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pemohon.tempat_lahir"
+                                                    name="tempat_lahir" class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Tanggal Lahir</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="date" v-model="model.data_pemohon.tanggal_lahir"
+                                                    name="tanggal_lahir" class="form-control" placeholder=""
+                                                    required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Agama</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pemohon.agama" class="form-select"
+                                                    name="agama" required>
+                                                    <option value="" selected>Pilih Agama</option>
+                                                    <option value="Islam">Islam</option>
+                                                    <option value="Katolik">Katolik</option>
+                                                    <option value="Kristen">Kristen</option>
+                                                    <option value="Hindu">Hindu</option>
+                                                    <option value="Budha">Budha</option>
+                                                    <option value="Konghuchu">Konghuchu</option>
+                                                    <option value="Aliran Kepercayaan">Aliran Kepercayaan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto mt-0">
+                                                <label>Alamat KTP</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <textarea v-model="model.data_pemohon.alamat_ktp" type="text"
+                                                    name="alamat_ktp" class="form-control" placeholder=""
+                                                    required=""></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto mt-0">
+                                                <label>Alamat Domisili</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <textarea v-model="model.data_pemohon.alamat_domisili" type="text"
+                                                    name="alamat_domisili" class="form-control" placeholder=""
+                                                    required=""></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Jenis Kelamin</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pemohon.jenis_kelamin" class="form-select"
+                                                    name="kelamin" required>
+                                                    <option value="" selected>Pilih Jenis Kelamin</option>
+                                                    <option value="L">Laki-laki</option>
+                                                    <option value="P">Perempuan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>No. HP</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="basic-addon1">+62</span>
+                                                    <input type="text" v-model="model.data_pemohon.no_hp" class="form-control" name="no_hp" aria-describedby="basic-addon1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Status</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pemohon.status_perkawinan" class="form-select"
+                                                    name="status" required>
+                                                    <option value="">Pilih Status Perkawinan</option>
+                                                    <option value="Belum Kawin">Belum Kawin</option>
+                                                    <option value="Kawin">Kawin</option>
+                                                    <option value="Duda/Janda">Duda/Janda</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="col-md">
-                        <div class="form-floating">
-                          <input type="date" class="form-control" id="floatingInputGrid" placeholder="Tanggal Lahir"
-                            v-model="model.nasabah.tanggal_lahir">
-                          <label for="floatingSelectGrid">Tanggal Lahir<span class="text-danger"> *</span></label>
+                    </li>
+
+                    <li id="data-pekerjaan" :class="data_model_data_pekerjaan">
+                        <div class="accordion" id="accordionFlush-data-pekerjaan">
+                            <div class="accordion-item card shadow-md border-3 rounded-3 p-3"
+                                :class="data_model_data_pekerjaan == 'kosong' ? 'border-danger' : data_model_data_pekerjaan == 'lengkap' ? 'border-info' : 'border-warning'">
+                                <h2 class="accordion-header" id="flush-heading-data-pekerjaan">
+                                    <button class="accordion-button collapsed mb-0" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapse-data-pekerjaan"
+                                        aria-expanded="false" aria-controls="flush-collapse-data-pekerjaan">
+                                        <h5 class="text-xl text-primary mb-0"
+                                            :class="data_model_data_pekerjaan == 'kosong' ? 'text-danger' : data_model_data_pekerjaan == 'lengkap' ? 'text-info' : 'text-warning'">
+                                            Data Pekerjaan
+                                        </h5>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse-data-pekerjaan" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-heading-data-pekerjaan"
+                                    data-bs-parent="#accordionFlush-data-pekerjaan">
+                                    <hr class="border border-bottom border-primary mt-0 pt-0 mx-3">
+                                    <div class="accordion-body">
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Nama Perusahaan / Instansi</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pekerjaan.affiliasi_id" name="name_pt"
+                                                    class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>No. Pegawai / ID Karyawan</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pekerjaan.nip" name="nip"
+                                                    class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>No. BPJS Tenaga Kerja</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pekerjaan.no_bpjs" name="bpjs"
+                                                    class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Jabatan / Posisi</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pekerjaan.jabatan"
+                                                    name="position" class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Status Kepegawaian</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pekerjaan.status_kepegawaian"
+                                                    class="form-select" name="status_kepegawaian" required>
+                                                    <option value="" selected>Pilih Status Kepegawaian</option>
+                                                    <option value="Tetap">Tetap</option>
+                                                    <option value="Kontrak">Kontrak</option>
+                                                    <option value="Outsourcing">Outsourcing</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Pendidikan Terakhir</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pekerjaan.pendidikan_terakhir"
+                                                    class="form-select" name="pendidikan_terakhir" required>
+                                                    <option value="" selected>Pilih Pendidikan Terakhir</option>
+                                                    <option value="SMA">SMA</option>
+                                                    <option value="D3">D3</option>
+                                                    <option value="S1">S1</option>
+                                                    <option value="S2">S2</option>
+                                                    <option value="S3">S3</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Bagian/Departemen/Divisi</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pekerjaan.departemen"
+                                                    name="departemen" class="form-control" placeholder=""
+                                                    required=""></input>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Lama Bekerja (tahun)</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="number" name="thn_kerja" class="form-control"
+                                                    placeholder="" required="" v-model="model.data_pekerjaan.tahun_kerja"></input>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Penghasilan Bulanan (THP)</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="number" name="thp" class="form-control"
+                                                    placeholder="" required="" v-model="model.data_pekerjaan.thp"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <!-- <div class="col-md mb-3">
-                      <div class="form-floating">
-                        <input type="text" class="form-control border-0 bg-transparent shadow-none" id="floatingLabel"
-                            placeholder="Judul Document" v-model="model.age_text_start" disabled />
-                          <label for="floatingLabel">Umur</label>
-                      </div>
-                    </div> -->
-                    <div class="form-floating mb-3">
-                      <select class="form-select form-select-lg" id="floatingCategory"
-                        aria-label="Floating label select example" v-model="model.nasabah.jenis_kelamin">
-                        <option disabled value="">Pilih Jenis Kelamin</option>
-                        <option value="L">Laki-laki</option>
-                        <option value="P">Perempuan</option>
-                      </select>
-                      <label for="floatingCategory">Jenis Kelamin<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <textarea class="form-control" placeholder="Leave a comment here"
-                        id="adddoclistfloatingDescription" style="height: 100px"
-                        v-model="model.nasabah.alamat"></textarea>
-                      <label for="adddoclistfloatingDescription">Alamat<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="floatingLabel" placeholder="Judul Document"
-                        v-model="model.nasabah.no_telepon" />
-                      <label for="floatingLabel">Nomor Telfon<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="ms-1 mb-3">
-                      <label>Pensiun<span class="text-danger"> *</span></label>
-                      <br>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input d-flex align-items-center justify-content-center" type="radio"
-                          name="inlineRadioOptions" id="inlineRadio1" value="Taspen" v-model="model.nasabah.pensiun">
-                        <label class="form-check-label" for="inlineRadio1">Taspen</label>
-                      </div>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input d-flex align-items-center justify-content-center" type="radio"
-                          name="inlineRadioOptions" id="inlineRadio2" value="Asabri" v-model="model.nasabah.pensiun">
-                        <label class="form-check-label" for="inlineRadio2">Asabri</label>
-                      </div>
-                    </div>
-                    <div class="col-md">
-                      <div class="form-check form-switch ms-1">
-                        <input class="form-check-input d-flex align-items-center" style="height: 20px;" type="checkbox"
-                          id="flexSwitchCheckCheckedFlagging" v-model="model.nasabah.flagging">
-                        <label class="form-check-label" for="flexSwitchCheckCheckedFlagging">Flagging</label>
-                      </div>
-                      <div class="form">
-                        <input class="form-control" id="floatingInputGrid" placeholder="Nominal Flagging"
-                          v-model.lazy="model.nasabah.flagging_nominal" v-money="money">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="d-grid d-flex align-items-center justify-content-md-center">
-                      <img v-if="model.foto_profil_preview" :src="model.foto_profil_preview" class="rounded-2"
-                        alt="Foto Nasabah" style="width: auto; height: 300px; object-fit: cover;">
-                    </div>
-                    <div class="mt-2 d-grid d-flex align-items-center justify-content-md-center mb-3">
-                      <input class="form-control" type="file" id="nasabahFile"
-                        @change="handleFileChange($event, 'nasabah')" style="display:none;" accept="image/*" />
-                      <label for="nasabahFile" class="form-label btn btn-info text-white">Foto Nasabah</label>
-                    </div>
-                    <div class="d-grid d-flex align-items-center justify-content-md-center">
-                      <img v-if="model.foto_ktp_preview" :src="model.foto_ktp_preview" class="rounded-2" alt="KTP"
-                        style="width: auto; height: 250px; object-fit: cover;">
-                    </div>
-                    <div class="mt-2 d-grid d-flex align-items-center justify-content-md-center">
-                      <input class="form-control" type="file" id="ktpFile" @change="handleFileChange($event, 'ktp')"
-                        style="display:none;" accept="image/*" />
-                      <label for="ktpFile" class="form-label btn btn-info text-white">KTP</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    </li>
+
+                    <li id="data-pasangan" :class="data_model_data_pasangan">
+                        <div class="accordion" id="accordionFlush-data-pasangan">
+                            <div class="accordion-item card shadow-md border-3 rounded-3 p-3"
+                                :class="data_model_data_pasangan == 'kosong' ? 'border-danger' : data_model_data_pasangan == 'lengkap' ? 'border-info' : 'border-warning'">
+                                <h2 class="accordion-header" id="flush-heading-data-pasangan">
+                                    <button class="accordion-button collapsed mb-0" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapse-data-pasangan"
+                                        aria-expanded="false" aria-controls="flush-collapse-data-pasangan">
+                                        <h5 class="text-xl text-primary mb-0"
+                                            :class="data_model_data_pasangan == 'kosong' ? 'text-danger' : data_model_data_pasangan == 'lengkap' ? 'text-info' : 'text-warning'">
+                                            Data Pasangan
+                                        </h5>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse-data-pasangan" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-heading-data-pasangan"
+                                    data-bs-parent="#accordionFlush-data-pasangan">
+                                    <hr class="border border-bottom border-primary mt-0 pt-0 mx-3">
+                                    <div class="accordion-body">
+
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Nama Pasangan</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pasangan.nama_pasangan"
+                                                    name="couple_name" class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Status Pasangan</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pasangan.status_pasangan" class="form-select"
+                                                    name="couple_status" required>
+                                                    <option value="" selected>Pilih Status Pasangan</option>
+                                                    <option value="Suami">Suami</option>
+                                                    <option value="Istri">Istri</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Nomor KTP Pasangan</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pasangan.nik_pasangan"
+                                                    name="couple_nik" class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto mt-0">
+                                                <label>Alamat KTP</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <textarea type="text" name="alamat_ktp" class="form-control"
+                                                    placeholder="" required=""></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto mt-0">
+                                                <label>Alamat Domisili</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <textarea v-model="model.data_pasangan.alamat_pasangan"
+                                                    type="text" name="alamat_domisili" class="form-control"
+                                                    placeholder="" required=""></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>No. HP</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="basic-addon1">+62</span>
+                                                    <input type="text" v-model="model.data_pasangan.no_hp_pasangan"
+                                                        class="form-control" name="couple_phone"
+                                                        aria-describedby="basic-addon1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Jumlah Anak</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="number" v-model="model.data_pasangan.jumlah_anak" name="anak"
+                                                    class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li id="data-pengajuan-kredit" :class="data_model_data_pengajuan_kredit">
+                        <div class="accordion" id="accordionFlush-data-pengajuan-kredit">
+                            <div class="accordion-item card shadow-md border-3 rounded-3 p-3"
+                                :class="data_model_data_pengajuan_kredit == 'kosong' ? 'border-danger' : data_model_data_pengajuan_kredit == 'lengkap' ? 'border-info' : 'border-warning'">
+                                <h2 class="accordion-header" id="flush-heading-data-pengajuan-kredit">
+                                    <button class="accordion-button collapsed mb-0" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapse-data-pengajuan-kredit"
+                                        aria-expanded="false" aria-controls="flush-collapse-data-pengajuan-kredit">
+                                        <h5 class="text-xl text-primary mb-0"
+                                            :class="data_model_data_pengajuan_kredit == 'kosong' ? 'text-danger' : data_model_data_pengajuan_kredit == 'lengkap' ? 'text-info' : 'text-warning'">
+                                            Data Pengajuan Kredit
+                                        </h5>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse-data-pengajuan-kredit" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-heading-data-pengajuan-kredit"
+                                    data-bs-parent="#accordionFlush-data-pengajuan-kredit">
+                                    <hr class="border border-bottom border-primary mt-0 pt-0 mx-3">
+                                    <div class="accordion-body">
+
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Fasilitas Kredit</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pengajuan.fasilitas_kredit"
+                                                    name="fasilitas_kredit" class="form-select" required>
+                                                    <option value="" selected>Pilih Fasilitas Kredit</option>
+                                                    <option value="KKB">KKB</option>
+                                                    <option value="KSG">KSG</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Tujuan Penggunaan Kredit</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pengajuan.tujuan_penggunaan"
+                                                    name="penggunaan_kredit" class="form-select" required>
+                                                    <option value="" selected>Pilih Tujuan Kredit</option>
+                                                    <option value="Kebutuhan Rumah Tangga">Kebutuhan Rumah Tangga
+                                                    </option>
+                                                    <option value="Pendidikan">Pendidikan</option>
+                                                    <option value="Pembelian Kendaraan/Barang">Pembelian
+                                                        Kendaraan/Barang
+                                                    </option>
+                                                    <option value="Konsumtif Lainnya">Konsumtif Lainnya</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Plafond Kredit</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="input-group">
+                                                    <span class="input-group-text">Rp</span>
+                                                    <input type="text" v-model="model.data_pengajuan.plafond_kredit"
+                                                        name="plafond" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Jangka Waktu Kredit</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="input-group">
+                                                    <input type="number" v-model="model.data_pengajuan.tenor_bulan"
+                                                        name="tenor" class="form-control" min="1" required>
+                                                    <span class="input-group-text">bulan</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Suka Bunga Kredit</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pengajuan.jenis_bunga" name="rate"
+                                                    class="form-select" required>
+                                                    <option value="" selected>Pilih Jenis Bunga</option>
+                                                    <option value="Fixed Rate">Fixed Rate</option>
+                                                    <option value="Floating Rate">Floating Rate</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Sistem Pembayaran</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_pengajuan.sistem_pembayaran"
+                                                    name="sistem_pembayaran" class="form-select" required>
+                                                    <option value="" selected>Pilih Sistem Pembayaran</option>
+                                                    <option value="Potong Gaji">Potong Gaji</option>
+                                                    <option value="Payroll">Payroll</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li id="data-rekening" :class="data_model_data_rekening">
+                        <div class="accordion" id="accordionFlush-data-rekening">
+                            <div class="accordion-item card shadow-md border-3 rounded-3 p-3"
+                                :class="data_model_data_rekening == 'kosong' ? 'border-danger' : data_model_data_rekening == 'lengkap' ? 'border-info' : 'border-warning'">
+                                <h2 class="accordion-header" id="flush-heading-data-rekening">
+                                    <button class="accordion-button collapsed mb-0" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapse-data-rekening"
+                                        aria-expanded="false" aria-controls="flush-collapse-data-rekening">
+                                        <h5 class="text-xl text-primary mb-0"
+                                            :class="data_model_data_rekening == 'kosong' ? 'text-danger' : data_model_data_rekening == 'lengkap' ? 'text-info' : 'text-warning'">
+                                            Data Rekening KBI Pemohon
+                                        </h5>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse-data-rekening" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-heading-data-rekening"
+                                    data-bs-parent="#accordionFlush-data-rekening">
+                                    <hr class="border border-bottom border-primary mt-0 pt-0 mx-3">
+                                    <div class="accordion-body">
+
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Bank Penerbit</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" name="bank_penerbit" class="form-control"
+                                                    value="PT. BANK KB INDONESIA, TBK." disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Jenis Rekening</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_rekening.jenis_rekening"
+                                                    name="jenis_rekening" class="form-select" required>
+                                                    <option value="" selected>Pilih Jenis Rekening</option>
+                                                    <option value="Tabungan Umum">Tabungan Umum</option>
+                                                    <option value="Tabungan Kerjasama">Tabungan Kerjasama</option>
+                                                    <option value="Digital KB Star">Digital KB Star</option>
+                                                    <option value="Lainnya">Lainnya</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Nomor Rekening</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_rekening.nomor_rekening" name="norek"
+                                                    class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Atas Nama</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_rekening.atas_nama_rekening"
+                                                    name="an_rekening" class="form-control" required>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li id="data-jaminan" :class="data_model_data_jaminan">
+                        <div class="accordion" id="accordionFlush-data-jaminan">
+                            <div class="accordion-item card shadow-md border-3 rounded-3 p-3"
+                                :class="data_model_data_jaminan == 'kosong' ? 'border-danger' : data_model_data_jaminan == 'lengkap' ? 'border-info' : 'border-warning'">
+                                <h2 class="accordion-header" id="flush-heading-data-jaminan">
+                                    <button class="accordion-button collapsed mb-0" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapse-data-jaminan"
+                                        aria-expanded="false" aria-controls="flush-collapse-data-jaminan">
+                                        <h5 class="text-xl text-primary mb-0"
+                                            :class="data_model_data_jaminan == 'kosong' ? 'text-danger' : data_model_data_jaminan == 'lengkap' ? 'text-info' : 'text-warning'">
+                                            Data Jaminan Kredit (Khusus Kredit Kendaraan Bermotor)
+                                        </h5>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse-data-jaminan" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-heading-data-jaminan"
+                                    data-bs-parent="#accordionFlush-data-jaminan">
+                                    <hr class="border border-bottom border-primary mt-0 pt-0 mx-3">
+                                    <div class="accordion-body">
+
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 mt-1 m-auto">
+                                                <label>Jenis Kendaraan</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_jaminan.jenis_kendaraan"
+                                                    name="jenis_kendaraan" class="form-select">
+                                                    <option value="" selected>Pilih Jenis Kendaraan</option>
+                                                    <option value="Roda 4">Roda 4</option>
+                                                    <option value="Roda 2">Roda 2 (**)</option>
+                                                </select>
+                                                <small class="text-warning">(**) Hanya kendaraan baru saja</small>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Kondisi Kendaraan</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_jaminan.kondisi_kendaraan"
+                                                    name="kondisi_kendaraan" class="form-select">
+                                                    <option value="">Pilih Kondisi Kendaraan</option>
+                                                    <option value="New">New</option>
+                                                    <option value="Used">Used</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Tujuan Kredit</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select v-model="model.data_jaminan.tujuan_kredit_kendaraan" name="tujuan_kredit"
+                                                    class="form-select">
+                                                    <option value="" selected>Pilih Tujuan Kredit</option>
+                                                    <option value="Pembelian">Pembelian</option>
+                                                    <option value="Refinancing">Refinancing</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Brand Kendaraan</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_jaminan.brand_kendaraan"
+                                                    name="brand_kendaraan" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Tipe Kendaraan</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_jaminan.tipe_kendaraan"
+                                                    name="tipe_kendaraan" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Tahun Pembuatan</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="number" v-model="model.data_jaminan.tahun_pembuatan"
+                                                    name="tahun_pembuatan" class="form-control" min="1900" max="2099">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Nomor BPKB*</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_jaminan.nomor_bpkb"
+                                                    name="nomor_bpkb" class="form-control">
+                                                <small class="text-muted">*Khusus Used Vehicle</small>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Nomor Mesin*</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_jaminan.nomor_mesin"
+                                                    name="nomor_mesin" class="form-control">
+                                                <small class="text-muted">*Khusus Used Vehicle</small>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Nomor Rangka*</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_jaminan.nomor_rangka"
+                                                    name="nomor_rangka" class="form-control">
+                                                <small class="text-muted">*Khusus Used Vehicle</small>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Atas Nama Kendaraan*</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_jaminan.atas_nama_kendaraan"
+                                                    name="an_kendaraan" class="form-control">
+                                                <small class="text-muted">*Khusus Used Vehicle</small>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li id="data-kontak-darurat" :class="data_model_data_kontak">
+                        <div class="accordion" id="accordionFlush-data-darurat">
+                            <div class="accordion-item card shadow-md border-3 rounded-3 p-3"
+                            :class="data_model_data_kontak == 'kosong' ? 'border-danger' : data_model_data_kontak == 'lengkap' ? 'border-info' : 'border-warning'">
+                                <h2 class="accordion-header" id="flush-heading-data-darurat">
+                                    <button class="accordion-button collapsed mb-0" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapse-data-darurat"
+                                        aria-expanded="false" aria-controls="flush-collapse-data-darurat">
+                                        <h5 class="text-xl text-primary mb-0"
+                                            :class="data_model_data_kontak == 'kosong' ? 'text-danger' : data_model_data_kontak == 'lengkap' ? 'text-info' : 'text-warning'">
+                                            Data Kontak Darurat
+                                        </h5>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse-data-darurat" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-heading-data-darurat"
+                                    data-bs-parent="#accordionFlush-data-darurat">
+                                    <hr class="border border-bottom border-primary mt-0 pt-0 mx-3">
+                                    <div class="accordion-body">
+
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Nama</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_kontak.nama_kontak_darurat"
+                                                    name="nama_lengkap" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Hubungan dengan pemohon</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_kontak.hubungan_kontak_darurat" name="hubungan"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>Alamat</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_kontak.alamat_kontak_darurat" name="alamat"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
+                                                <label>No. HP</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="basic-addon1">+62</span>
+                                                    <input type="text" v-model="model.data_kontak.no_hp_kontak_darurat"
+                                                        class="form-control" name="couple_phone"
+                                                        aria-describedby="basic-addon1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
             </div>
-          </div>
+
         </div>
-
-        <div class="card bg-info p-3" :class="model.angsuran.schedule_angsuran_created ? 'mb-3' : 'mb-6'">
-          <div class="form-check form-switch mb-0">
-            <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedAngsuran"
-              v-model="model.angsuran.schedule_angsuran_created">
-            <label class="form-check-label text-white text-bold mb-0" for="flexSwitchCheckCheckedAngsuran">Buat Angsuran
-              Pinjaman</label>
-          </div>
+        <div class="offcanvas-footer d-flex justify-content-end p-3">
+            <button class="btn btn-warning me-3" @click.prevent="closeComponent">Cancel</button>
+            <button class="btn btn-primary" @click.prevent="confirmStore">Submit</button>
         </div>
-
-        <div v-if="model.angsuran.schedule_angsuran_created" class="accordion mt-0 mb-6" id="accordionDocumentDetails">
-          <div class="accordion-item mb-3">
-            <h5 class="accordion-header" id="headingOne1">
-              <button class="accordion-button border-bottom font-weight-bold collapsed d-flex align-items-center pt-0"
-                type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne1" aria-expanded="false"
-                aria-controls="collapseOne1">
-                <div class="m-0 flex-grow-1">
-                  <h6 class="m-0">Angsuran Pinjaman</h6>
-                  <p class="m-0 text-sm">Detail Jadwal Angsuran Pinjaman</p>
-                </div>
-                <i class="fas fa-chevron-down position-absolute end-0 me-3"></i>
-              </button>
-            </h5>
-            <div id="collapseOne1" class="accordion-collapse collapse show" aria-labelledby="headingOne1"
-              data-bs-parent="#accordionDocumentDetails">
-              <div class="accordion-body text-sm">
-                <!-- <div class="form-check d-grid d-flex align-items-center justify-content-md-end mt-3 ms-3 mb-3">
-                  <input class="form-check-input" type="checkbox" v-model="model.angsuran.angsuran_accepted"
-                    id="flexCheckDefault">
-                  <label class="form-check-label mb-0 ms-2 text-bold" for="flexCheckDefault"
-                    :class="model.angsuran.angsuran_accepted ? 'text-success' : 'text-danger'">
-                    Plafond Accepted
-                  </label>
-                </div> -->
-                <div class="row g-2">
-                  <div class="col-md">
-                    <p class="mb-3 fs-5 text-dark text-center text-bold">Data Debitur</p>
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control border-0 bg-transparent shadow-none" id="floatingLabel"
-                        placeholder="Judul Document" v-model="model.nasabah.nama_lengkap" disabled />
-                      <label for="floatingLabel">Nama Nasabah</label>
-                    </div>
-                    <div class="row g-2">
-                      <div class="col-md">
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control border-0 bg-transparent shadow-none" id="floatingLabel"
-                            placeholder="Judul Document" v-model="model.age_text_start" disabled />
-                          <label for="floatingLabel">Umur Awal</label>
-                        </div>
-                      </div>
-                      <div class="col-md">
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control border-0 bg-transparent shadow-none" id="floatingLabel"
-                            placeholder="Judul Document" v-model="model.age_text_end" disabled />
-                          <label for="floatingLabel">Umur Akhir</label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="floatingLabel" placeholder="Judul Document"
-                        v-model="model.angsuran.norek" />
-                      <label for="floatingLabel">Norek<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="row g-2">
-                      <div class="col-md">
-                        <div class="form-floating mb-3">
-                          <select class="form-select form-select-lg" id="floatingCategory"
-                            aria-label="Floating label select example" v-model="model.angsuran.unit">
-                            <option disabled value="">Unit Layanan</option>
-                            <option v-for="(row, index) in collections.unit_id" :key="index" :value="row.code">
-                              {{ row.name }}
-                            </option>
-                          </select>
-                          <label for="floatingCategory">KNS Unit Layanan<span class="text-danger"> *</span></label>
-                        </div>
-                      </div>
-                      <div class="col-md">
-                        <div class="form-floating mb-3">
-                          <select class="form-select form-select-lg" id="floatingCategory"
-                            aria-label="Floating label select example" v-model="model.angsuran.fasilitas_id">
-                            <option disabled value="">Pilih Fasilitas</option>
-                            <option v-for="(row, index) in collections.facilities" :key="index" :value="row.code">
-                              {{ row.name }}
-                            </option>
-                          </select>
-                          <label for="floatingCategory">Fasilitas</label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md">
-                      <!-- <label class="form-check-label mb-0 text-xs" for="flexSwitchCheckCheckedx">Provisi</label> -->
-                      <div class="row g-2">
-                        <div class="col-md-3">
-                          <div class="form-floating mb-3">
-                            <!-- <input type="number" class="form-control" placeholder="" id="floatingLabel"
-                              aria-label="provisi" aria-describedby="basic-addon2" v-model="model.angsuran.provisi_percentage">
-                              <label for="floatingLabel">Biaya Admin<span class="text-danger"> *</span></label>
-                            <span class="input-group-text" id="basic-addon2">%</span> -->
-                            <input class="form-control" placeholder="Nominal" id="floatingLabel"
-                              v-model="model.angsuran.provisi_percentage" />
-                            <label for="floatingLabel">Provisi (%)<span class="text-danger"> *</span></label>
-                          </div>
-                        </div>
-                        <div class="col-sm">
-                          <div class="form-floating mb-3">
-                            <!-- <input class="form-control" placeholder="Nominal" id="floatingLabel"
-                          v-model.lazy="model.angsuran.provisi_nominal" v-money="money" /> -->
-                            <input class="form-control bg-transparent" placeholder="Nominal" id="floatingLabel"
-                              v-model.lazy="model.angsuran.provisi_nominal" v-money="money" disabled />
-                            <label for="floatingLabel">Nominal Provisi<span class="text-danger"> *</span></label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row g-2">
-                      <div class="col-md">
-                        <div class="form-floating mb-3">
-                          <input class="form-control" placeholder="Nominal" id="floatingLabel"
-                            v-model.lazy="model.angsuran.biaya_admin" v-money="money" />
-                          <label for="floatingLabel">Biaya Admin<span class="text-danger"> *</span></label>
-                        </div>
-                      </div>
-                      <div class="col-md">
-                        <div class="form-floating mb-3">
-                          <input class="form-control" placeholder="Nominal" id="floatingLabel"
-                            v-model.lazy="model.angsuran.biaya_lain" v-money="money" />
-                          <label for="floatingLabel">Biaya Lain<span class="text-danger"> *</span></label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                    <p class="mb-3 fs-5 text-dark text-center text-bold">Data Pembiayaan</p>
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="floatingLabel" placeholder="Judul Document"
-                        v-model="model.angsuran.nomor_pensiunan" />
-                      <label for="floatingLabel">Nomor Pensiunan<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <input class="form-control" placeholder="Nominal" id="floatingLabel"
-                        v-model.lazy="model.angsuran.nilai_plafond" v-money="money" />
-                      <label for="floatingLabel">Plafond Pembiayaan<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <input type="number" min="0" step="0.01" class="form-control" id="floatingLabel"
-                        placeholder="Judul Document" v-model="model.angsuran.rate_bunga" />
-                      <label for="floatingLabel">Suku Bunga Eff/pa (%)<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <input type="number" min="0" class="form-control" id="floatingLabel" placeholder="Judul Document"
-                        v-model="model.angsuran.tenor" />
-                      <label for="floatingLabel">Jangka Waktu (Bulan)<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="form-floating mb-3">
-                      <input type="date" class="form-control" id="floatingLabel" placeholder="Judul Document"
-                        v-model="model.angsuran.tanggal_mulai" />
-                      <label for="floatingLabel">Tanggal PK / Akad<span class="text-danger"> *</span></label>
-                    </div>
-                    <div class="input-group mb-3">
-                      <div class="form-floating flex-grow-1">
-                        <input type="text" class="form-control bg-transparent border border-1" name="floatingLabel"
-                          placeholder="Nominal" v-model="displayedAngsuran" v-money="money" disabled>
-                        <label for="floatingLabel">Angsuran per-bulan</label>
-                      </div>
-                      <a class="input-group-text btn mb-0 vertical-center"
-                        :class="model.refreshAngsuranBtn ? 'btn-success' : 'btn-danger'"
-                        v-show="!model.refreshAngsuranBtn" @click.prevent="calculateAngsuran" style="z-index: 0;"><i
-                          class="fas fa-sync p-2 vertical-center"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-floating mb-3 text-center mt-3" v-show="!model.createdSchedule">
-                <a class="btn text-center w-100" :class="model.createdSchedule ? 'btn-success' : 'btn-warning'"
-                  @click.prevent="createScedule">Buat Jadwal Angsuran</a>
-              </div>
-              <div class="border border-1 border-primary rounded-top p-4" v-show="model.createdSchedule">
-                <li class="nav-item dropdown pe-2 d-flex align-items-center float-end">
-                  <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButtonProfile"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-download text-dark"></i>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4 shadow-lg"
-                    aria-labelledby="dropdownMenuButtonProfile">
-                    <li class="m-3">
-                      <a class="text-dark text-sm" href="#" @click.prevent="convertToExcel">
-                        Excel
-                      </a>
-                    </li>
-                    <li class="m-3">
-                      <a class="text-dark" href="#" @click.prevent="convertToPDF">
-                        PDF
-                      </a>
-                    </li>
-                    <li class="m-3">
-                      <a class="text-dark" href="#" @click.prevent="convertToImg">
-                        Image
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-
-                <div id="table-angsuran">
-                  <p class="mb-0 fs-5 text-dark text-center text-bold">Jadwal Angsuran Pinjaman</p>
-                  <p class="mb-0 text-sm text-dark text-center">Nama: {{ model.nasabah.nama_lengkap }}</p>
-                  <div class="table-responsive w-100">
-                    <table class="table table-hover table-bordered mt-3 mb-0">
-                      <thead class="table-dark">
-                        <tr>
-                          <th width="5%" class="text-center">No</th>
-                          <th>Tanggal Bayar</th>
-                          <th class="text-end">Angsuran</th>
-                          <th class="text-end">Cicilan Pokok</th>
-                          <th class="text-end">Cicilan Bunga / Margin</th>
-                          <th class="text-end">Sisa Pokok</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr style="background-color: cadetblue; border-color: cadetblue; color: white;">
-                          <td class="text-center align-middle text-xs py-3" colspan="2">
-                            {{ new Date(model.angsuran.tanggal_mulai).toLocaleString('en-GB', {
-                              day: 'numeric', month:
-                                'long', year: 'numeric'
-                            }) }}
-                          </td>
-                          <td class="text-end ps-4 align-middle text-xs" colspan="4">
-                            {{ model.angsuran.nilai_plafond }}
-                          </td>
-                        </tr>
-                        <tr v-for="(detail, index) in model.angsuran.details" :key="index" class="align-items-center">
-                          <td class="text-center align-middle text-xs p-3">
-                            {{ detail.periode_ke }}
-                          </td>
-                          <td class="ps-4 align-middle text-xs">
-                            {{ new Date(detail.tanggal_jatuh_tempo).toLocaleString('en-GB', {
-                              day: 'numeric', month:
-                                'long', year: 'numeric'
-                            }) }}
-                          </td>
-                          <td class="text-end ps-4 align-middle text-xs">
-                            {{ formatRupiah(detail.nilai_angsuran) }}
-                          </td>
-                          <td class="text-end ps-4 align-middle text-xs">
-                            {{ formatRupiah(detail.cicilan_pokok) }}
-                          </td>
-                          <td class="text-end ps-4 align-middle text-xs">
-                            {{ formatRupiah(detail.cicilan_bunga) }}
-                          </td>
-                          <td class="text-end ps-4 align-middle text-xs">
-                            {{ formatRupiah(detail.nilai_pokok) }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="position-absolute end-0 bottom-0 me-3">
-          <button v-if="!loading" type="button" class="btn btn-secondary rounded-1 me-3"
-            @click.prevent="closeComponent">
-            Cancel
-          </button>
-          <button v-if="!loading" type="button" class="btn btn-primary rounded-1" @click.prevent="confirmStore">
-            Simpan
-          </button>
-          <button v-else class="btn btn-primary" type="button" disabled>
-            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-            Loading...
-          </button>
-        </div>
-      </form>
     </div>
-  </div>
 </template>
 
 <script>
 import { VMoney } from 'v-money'
-import $ from "jquery";
+import $, { data } from "jquery";
 import Swal from "sweetalert2";
 import QRCode from "qrcode";
-import { emitter } from "../../../../../../eventEmitter.js";
+import { emitter } from '../../../../../../eventEmitter.js';
 import html2pdf from "html2pdf.js";
 import ExcelJS from 'exceljs';
 import html2canvas from 'html2canvas';
 export default {
-  directives: { money: VMoney },
-  name: "AddNasabahOffcanvas",
-  data() {
-    return {
-      modalAdd: "",
-      loading: false,
-      money: {
-        decimal: ',',
-        thousands: '.',
-        prefix: 'Rp. ',
-        suffix: '',
-        precision: 0,
-        masked: false
-      },
-      collections: {
-        units: [],
-        facilities: [],
-      },
-      model: {
-        nasabah: {
-          is_executing: false,
-          nik: '',
-          nama_lengkap: '',
-          tempat_lahir: '',
-          tanggal_lahir: '',
-          jenis_kelamin: '',
-          alamat: '',
-          pensiun: '',
-          flagging: '',
-          flagging_nominal: 0,
-          no_telepon: '',
-          age_year: 0,
-          age_month: 0,
-          age_day: 0,
-        },
-        angsuran: {
-          schedule_angsuran_created: false,
-          angsuran_accepted: false,
-          nomor_pensiunan: '',
-          norek: '',
-          unit_id: '',
-          fasilitas_id: '',
-          nilai_plafond: 0,
-          rate_bunga: 0,
-          tenor: 0,
-          tanggal_mulai: '',
-          nilai_angsuran: 0,
-          provisi_percentage: 0,
-          provisi_nominal: 0,
-          biaya_admin: 0,
-          biaya_lain: 0,
-          details: [],
-        },
-        refreshAngsuranBtn: false,
-        createdSchedule: false,
-        foto_profil: null,
-        foto_ktp: null,
-        foto_profil_preview: null,
-        foto_ktp_preview: null,
-        age_text_start: '',
-        age_text_end: ''
-      },
-      displayedAngsuran: 0
-    };
-  },
-
-  mounted() {
-    emitter.on("AddNasabah", async (user) => {
-      this.user = user;
-      this.modalAdd = new bootstrap.Offcanvas("#offcanvasAddRight", {
-        backdrop: false,
-        keyboard: false,
-      });
-      await this.fetchCategories();
-      await this.openModal();
-    });
-  },
-  methods: {
-    asset(path) {
-      return `${BASEURL}${path}`;
-    },
-    async openModal() {
-      this.modalAdd.show();
-    },
-    formatRupiah(value) {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        currencyDisplay: 'symbol',
-        maximumFractionDigits: 0
-      }).format(value);
-    },
-    calculateAge(birthDate) {
-      let today = new Date();
-      let birth = new Date(birthDate);
-
-      let years = today.getFullYear() - birth.getFullYear();
-      let months = today.getMonth() - birth.getMonth();
-      let days = today.getDate() - birth.getDate();
-
-      if (days < 0) {
-        months--;
-        let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-        days += lastDayOfMonth;
-      }
-
-      if (months < 0) {
-        years--;
-        months += 12;
-      }
-
-      this.model.nasabah.age_year = years;
-      this.model.nasabah.age_month = months;
-      this.model.nasabah.age_day = days;
-
-      this.model.age_text_start = `${this.model.nasabah.age_year} Tahun, ${this.model.nasabah.age_month} bulan, ${this.model.nasabah.age_day} hari`;
-    },
-    addMonths() {
-      let newDate = new Date(this.model.nasabah.tanggal_lahir);
-      let birthDate = new Date(this.model.nasabah.tanggal_lahir);
-      newDate.setMonth(newDate.getMonth() + this.model.angsuran.tenor);
-
-      let newYears = newDate.getFullYear() - birthDate.getFullYear();
-      let newMonths = newDate.getMonth() - birthDate.getMonth();
-      let newDays = newDate.getDate() - birthDate.getDate();
-
-      if (newDays < 0) {
-        newMonths--;
-        let lastDayOfMonth = new Date(newDate.getFullYear(), newDate.getMonth(), 0).getDate();
-        newDays += lastDayOfMonth;
-      }
-
-      if (newMonths < 0) {
-        newYears--;
-        newMonths += 12;
-      }
-
-      this.model.age_text_end = `${newYears + this.model.nasabah.age_year} Tahun, ${newMonths} bulan, ${newDays} hari`;
-    },
-    handleFileChange(event, type) {
-      const file = event.target.files[0]
-      if (file) {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          if (type === 'nasabah') {
-            this.model.foto_profil_preview = e.target.result
-            this.model.foto_profil = file
-          } else if (type === 'ktp') {
-            this.model.foto_ktp_preview = e.target.result
-            this.model.foto_ktp = file
-          }
-        }
-        reader.readAsDataURL(file)
-      }
+    directives: { money: VMoney },
+    name: "AddUserOffcanvas",
+    data() {
+        return {
+            modalAdd: "",
+            loading: false,
+            componentload: false,
+            collections: {
+                roles: [],
+                units: [],
+            },
+            model: {
+                // Section A: Data Pemohon
+                data_pemohon: {
+                    nama_lengkap: '',
+                    nik: '',
+                    tempat_lahir: '',
+                    tanggal_lahir: '',
+                    agama: '',
+                    alamat_ktp: '',
+                    alamat_domisili: '',
+                    jenis_kelamin: '',
+                    no_hp: '',
+                    status_perkawinan: '',
+                },
+                // Section B: Data Pekerjaan
+                data_pekerjaan: {
+                    affiliasi_id: '',
+                    nip: '',
+                    no_bpjs: '',
+                    jabatan: '',
+                    status_kepegawaian: '',
+                    pendidikan_terakhir: '',
+                    departemen: '',
+                    tahun_kerja: '',
+                    thp: '',
+                },
+                // Section C: Data Pasangan Pemohon
+                data_pasangan: {
+                    nama_pasangan: '',
+                    status_pasangan: '',
+                    nik_pasangan: '',
+                    alamat_pasangan: '',
+                    no_hp_pasangan: '',
+                    jumlah_anak: '',
+                },
+                // Section D: Data Pengajuan Kredit
+                data_pengajuan: {
+                    fasilitas_kredit: '',
+                    tujuan_penggunaan: '',
+                    plafond_kredit: '',
+                    tenor_bulan: '',
+                    jenis_bunga: '',
+                    sistem_pembayaran: '',
+                },
+                // Section E: Data Rekening KBI Pemohon
+                data_rekening: {
+                    bank_penerbit: 'PT. BANK KB INDONESIA, TBK.',
+                    jenis_rekening: '',
+                    nomor_rekening: '',
+                    atas_nama_rekening: '',
+                },
+                // Section F: Jaminan Kredit
+                data_jaminan: {
+                    jenis_kendaraan: '',
+                    kondisi_kendaraan: '',
+                    tujuan_kredit_kendaraan: '',
+                    brand_kendaraan: '',
+                    tipe_kendaraan: '',
+                    tahun_pembuatan: '',
+                    nomor_bpkb: '',
+                    nomor_mesin: '',
+                    nomor_rangka: '',
+                    atas_nama_kendaraan: '',
+                },
+                // Section G: Kontak Darurat
+                data_kontak: {
+                    nama_kontak_darurat: '',
+                    hubungan_kontak_darurat: '',
+                    alamat_kontak_darurat: '',
+                    no_hp_kontak_darurat: '',
+                },
+                // Section H: Dokumen Pendukung
+                data_dokumen: {
+                    dokumen_ktp: null,
+                    dokumen_kartu_keluarga: null,
+                    dokumen_npwp: null,
+                    dokumen_ktp_pasangan: null,
+                    dokumen_asuransi: null,
+                    dokumen_id_card_perusahaan: null,
+                    dokumen_selfie: null,
+                    dokumen_surat_pernyataan: null,
+                },
+            },
+            data_model_data_pemohon: 'kosong',
+            data_model_data_pekerjaan: 'kosong',
+            data_model_data_pasangan: 'kosong',
+            data_model_data_pengajuan_kredit: 'kosong',
+            data_model_data_rekening: 'kosong',
+            data_model_data_jaminan: 'kosong',
+            data_model_data_kontak: 'kosong',
+        };
     },
 
-    async fetchCategories() {
-      let endpoint = `${BASEURL}/api/edoc/category/options`;
-      let response = await axios.get(endpoint, {
-        headers: {
-          Authorization: "Bearer " + this.$token(),
-        },
-      });
-      this.collections.categories = response.data.data.options;
-    },
-    async calculateAngsuran() {
-      if (
-        this.model.angsuran.schedule_angsuran_created &&
-        this.model.angsuran.nilai_plafond !== 0 &&
-        this.model.angsuran.rate_bunga !== 0 &&
-        this.model.angsuran.rate_bunga !== '' &&
-        this.model.angsuran.tenor !== 0 &&
-        this.model.angsuran.tenor !== ''
-      ) {
-        const annualInterestRate = this.model.angsuran.rate_bunga / 100;
-        const months = this.model.angsuran.tenor;
-        const principal = parseFloat(this.model.angsuran.nilai_plafond.replace(/Rp\.|\./g, ''));
+    mounted() {
+        emitter.on("AddNasabah", async (authorized) => {
+            if (authorized) {
+                this.modalAdd = new bootstrap.Offcanvas("#offcanvasAddRight", {
+                    backdrop: false,
+                    keyboard: false,
+                });
+                await this.openModal();
 
-        const monthlyInterestRate = annualInterestRate / 12;
+                this.componentload = true;
+                await this.fetchRoles();
+                await this.fetchUnits();
+                this.componentload = false;
+            }
 
-        this.model.angsuran.nilai_angsuran = principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months) / (Math.pow(1 + monthlyInterestRate, months) - 1);
-        this.displayedAngsuran = Math.round(this.model.angsuran.nilai_angsuran);
-        this.model.angsuran.nilai_angsuran = parseFloat(this.model.angsuran.nilai_angsuran);
-        this.model.refreshAngsuranBtn = true
-      }
-    },
-
-    async createScedule() {
-      if (this.model.refreshAngsuranBtn) {
-        let endpoint = `${BASEURL}/api/simulation`;
-        let response = await axios.post(endpoint, this.model.angsuran, {
-          headers: {
-            Authorization: "Bearer " + this.$token(),
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        this.model.angsuran.details = response.data.simulation;
-        this.model.createdSchedule = true
-      }
-    },
-    async confirmStore() {
-      if (this.model.angsuran.schedule_angsuran_created) {
-        if (!this.model.createdSchedule || !this.model.refreshAngsuranBtn) {
-          Swal.fire("Kesalahan", "Nilai angsuran & Jadwal angsuran belum sesuai.", "error");
-          return false;
-        }
-      }
-
-      Swal.fire({
-        title: "Simpan?",
-        text: "Pastikan data yang anda simpan sudah benar",
-        icon: "info",
-        showCancelButton: true,
-        confirmButtonText: "Simpan",
-      }).then((result) => {
-        if (result.value) {
-          this.store();
-        }
-      });
-    },
-    async store() {
-      this.loading = true
-      let endpoint = `${BASEURL}/api/nasabah`;
-      try {
-        Swal.fire({
-          allowOutsideClick: false,
-          text: 'Sedang diproses, mohon ditunggu..',
-          didOpen: () => {
-            Swal.showLoading();
-          }
-        })
-        let response = await axios.post(endpoint, this.model, {
-          headers: {
-            Authorization: "Bearer " + this.$token(),
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        this.loading = false
-        Swal.close()
-        if (response) {
-          Swal.fire({
-            title: "Penyimpanan Berhasil",
-            // text: "Apakah anda ingin print qrcode sekarang?",
-            icon: "success",
-            showCancelButton: false,
-            allowOutsideClick: false,
-            confirmButtonText: "Close",
-          }).then((result) => {
-            this.closeComponent();
-            // if (result.value) {
-            //   this.viewCurrentQRCode(this.model.number);
-            // } else {
-            //   this.closeComponent();
-            // }
-          });
-        }
-      } catch (error) {
-        this.loading = false
-        console.error("Error store nasabah: ", error);
-        let errormsg = ''
-        if (error.response && error.response.data && typeof error.response.data.message === 'object') {
-          Object.keys(error.response.data.message).forEach(key => {
-            errormsg += `${key}: ${error.response.data.message[key]} \n`;
-          });
-        } else {
-          errormsg = error.response.data.message || 'An unknown error occurred.';
-        }
-        this.$swal.fire({
-          title: 'Failed!',
-          text: errormsg,
-          icon: 'error'
-        });
-      }
-    },
-
-    refreshAngsuran() {
-      this.model.refreshAngsuranBtn = false
-      this.model.createdSchedule = false
-      this.model.angsuran.details = []
-    },
-    closeComponent() {
-      this.modalAdd.hide()
-      this.resetForm()
-      emitter.emit("fetchNasabahList")
-    },
-    resetForm() {
-      this.model = {
-        nasabah: {
-          is_executing: false,
-          nik: '',
-          nama_lengkap: '',
-          tempat_lahir: '',
-          tanggal_lahir: '',
-          jenis_kelamin: '',
-          alamat: '',
-          pensiun: '',
-          flagging: '',
-          flagging_nominal: 0,
-          no_telepon: '',
-          age_year: 0,
-          age_month: 0,
-          age_day: 0,
-        },
-        angsuran: {
-          schedule_angsuran_created: false,
-          angsuran_accepted: false,
-          unit_id: '',
-          fasilitas_id: '',
-          nilai_plafond: 0,
-          rate_bunga: 0,
-          tenor: 0,
-          tanggal_mulai: '',
-          nilai_angsuran: 0,
-          provisi_percentage: 0,
-          provisi_nominal: 0,
-          biaya_admin: 0,
-          biaya_lain: 0,
-          details: [],
-        },
-        refreshAngsuranBtn: false,
-        createdSchedule: false,
-        foto_profil: null,
-        foto_ktp: null,
-        foto_profil_preview: null,
-        foto_ktp_preview: null,
-      };
-    },
-
-
-    convertToExcel() {
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet('Jadwal Angsuran Pinjaman');
-
-      // Add header
-      worksheet.addRow(['No', 'Tanggal Bayar', 'Angsuran', 'Pokok', 'Margin', 'Sisa Pokok']);
-
-      // Add data rows
-      this.model.angsuran.details.forEach(detail => {
-        worksheet.addRow([
-          detail.angsuran_ke,
-          detail.tanggal_bayar,
-          detail.angsuran,
-          detail.pokok,
-          detail.margin,
-          detail.sisa_pokok
-        ]);
-      });
-
-      // Save the workbook
-      workbook.xlsx.writeBuffer().then(buffer => {
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'jadwal_angsuran_pinjaman.xlsx';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      });
-    },
-    convertToPDF() {
-      const element = document.getElementById('table-angsuran');
-      const opt = {
-        margin: 1,
-        filename: 'jadwal_angsuran_pinjaman.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 1 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-      html2pdf().from(element).set(opt).save();
-    },
-    convertToImg() {
-      const element = document.getElementById('table-angsuran');
-      html2canvas(element).then(canvas => {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = 'jadwal_angsuran_pinjaman.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }).catch(function (error) {
-        console.error('Oops, something went wrong!', error);
-      });
-    },
-    convertNominal(nominal) {
-      let cleanedValue = nominal
-        .replace(/Rp\.?\s?/g, '')
-        .replace(/\./g, '')
-        .replace(/,/g, '.')
-        .trim()
-      return parseFloat(cleanedValue) || 0;
-    },
-    generatePDFAddDoc() {
-      Swal.fire({
-        timer: 2000,
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
-      const element = document.getElementById("pdfContentAddDoc");
-      html2pdf()
-        .from(element)
-        // .save('qrcode.pdf');
-        .toPdf()
-        .get("pdf")
-        .then((pdf) => {
-          const blob = pdf.output("blob");
-          const url = URL.createObjectURL(blob);
-
-          const newTab = window.open(url);
-
-          newTab.onload = () => {
-            newTab.print();
-          };
         });
     },
-  },
-  computed: {},
-  watch: {
-    'model.angsuran.nilai_plafond': function () {
-      this.refreshAngsuran()
-      if (typeof this.model.angsuran.nilai_plafond == 'string') {
-        this.model.angsuran.provisi_nominal = this.model.angsuran.nilai_plafond.replace(/[^0-9]/g, "") * (this.model.angsuran.provisi_percentage / 100)
-      }
+    methods: {
+        asset(path) {
+            return `${BASEURL}${path}`;
+        },
+
+        confirmStore() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.store()
+                }
+            })
+        },
+        async store() {
+            this.loading = true
+            let endpoint = `${BASEURL}/api/nasabah`;
+            try {
+                let response = await axios.post(endpoint, this.model, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                console.log('Store response:', response);
+                Swal.fire(
+                    'Saved!',
+                    'User has been saved.',
+                    'success'
+                )
+                this.closeComponent()
+            } catch (error) {
+                console.error("Error storing user: ", error);
+                Swal.fire(
+                    'Error!',
+                    'There was an error saving the user.',
+                    'error'
+                )
+            } finally {
+                this.loading = false
+            }
+        },
+        async openModal() {
+            this.modalAdd.show();
+        },
+        closeComponent() {
+            this.modalAdd.hide()
+            this.resetForm()
+            emitter.emit("fetchUserList")
+        },
+        resetForm() {
+            this.model.name = ""
+            this.model.email = ""
+            this.model.password = ""
+            this.model.role_id = null
+            this.model.unit_id = null
+        },
+        initSelect2Filters() {
+            const selectElements = $(this.$el).find('select.select2-filter');
+            if (!selectElements.length || typeof $.fn.select2 !== 'function') {
+                return;
+            }
+            selectElements.select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                // placeholder: 'All',
+                allowClear: true,
+                // minimumResultsForSearch: 0,
+                // dropdownParent: $(this.$el),
+            });
+        },
+        destroySelect2() {
+            const selectElements = $(this.$el).find('select.select2-filter');
+            if (!selectElements.length) {
+                return;
+            }
+
+            selectElements.each(function () {
+                if ($(this).data('select2')) {
+                    $(this).select2('destroy');
+                }
+            });
+        },
     },
-    'model.angsuran.rate_bunga': function () {
-      this.refreshAngsuran()
+    computed: {},
+    watch: {
+        'model.data_pemohon': {
+            handler(newVal) {
+                const values = Object.values(newVal);
+                const filledCount = values.filter(v => {
+                    if (typeof v === 'string') return v.trim() !== '';
+                    return v !== null && v !== undefined;
+                }).length;
+
+                if (filledCount === 0) {
+                    this.data_model_data_pemohon = 'kosong';
+                } else if (filledCount === values.length) {
+                    this.data_model_data_pemohon = 'lengkap';
+                } else {
+                    this.data_model_data_pemohon = 'partial';
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
+        'model.data_pekerjaan': {
+            handler(newVal) {
+                const values = Object.values(newVal);
+                const filledCount = values.filter(v => {
+                    if (typeof v === 'string') return v.trim() !== '';
+                    return v !== null && v !== undefined;
+                }).length;
+
+                if (filledCount === 0) {
+                    this.data_model_data_pekerjaan = 'kosong';
+                } else if (filledCount === values.length) {
+                    this.data_model_data_pekerjaan = 'lengkap';
+                } else {
+                    this.data_model_data_pekerjaan = 'partial';
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
+        'model.data_pasangan': {
+            handler(newVal) {
+                const values = Object.values(newVal);
+                const filledCount = values.filter(v => {
+                    if (typeof v === 'string') return v.trim() !== '';
+                    return v !== null && v !== undefined;
+                }).length;
+
+                if (filledCount === 0) {
+                    this.data_model_data_pasangan = 'kosong';
+                } else if (filledCount === values.length) {
+                    this.data_model_data_pasangan = 'lengkap';
+                } else {
+                    this.data_model_data_pasangan = 'partial';
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
+        'model.data_pengajuan': {
+            handler(newVal) {
+                const values = Object.values(newVal);
+                const filledCount = values.filter(v => {
+                    if (typeof v === 'string') return v.trim() !== '';
+                    return v !== null && v !== undefined;
+                }).length;
+
+                if (filledCount === 0) {
+                    this.data_model_data_pengajuan_kredit = 'kosong';
+                } else if (filledCount === values.length) {
+                    this.data_model_data_pengajuan_kredit = 'lengkap';
+                } else {
+                    this.data_model_data_pengajuan_kredit = 'partial';
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
+        'model.data_rekening': {
+            handler(newVal) {
+                const values = Object.values(newVal);
+                const filledCount = values.filter(v => {
+                    if (typeof v === 'string') return v.trim() !== '';
+                    return v !== null && v !== undefined;
+                }).length;
+
+                if (filledCount === 0) {
+                    this.data_model_data_rekening = 'kosong';
+                } else if (filledCount === values.length) {
+                    this.data_model_data_rekening = 'lengkap';
+                } else {
+                    this.data_model_data_rekening = 'partial';
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
+        'model.data_jaminan': {
+            handler(newVal) {
+                const values = Object.values(newVal);
+                const filledCount = values.filter(v => {
+                    if (typeof v === 'string') return v.trim() !== '';
+                    return v !== null && v !== undefined;
+                }).length;
+
+                if (filledCount === 0) {
+                    this.data_model_data_jaminan = 'kosong';
+                } else if (filledCount === values.length) {
+                    this.data_model_data_jaminan = 'lengkap';
+                } else {
+                    this.data_model_data_jaminan = 'partial';
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
+        'model.data_kontak': {
+            handler(newVal) {
+                const values = Object.values(newVal);
+                const filledCount = values.filter(v => {
+                    if (typeof v === 'string') return v.trim() !== '';
+                    return v !== null && v !== undefined;
+                }).length;
+
+                if (filledCount === 0) {
+                    this.data_model_data_kontak = 'kosong';
+                } else if (filledCount === values.length) {
+                    this.data_model_data_kontak = 'lengkap';
+                } else {
+                    this.data_model_data_kontak = 'partial';
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
     },
-    'model.angsuran.tenor': function () {
-      this.refreshAngsuran()
-      this.addMonths()
-    },
-    'model.angsuran.tanggal_mulai': function () {
-      this.refreshAngsuran()
-    },
-    'model.nasabah.tanggal_lahir': function (val) {
-      this.calculateAge(val)
-    },
-    'model.angsuran.provisi_percentage': function () {
-      if (typeof this.model.angsuran.nilai_plafond == 'string') {
-        this.model.angsuran.provisi_nominal = this.model.angsuran.nilai_plafond.replace(/[^0-9]/g, "") * (this.model.angsuran.provisi_percentage / 100)
-      }
-    },
-  },
 };
 </script>
+
 <style scoped>
 .responsive-offcanvas {
-  width: 100%;
+    width: 100%;
 }
 
 @media (min-width: 768px) {
-  .responsive-offcanvas {
-    width: 100%;
-  }
+    .responsive-offcanvas {
+        width: 100%;
+    }
 }
 
-.list-doc li,
-.list-doc li p {
-  white-space: normal;
-  float: left;
-  width: 100%;
-  height: auto;
-  word-wrap: break-word;
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.overflowy-hidden-style::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.overflowy-hidden-style {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+
+.entry-content h3 {
+    margin: 0;
+}
+
+.entry-content {
+    counter-reset: li;
+    padding: 1rem;
+}
+
+.entry-content>ol>li {
+    position: relative;
+}
+
+.entry-content>ol>li::before {
+    /* background: green; */
+    opacity: 0.95;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -15px;
+    width: 10px;
+    height: 100%;
+}
+
+.entry-content>ol {
+    list-style: decimal;
+    padding: 0 0 0 2rem;
+    margin: 0;
+}
+
+.entry-content>ol>ol {
+    margin: 0 0 0 1em;
+}
+
+.entry-content>ol>li {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.5rem 1rem;
+    margin: 0;
+    color: #000;
+    text-decoration: none;
+    border-radius: 1em;
+    transition: all 0.2s ease-in-out;
+    line-height: 1.4em;
+}
+
+.entry-content>ol>li:hover {
+    text-decoration: none;
+}
+
+.entry-content>ol>li:before {
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    z-index: 1;
+    left: -3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #774dd3;
+    width: 2em;
+    height: 2em;
+    display: grid;
+    place-content: center;
+    line-height: 1;
+    border: 2px solid #774dd3;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 100%;
+    color: #ffffff;
+}
+
+/* When kosong */
+.entry-content>ol>li.kosong:before {
+    background: rgb(234, 78, 61);
+    border-color: rgb(234, 78, 61);
+}
+
+/* When partial */
+.entry-content>ol>li.partial:before {
+    background: rgb(241, 153, 55);
+    border-color: rgb(241, 153, 55);
+}
+
+/* When lengkap */
+.entry-content>ol>li.lengkap:before {
+    background: rgb(85, 166, 248);
+    border-color: rgb(85, 166, 248);
+}
+
+.entry-content>ol>li:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: -5px;
+    left: -2rem;
+    width: 0.1rem;
+    background: #774dd3;
+    z-index: 0;
+}
+
+.entry-content>ol>li:first-child:after {
+    top: 50%;
+}
+
+.entry-content>ol>li:last-child:after {
+    top: 0;
+    bottom: 50%;
 }
 </style>

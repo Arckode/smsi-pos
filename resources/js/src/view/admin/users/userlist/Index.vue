@@ -13,8 +13,8 @@
                     <div class="card-header border-bottom pb-0">
                         <div class="d-sm-flex align-items-center">
                             <div>
-                                <h6 class="font-weight-semibold text-lg mb-0">Book lists</h6>
-                                <p class="text-sm">Informasi tentang semua Nasabah</p>
+                                <h6 class="font-weight-semibold text-lg mb-0">User lists</h6>
+                                <p class="text-sm">Informasi User terdaftar sebagai pengguna system</p>
                             </div>
                             <div class="ms-auto d-flex">
                                 <button v-if="canCreateUser" @click.prevent="addUser"

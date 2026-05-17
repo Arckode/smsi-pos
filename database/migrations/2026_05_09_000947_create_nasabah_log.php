@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inventory_categories', function (Blueprint $table) {
-            $table->id('category_id');
-            $table->string('category_name')->unique();
-            $table->boolean('status')->default(true);
+        Schema::create('nasabah_log', function (Blueprint $table) {
+            $table->id();
+            $table->string('action');
+            $table->integer('nasabah_id');
+            $table->json('payload_before')->nullable();
+            $table->json('payload_after')->nullable();
+            $table->integer('created_by')->nullable();
+
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inventory_categories');
+        Schema::dropIfExists('nasabah_status_log');
     }
 };
