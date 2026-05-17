@@ -144,6 +144,8 @@
                                             </p>
                                         </td> -->
                                         <td class="align-middle text-lg">
+                                            <a class="btn btn-sm mb-0 btn-success" @click="sendPengajuanEmail(item.id)">
+                                                Kirim email</a>
                                             <a class="btn btn-sm mb-0 btn-info" @click="changeStatus(item.id)">
                                                 {{ item.status_pengajuan }}</a>
                                             <a class="btn btn-sm btn-danger mb-0" @click="preview(item.id)">Preview</a>
@@ -316,6 +318,32 @@ export default {
                 window.open(url, '_blank');
             } catch (error) {
                 console.error('Preview error: ', error);
+            }
+        },
+        async sendPengajuanEmail(nasabahId) {
+            // Show a loading indicator here if you want (e.g., changing button text to "Sending...")
+            console.log("Sending email for Nasabah ID: " + nasabahId);
+
+            try {
+                const response = await fetch(`/api/nasabah/${nasabahId}/send-pengajuan`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.status) {
+                    alert('Success: ' + data.message);
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
             }
         },
 
