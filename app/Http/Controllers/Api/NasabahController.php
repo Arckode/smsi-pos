@@ -13,6 +13,10 @@ use App\Models\MenuUserSubmodulePermission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use App\Mail\PengajuanMail;
+use Illuminate\Support\Facades\Mail;
+use Spatie\Browsershot\Browsershot;
+
 class NasabahController extends Controller
 {
     // protected const SUBMODULE_URL = '/nasabah';
@@ -363,6 +367,38 @@ class NasabahController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Failed to upload file: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function sendPengajuan(Int $id)
+    {
+        try {
+
+            // 1. Fetch your data
+            $nasabah = Nasabah::findOrFail($id);
+
+            // 2. Compile your Blade template into raw HTML string
+            $html = view('preview', ['data' => $nasabah])->render();
+
+            // 3. Use Browsershot to render modern CSS (Tailwind, Flexbox, Grid, etc.)
+            $pdfRawBytes = Browsershot::html($html)
+                ->setChromePath('C:\Program Files\Google\Chrome\Application\chrome.exe')
+                ->format('A4')
+                ->margins(10, 10, 10, 10) // top, right, bottom, left in mm
+                ->showBackground()        // Critical if you use Tailwind background colors!
+                ->pdf();                  // Returns the raw binary string
+            // 4. Send using your existing Mailable fromData structure
+            Mail::to('rizalkh.arnanda@gmail.com')->send(new PengajuanMail($pdfRawBytes));
+
+            return response()->json([
+                'status' => true,
+                'message' => 'mail has been sent.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to send invoice: ' . $e->getMessage(),
             ], 500);
         }
     }
