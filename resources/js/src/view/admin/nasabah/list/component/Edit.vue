@@ -198,9 +198,12 @@
                                                         <label>Nama Perusahaan / Instansi</label>
                                                     </div>
                                                     <div class="col-md-9">
-                                                        <input type="text" v-model="model.data_pekerjaan.affiliasi_id"
-                                                            name="name_pt" class="form-control" placeholder=""
-                                                            required="">
+                                                        <select v-model="model.data_pekerjaan.affiliasi_id" name="affiliasi_id" class="form-select" required>
+                                                            <option value="" selected>Pilih Nama Perusahaan / Instansi</option>
+                                                            <option v-for="item in collections.affiliasi" :key="item.id" :value="item.id">
+                                                                {{ item.nama_affiliasi }}
+                                                            </option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
@@ -983,8 +986,7 @@ export default {
             componentload: false,
             userid: null,
             collections: {
-                roles: [],
-                units: [],
+                affiliasi: [],
             },
             model: {
                 // Section A: Data Pemohon
@@ -1101,6 +1103,7 @@ export default {
                 this.userid = id;
                 this.componentload = true;
                 await this.fetchRoles();
+                await this.fetchAffiliasi();
                 await this.fetchUnits();
                 await this.fetchNasabah(this.userid);
                 await this.openModal();
@@ -1112,6 +1115,19 @@ export default {
     methods: {
         asset(path) {
             return `${BASEURL}${path}`;
+        },
+        async fetchAffiliasi() {
+            let endpoint = `${BASEURL}/api/affiliasi/options`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                this.collections.affiliasi = response.data.data;
+            } catch (error) {
+                console.error("Error fetching affiliasi: ", error);
+            }
         },
         async fetchNasabah(id) {
             let endpoint = `${BASEURL}/api/nasabah/${id}`;

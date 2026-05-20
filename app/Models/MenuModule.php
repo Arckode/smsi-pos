@@ -13,7 +13,7 @@ class MenuModule extends Model
 
     protected $primaryKey = 'module_id'; // Specify the primary key
 
-    protected $fillable = ['name', 'url', 'icon'];
+    protected $fillable = ['name', 'url', 'icon', 'order'];
 
     // Relationships
     public function subModules()

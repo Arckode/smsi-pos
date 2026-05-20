@@ -130,7 +130,7 @@
                                                             {{ item.nama_lengkap }}
                                                         </a>
                                                         <p class="text-sm text-secondary mb-0">
-                                                            {{ item.affiliasi_id }}
+                                                            {{ item.affiliasi ? item.affiliasi.nama_affiliasi : '-' }}
                                                         </p>
                                                     </div>
                                                 </div>

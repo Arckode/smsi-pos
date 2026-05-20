@@ -48,7 +48,7 @@ class NasabahController extends Controller
     {
         // $this->authorizeSubmoduleAction('read');
         $relations = [
-            // 'unit:id,name',
+            'affiliasi:id,nama_affiliasi',
             // 'role:id,name'
         ];
 
@@ -115,7 +115,7 @@ class NasabahController extends Controller
                 'data_pemohon.jenis_kelamin' => 'nullable|string|max:255',
                 'data_pemohon.no_hp' => 'nullable|string|max:255',
                 'data_pemohon.status_perkawinan' => 'nullable|string|max:255',
-                'data_pekerjaan.affiliasi_id' => 'nullable|string|max:255',
+                'data_pekerjaan.affiliasi_id' => 'nullable|integer|max:255',
                 'data_pekerjaan.nip' => 'nullable|string|max:255',
                 'data_pekerjaan.npwp' => 'nullable|string|max:255',
                 'data_pekerjaan.no_bpjs' => 'nullable|string|max:255',

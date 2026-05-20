@@ -41,7 +41,7 @@ class UserAccessController extends Controller
     {
         $this->authorizeSubmoduleAction('read');
 
-        $allModules = MenuModule::with('subModules')->get();
+        $allModules = MenuModule::with('subModules')->orderBy('order')->get();
 
         $users = User::with(['menuUserAccess', 'submodulePermissions'])->get();
 

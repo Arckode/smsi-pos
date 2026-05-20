@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('module_id');
             $table->string('name');
             $table->string('icon')->nullable();
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

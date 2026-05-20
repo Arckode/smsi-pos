@@ -174,8 +174,12 @@
                                                 <label>Nama Perusahaan / Instansi</label>
                                             </div>
                                             <div class="col-md-9">
-                                                <input type="text" v-model="model.data_pekerjaan.affiliasi_id" name="name_pt"
-                                                    class="form-control" placeholder="" required="">
+                                                <select v-model="model.data_pekerjaan.affiliasi_id" name="affiliasi_id" class="form-control" required="">
+                                                    <option value="">Pilih Affiliasi</option>
+                                                    <option v-for="item in collections.affiliasi" :key="item.id" :value="item.id">
+                                                        {{ item.nama_affiliasi }}
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -782,8 +786,7 @@ export default {
             loading: false,
             componentload: false,
             collections: {
-                roles: [],
-                units: [],
+                affiliasi: [],
             },
             model: {
                 // Section A: Data Pemohon
@@ -887,10 +890,9 @@ export default {
                     keyboard: false,
                 });
                 await this.openModal();
-
+                
                 this.componentload = true;
-                await this.fetchRoles();
-                await this.fetchUnits();
+                await this.fetchAffiliasi();
                 this.componentload = false;
             }
 
@@ -901,6 +903,19 @@ export default {
             return `${BASEURL}${path}`;
         },
 
+        async fetchAffiliasi() {
+            let endpoint = `${BASEURL}/api/affiliasi/options`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                this.collections.affiliasi = response.data.data;
+            } catch (error) {
+                console.error("Error fetching affiliasi: ", error);
+            }
+        },
         confirmStore() {
             Swal.fire({
                 title: 'Are you sure?',

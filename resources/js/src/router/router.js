@@ -16,6 +16,7 @@ const Login = () => import("../Auth.vue");
 import AdminIndex from "../view/admin/Index.vue";
 import A_UserListsIndex from "../view/admin/users/userlist/Index.vue";
 import A_UserAccessIndex from "../view/admin/users/useraccess/Index.vue";
+import A_AffiliasiIndex from "../view/admin/management/affiliasi/Index.vue";
 // import A_BooksIndex from "../view/admin/book/Index.vue";
 
 import A_NasabahListIndex from "../view/admin/nasabah/list/Index.vue";
@@ -90,6 +91,14 @@ const router = createRouter({
             component: A_UserListsIndex,
             meta: {
                 breadcrumb: "User List Management"
+            },
+        },
+        {
+            path: "/management/affiliasi",
+            name: "admin.affiliasi",
+            component: A_AffiliasiIndex,
+            meta: {
+                breadcrumb: "Affiliasi Management"
             },
         },
         {

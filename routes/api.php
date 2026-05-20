@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\UserListController;
 use App\Http\Controllers\Api\UserAccessController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\UserRolesController;
+use App\Http\Controllers\Api\AffiliasiController;
 use App\Http\Controllers\Api\NasabahController;
 
 
@@ -67,6 +68,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reset-password/{id}', [UserListController::class, 'resetPassword']);
     Route::put('/users/{id}', [UserListController::class, 'update']);
     Route::apiResource('/users', UserListController::class);
+
+    Route::get('/affiliasi/options', [AffiliasiController::class, 'options']);
+    Route::apiResource('/affiliasi', AffiliasiController::class);
 
     Route::get('/role/options', [UserRolesController::class, 'options']);
     Route::get('/unit/options', [UnitController::class, 'options']);

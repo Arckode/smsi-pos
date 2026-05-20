@@ -123,6 +123,7 @@ class AuthController extends Controller
                     $accessesData[$moduleId] = [
                         'name' => $module->name,
                         'url' => $module->url,
+                        'order' => $module->order ?? 0,
                         'submodules' => [],
                     ];
                 }
@@ -135,6 +136,14 @@ class AuthController extends Controller
             }
 
             $accessesData = array_values($accessesData);
+            usort($accessesData, function ($a, $b) {
+                return ($a['order'] ?? 0) <=> ($b['order'] ?? 0);
+            });
+            // remove order key before returning
+            $accessesData = array_map(function ($item) {
+                unset($item['order']);
+                return $item;
+            }, $accessesData);
 
             return response()->json([
                 'status' => true,
@@ -212,6 +221,7 @@ class AuthController extends Controller
                     $accessesData[$moduleId] = [
                         'name' => $module->name,
                         'url' => $module->url,
+                        'order' => $module->order ?? 0,
                         'submodules' => [],
                     ];
                 }
@@ -224,6 +234,14 @@ class AuthController extends Controller
             }
 
             $accessesData = array_values($accessesData);
+            usort($accessesData, function ($a, $b) {
+                return ($a['order'] ?? 0) <=> ($b['order'] ?? 0);
+            });
+            // remove order key before returning
+            $accessesData = array_map(function ($item) {
+                unset($item['order']);
+                return $item;
+            }, $accessesData);
 
             return response()->json([
                 'status' => true,

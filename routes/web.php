@@ -47,6 +47,10 @@ Route::get('/users/{any}', function () {
     return view('admin');
 })->where('any', '^(?!api\/)(?!storage\/)[\/\w\.-]*');
 
+Route::get('/management/{any}', function () {
+    return view('admin');
+})->where('any', '^(?!api\/)(?!storage\/)[\/\w\.-]*');
+
 Route::get('/admin', function () {
     return view('admin');
 });

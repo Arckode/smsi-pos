@@ -29,7 +29,7 @@ class NasabahRequest extends FormRequest
             'status_perkawinan' => 'nullable|string|max:255',
 
             // Section B: Data Pekerjaan
-            'affiliasi_id' => 'nullable|string|max:255',
+            'affiliasi_id' => 'nullable|integer|max:255',
             'nip' => 'nullable|string|max:255',
             'npwp' => 'nullable|string|max:255',
             'no_bpjs' => 'nullable|string|max:255',

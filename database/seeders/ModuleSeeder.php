@@ -11,9 +11,10 @@ class ModuleSeeder extends Seeder
     {
         // Modules
         DB::table('menu_modules')->insert([
-            ['name' => 'Management', 'icon' => 'fas fa-users'],
+            ['name' => 'User Management', 'icon' => 'fas fa-users'],
             ['name' => 'Nasabah Management', 'icon' => 'fas fa-box'],
             ['name' => 'Settings', 'icon' => 'fas fa-cog'],
+            ['name' => 'System Management', 'icon' => 'fas fa-handshake'],
         ]);
 
         // Sub-modules
@@ -23,6 +24,7 @@ class ModuleSeeder extends Seeder
             ['module_id' => 2, 'sub_module_name' => 'Nasabah Lists', 'url' => '/nasabah/lists'],
             ['module_id' => 2, 'sub_module_name' => 'Pengajuan BI Check', 'url' => '/nasabah/submit/request'],
             ['module_id' => 3, 'sub_module_name' => 'General Settings', 'url' => '/settings'],
+            ['module_id' => 4, 'sub_module_name' => 'Affiliasi', 'url' => '/management/affiliasi'],
         ]);
 
         // User Access (Example - Replace with your actual user IDs and module assignments)

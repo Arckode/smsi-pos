@@ -110,4 +110,8 @@ class Nasabah extends Model
         'status_nasabah',
     ];
 
+    public function affiliasi()
+    {
+        return $this->belongsTo(Affiliasi::class, 'affiliasi_id');
+    }
 }
