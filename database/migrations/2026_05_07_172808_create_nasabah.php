@@ -30,6 +30,7 @@ return new class extends Migration
             // Section B: Data Pekerjaan
             $table->integer('affiliasi_id')->nullable();
             $table->string('nip')->nullable();
+            $table->string('npwp')->nullable();
             $table->string('no_bpjs')->nullable();
             $table->string('jabatan')->nullable();
             $table->enum('status_kepegawaian', ['Tetap', 'Kontrak', 'Outsourcing'])->nullable();
@@ -80,39 +81,33 @@ return new class extends Migration
 
             // Section H: Dokumen Pendukung (Menyimpan path/file name)
             $table->string('dokumen_ktp')->nullable();
-            $table->boolean('is_dokumen_ktp')->default(false)->nullable();
             $table->integer('uploader_dokumen_ktp')->nullable();
 
             $table->string('dokumen_kartu_keluarga')->nullable();
-            $table->boolean('is_dokumen_kartu_keluarga')->default(false)->nullable();
             $table->integer('uploader_dokumen_kartu_keluarga')->nullable();
 
             $table->string('dokumen_npwp')->nullable();
-            $table->boolean('is_dokumen_npwp')->default(false)->nullable();
             $table->integer('uploader_dokumen_npwp')->nullable();
             
             $table->string('dokumen_ktp_pasangan')->nullable();
-            $table->boolean('is_dokumen_ktp_pasangan')->default(false)->nullable();
             $table->integer('uploader_dokumen_ktp_pasangan')->nullable();
 
             $table->string('dokumen_asuransi')->nullable();
-            $table->boolean('is_dokumen_asuransi')->default(false)->nullable();
             $table->integer('uploader_dokumen_asuransi')->nullable();
 
             $table->string('dokumen_id_card_perusahaan')->nullable();
-            $table->boolean('is_dokumen_id_card_perusahaan')->default(false)->nullable();
             $table->integer('uploader_dokumen_id_card_perusahaan')->nullable();
 
             $table->string('dokumen_selfie')->nullable();
-            $table->boolean('is_dokumen_selfie')->default(false)->nullable();
             $table->integer('uploader_dokumen_selfie')->nullable();
 
             $table->string('dokumen_surat_pernyataan')->nullable();
-            $table->boolean('is_dokumen_surat_pernyataan')->default(false)->nullable();
             $table->integer('uploader_dokumen_surat_pernyataan')->nullable();
 
             // Status dan tracking
             $table->enum('status_pengajuan', ['Draft', 'Submitted', 'User Review', 'Approved', 'Rejected'])->default('Draft');
+            $table->boolean('validation')->default(false)->nullable();
+            $table->integer('validated_by')->nullable();
             $table->text('catatan')->nullable();
 
             $table->timestamps();

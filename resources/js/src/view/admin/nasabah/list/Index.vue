@@ -96,7 +96,7 @@
                             </div>
 
                         </div>
-                        <div class="table-responsive p-0">
+                        <div class="p-3">
                             <div v-if="loadContent" class="d-flex justify-content-center p-4">
                                 <div class="spinner-border text-primary" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -106,56 +106,165 @@
                                 <h6 class="text-danger">Anda tidak memiliki izin untuk melihat data pada halaman ini.
                                 </h6>
                             </div>
-                            <table v-else ref="userTable"
-                                class="table table-striped table-hover align-items-center mb-0">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="text-sm font-weight-semibold opacity-7">Nama Nasabah <br> Affiliasi
-                                        </th>
-                                        <!-- <th class="text-sm font-weight-semibold opacity-7">Role</th>
-                                        <th class="text-sm font-weight-semibold opacity-7">unit</th> -->
-                                        <th class="text-sm font-weight-semibold opacity-7">Status</th>
-                                        <!-- <th class="text-sm font-weight-semibold opacity-7">Action</th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="item in collection.users.data" :key="item.id">
-                                        <td class="align-middle text-lg">
-                                            <div class="d-flex px-3 py-1">
-                                                <div class="d-flex flex-column justify-content-start ms-1">
-                                                    <a class="mb-0 text-sm font-weight-semibold text-primary text-bold"
-                                                        @click.prevent="editNasabah(item.id)">
-                                                        {{ item.nama_lengkap }}
-                                                    </a>
-                                                    <p class="text-sm text-secondary mb-0">
-                                                        {{ item.affiliasi_id }}
-                                                    </p>
+                            <div v-else class="table-responsive">
+                                <table class="table table-striped table-hover align-items-center mb-0">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="text-sm font-weight-semibold opacity-7">
+                                                Nama Nasabah
+                                                <br>
+                                                Affiliasi
+                                            </th>
+                                            <th class="text-sm font-weight-semibold opacity-7">Kelengkapan Dokumen</th>
+                                            <th class="text-sm font-weight-semibold opacity-7 text-center">Status Nasabah</th>
+                                            <th class="text-sm font-weight-semibold opacity-7">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in collection.users.data" :key="item.id">
+                                            <td class="align-middle text-lg">
+                                                <div class="d-flex px-3 py-1">
+                                                    <div class="d-flex flex-column justify-content-start ms-1">
+                                                        <a class="mb-0 text-sm font-weight-semibold text-primary text-bold"
+                                                            @click.prevent="editNasabah(item.id)">
+                                                            {{ item.nama_lengkap }}
+                                                        </a>
+                                                        <p class="text-sm text-secondary mb-0">
+                                                            {{ item.affiliasi_id }}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <!-- <td class="align-middle text-lg">
-                                            <p class="text-sm text-secondary mb-0">
-                                                {{ item.role.name }}
-                                            </p>
-                                        </td>
-                                        <td class="align-middle text-lg">
-                                            <p class="text-sm text-secondary mb-0">
-                                                {{ item.unit.name }}
-                                            </p>
-                                        </td> -->
-                                        <td class="align-middle text-lg">
-                                            <a class="btn btn-sm mb-0 btn-success" @click="sendPengajuanEmail(item.id)">
-                                                Kirim email</a>
-                                            <a class="btn btn-sm mb-0 btn-info" @click="changeStatus(item.id)">
-                                                {{ item.status_pengajuan }}</a>
-                                            <a class="btn btn-sm btn-danger mb-0" @click="preview(item.id)">Preview</a>
-                                        </td>
-                                        <!-- <td>
-                                            
-                                        </td> -->
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            </td>
+                                            <td class="align-middle text-lg">
+                                                <div id="content">
+                                                    <div id="horz-list">
+                                                        <ul class="d-flex flex-row">
+                                                            <li>
+                                                                <div class="d-flex flex-column">
+                                                                    <p class="text-sm text-secondary mb-0">
+                                                                        KTP
+                                                                    </p>
+                                                                    <template v-if="item.dokumen_ktp != null">
+                                                                        <i class="fas fa-check-circle text-primary"></i>
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                                    </template>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="d-flex flex-column">
+                                                                    <p class="text-sm text-secondary mb-0">
+                                                                        KK
+                                                                    </p>
+                                                                    <template v-if="item.dokumen_kartu_keluarga != null">
+                                                                        <i class="fas fa-check-circle text-primary"></i>
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                                    </template>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="d-flex flex-column">
+                                                                    <p class="text-sm text-secondary mb-0">
+                                                                        NPWP
+                                                                    </p>
+                                                                    <template v-if="item.dokumen_npwp != null">
+                                                                        <i class="fas fa-check-circle text-primary"></i>
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                                    </template>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="d-flex flex-column">
+                                                                    <p class="text-sm text-secondary mb-0">
+                                                                        Pasangan
+                                                                    </p>
+                                                                    <template v-if="item.dokumen_ktp_pasangan != null">
+                                                                        <i class="fas fa-check-circle text-primary"></i>
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                                    </template>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="d-flex flex-column">
+                                                                    <p class="text-sm text-secondary mb-0">
+                                                                        Asuransi
+                                                                    </p>
+                                                                    <template v-if="item.dokumen_asuransi != null">
+                                                                        <i class="fas fa-check-circle text-primary"></i>
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                                    </template>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="d-flex flex-column">
+                                                                    <p class="text-sm text-secondary mb-0">
+                                                                        ID Card
+                                                                    </p>
+                                                                    <template
+                                                                        v-if="item.dokumen_id_card_perusahaan != null">
+                                                                        <i class="fas fa-check-circle text-primary"></i>
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                                    </template>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="d-flex flex-column">
+                                                                    <p class="text-sm text-secondary mb-0">
+                                                                        Selfie
+                                                                    </p>
+                                                                    <template v-if="item.dokumen_selfie != null">
+                                                                        <i class="fas fa-check-circle text-primary"></i>
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                                    </template>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="d-flex flex-column">
+                                                                    <p class="text-sm text-secondary mb-0">
+                                                                        Pernyataan
+                                                                    </p>
+                                                                    <template v-if="item.dokumen_surat_pernyataan != null">
+                                                                        <i class="fas fa-check-circle text-primary"></i>
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        <i class="fas fa-times-circle text-danger"></i>
+                                                                    </template>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle text-center text-lg">
+                                                <a class="btn btn-sm mb-0 btn-secondary" @click="changeStatus(item.id)">
+                                                    {{ item.status_pengajuan }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a v-if="email_integration" class="btn btn-sm mb-0 btn-success" @click="sendPengajuanEmail(item.id)">
+                                                        Kirim email
+                                                    </a>
+                                                    <a class="btn btn-sm mb-0 btn-info" @click.prevent="downloadPreview(item.id, item.nama_lengkap)"><span>PDF Pengajuan</span></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="border-top py-3 px-3 d-flex align-items-center flex-wrap">
                             <div class="d-flex flex-column">
@@ -224,6 +333,7 @@ export default {
         return {
             loadContent: true,
             filterisHidden: false,
+            email_integration: false,
             meta: {
                 user: '',
                 page: {
@@ -269,10 +379,6 @@ export default {
         }
     },
 
-    beforeUnmount() {
-        this.destroyDataTable();
-    },
-
     methods: {
         asset(path) {
             return `${BASEURL}${path}`
@@ -315,11 +421,59 @@ export default {
 
                 const url = URL.createObjectURL(blob);
 
+                // Open the URL in a new tab (optional, if you want to show the preview before downloading)
                 window.open(url, '_blank');
+
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+
             } catch (error) {
                 console.error('Preview error: ', error);
             }
         },
+        async preview_asuransi(id) {
+            let endpoint = `${BASEURL}/api/asuransi/${id}`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: { Authorization: 'Bearer ' + this.$token() }
+                });
+
+                const blob = new Blob([response.data], { type: 'text/html' });
+
+                const url = URL.createObjectURL(blob);
+
+                // Open the URL in a new tab (optional, if you want to show the preview before downloading)
+                window.open(url, '_blank');
+
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+
+            } catch (error) {
+                console.error('Preview error: ', error);
+            }
+        },
+
+        async downloadPreview(id, name) {
+            let endpoint = `${BASEURL}/api/preview-pdf/${id}`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: { Authorization: 'Bearer ' + this.$token() },
+                    responseType: 'blob',
+                });
+
+                const blob = new Blob([response.data], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const anchor = document.createElement('a');
+                const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '_') : 'nasabah';
+                anchor.href = url;
+                anchor.download = `preview_nasabah_${safeName}_${id}.pdf`;
+                document.body.appendChild(anchor);
+                anchor.click();
+                document.body.removeChild(anchor);
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+            } catch (error) {
+                console.error('Download preview error: ', error);
+            }
+        },
+
         async sendPengajuanEmail(nasabahId) {
             // Show a loading indicator here if you want (e.g., changing button text to "Sending...")
             console.log("Sending email for Nasabah ID: " + nasabahId);
@@ -423,31 +577,31 @@ export default {
             });
         },
 
-        initDataTable() {
-            this.$nextTick(() => {
-                if (!this.collection.users || !Array.isArray(this.collection.users.data)) {
-                    return;
-                }
+        // initDataTable() {
+        //     this.$nextTick(() => {
+        //         if (!this.collection.users || !Array.isArray(this.collection.users.data)) {
+        //             return;
+        //         }
 
-                this.destroyDataTable();
+        //         this.destroyDataTable();
 
-                this.dataTable = $(this.$refs.userTable).DataTable({
-                    dom: 't',
-                    responsive: true,
-                    autoWidth: false,
-                    paging: false,
-                    searching: false,
-                    ordering: true,
-                    info: false,
-                    lengthChange: false,
-                    language: {
-                        zeroRecords: "Tidak ada data yang cocok",
-                    }
-                });
+        //         this.dataTable = $(this.$refs.NasabahTable).DataTable({
+        //             dom: 't',
+        //             responsive: true,
+        //             autoWidth: false,
+        //             paging: false,
+        //             searching: false,
+        //             ordering: true,
+        //             info: false,
+        //             lengthChange: false,
+        //             language: {
+        //                 zeroRecords: "Tidak ada data yang cocok",
+        //             }
+        //         });
 
-                this.initSelect2Filters();
-            });
-        },
+        //         this.initSelect2Filters();
+        //     });
+        // },
 
         async fetchUserList() {
             this.destroyDataTable();
@@ -478,7 +632,7 @@ export default {
                 this.meta.page.userList.current_page = this.collection.users.current_page
                 this.meta.page.userList.last_page = this.collection.users.last_page
                 this.loadContent = false
-                this.initDataTable();
+                // this.initDataTable();
             } catch (error) {
                 console.error("Error fetching document list: ", error);
                 if (requestId === this.requestCounter) {
@@ -548,7 +702,7 @@ export default {
                 this.meta.page.userList.current_page = this.collection.users.current_page
                 this.meta.page.userList.last_page = this.collection.users.last_page
                 Swal.close()
-                this.initDataTable();
+                // this.initDataTable();
             } catch (error) {
                 console.error("Error fetching document list: ", error);
             }
@@ -695,4 +849,28 @@ export default {
 #filter-toggleBtn {
     width: 100px;
 }
+
+#horz-list ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+}
+
+#horz-list ul li {
+    display: inline;
+}
+
+#horz-list ul li {
+    text-decoration: none;
+    margin: 10px;
+    width: 60px;
+    /* border-right: 1px solid rgba(170, 54, 216, 0.8); */
+    /* margin: 0 0 0 -6px; */
+}
+
+/* #horz-list ul li a:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: #1a1a1a;
+} */
 </style>

@@ -59,6 +59,9 @@ Route::get('/neraca', function () {
 Route::get('/preview', function () {
     return view('preview');
 });
+Route::get('/asuransi', function () {
+    return view('asuransi');
+});
 Route::get('/nasabah/{any}', function () {
     return view('admin');
 })->where('any', '^(?!api\/)(?!storage\/)[\/\w\.-]*');

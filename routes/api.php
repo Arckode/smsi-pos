@@ -72,7 +72,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/unit/options', [UnitController::class, 'options']);
 
     Route::get('/nasabah/options', [NasabahController::class, 'options']);
+    Route::get('/preview-pdf/{id}', [NasabahController::class, 'downloadPreviewPdf']);
     Route::get('/preview/{id}', [NasabahController::class, 'showPreview']);
+    Route::get('/asuransi/{id}', [NasabahController::class, 'showAsuransi']);
     Route::post('/nasabah/upload', [NasabahController::class, 'upload']);
     Route::post('/nasabah/{id}/send-pengajuan', [NasabahController::class, 'sendPengajuan']);
 

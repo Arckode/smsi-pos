@@ -1,8 +1,8 @@
 import "./bootstrap";
 import $ from "jquery";
 window.$ = window.jQuery = $;
-import "datatables.net-bs5";
-import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+// import "datatables.net-bs5";
+// import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import "select2/dist/js/select2.full.min.js";
 import "select2/dist/css/select2.min.css";
 import "select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css";

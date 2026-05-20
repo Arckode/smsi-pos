@@ -75,7 +75,7 @@
 </head>
 <body>
 
-    <pre>@php print_r($data) @endphp</pre>
+    {{-- <pre>@php print_r($data) @endphp</pre> --}}
     <div class="page">
         <div class="header">
             <div class="logo-area">

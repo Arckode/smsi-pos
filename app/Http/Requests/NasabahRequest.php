@@ -31,6 +31,7 @@ class NasabahRequest extends FormRequest
             // Section B: Data Pekerjaan
             'affiliasi_id' => 'nullable|string|max:255',
             'nip' => 'nullable|string|max:255',
+            'npwp' => 'nullable|string|max:255',
             'no_bpjs' => 'nullable|string|max:255',
             'jabatan' => 'nullable|string|max:255',
             'status_kepegawaian' => ['nullable', Rule::in(['Tetap', 'Kontrak', 'Outsourcing'])],

@@ -29,6 +29,7 @@ class Nasabah extends Model
         // Section B: Data Pekerjaan
         'affiliasi_id',
         'nip',
+        'npwp',
         'no_bpjs',
         'jabatan',
         'status_kepegawaian',
@@ -79,37 +80,31 @@ class Nasabah extends Model
 
         // Section H: Data Dokumen Pendukung
         'dokumen_ktp',
-        'is_dokumen_ktp',
         'uploader_dokumen_ktp',
 
         'dokumen_kartu_keluarga',
-        'is_dokumen_kartu_keluarga',
         'uploader_dokumen_kartu_keluarga',
         
         'dokumen_npwp',
-        'is_dokumen_npwp',
         'uploader_dokumen_npwp',
         
         'dokumen_ktp_pasangan',
-        'is_dokumen_ktp_pasangan',
         'uploader_dokumen_ktp_pasangan',
         
         'dokumen_asuransi',
-        'is_dokumen_asuransi',
         'uploader_dokumen_asuransi',
         
         'dokumen_id_card_perusahaan',
-        'is_dokumen_id_card_perusahaan',
         'uploader_dokumen_id_card_perusahaan',
         
         'dokumen_selfie',
-        'is_dokumen_selfie',
         'uploader_dokumen_selfie',
         
         'dokumen_surat_pernyataan',
-        'is_dokumen_surat_pernyataan',
         'uploader_dokumen_surat_pernyataan',
         
+        'validation',
+        'validated_by',
         'status_pengajuan',
         'catatan',
         'status_nasabah',

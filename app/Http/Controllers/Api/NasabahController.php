@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAccessRequest;
 use App\Models\Nasabah;
+use App\Models\NasabahLog;
+use App\Models\NasabahStatusLog;
 use App\Models\MenuModule;
 use App\Models\MenuSubmodule;
 use App\Models\User;
@@ -115,6 +117,7 @@ class NasabahController extends Controller
                 'data_pemohon.status_perkawinan' => 'nullable|string|max:255',
                 'data_pekerjaan.affiliasi_id' => 'nullable|string|max:255',
                 'data_pekerjaan.nip' => 'nullable|string|max:255',
+                'data_pekerjaan.npwp' => 'nullable|string|max:255',
                 'data_pekerjaan.no_bpjs' => 'nullable|string|max:255',
                 'data_pekerjaan.jabatan' => 'nullable|string|max:255',
                 'data_pekerjaan.status_kepegawaian' => 'nullable|string|max:255',
@@ -320,6 +323,62 @@ class NasabahController extends Controller
         return view('preview', ['data' => $nasabah]);
     }
 
+    private function getBrowsershotExecutablePath(): ?string
+    {
+        $customPath = env('BROWSERSHOT_CHROME_PATH');
+        if ($customPath && file_exists($customPath)) {
+            return $customPath;
+        }
+
+        $paths = [
+            'C:\Program Files\Google\Chrome\Application\chrome.exe',
+            'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',
+            '/usr/bin/google-chrome',
+            '/usr/bin/chromium-browser',
+            '/usr/bin/chromium',
+            '/usr/bin/chrome',
+        ];
+
+        foreach ($paths as $path) {
+            if (file_exists($path)) {
+                return $path;
+            }
+        }
+
+        return null;
+    }
+
+    public function downloadPreviewPdf(int $id)
+    {
+        $nasabah = Nasabah::findOrFail($id);
+        $html = view('preview', ['data' => $nasabah])->render();
+
+        $browserShot = Browsershot::html($html)
+            ->format('A4')
+            ->margins(10, 10, 10, 10)
+            ->showBackground();
+
+        if ($chromePath = $this->getBrowsershotExecutablePath()) {
+            $browserShot->setChromePath($chromePath);
+        }
+
+        $pdfRawBytes = $browserShot->pdf();
+
+        $fileName = 'Pengajuan_nasabah_' . preg_replace('/[^a-zA-Z0-9-_]/', '_', $nasabah->nama_lengkap ?? 'nasabah') . '.pdf';
+
+        return response($pdfRawBytes, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
+    }
+
+    public function showAsuransi(int $id)
+    {
+        $nasabah = Nasabah::findOrFail($id);
+
+        return view('asuransi', ['data' => $nasabah]);
+    }
+
     public function upload(Request $request)
     {
         try {
@@ -382,12 +441,16 @@ class NasabahController extends Controller
             $html = view('preview', ['data' => $nasabah])->render();
 
             // 3. Use Browsershot to render modern CSS (Tailwind, Flexbox, Grid, etc.)
-            $pdfRawBytes = Browsershot::html($html)
-                ->setChromePath('C:\Program Files\Google\Chrome\Application\chrome.exe')
+            $browserShot = Browsershot::html($html)
                 ->format('A4')
                 ->margins(10, 10, 10, 10) // top, right, bottom, left in mm
-                ->showBackground()        // Critical if you use Tailwind background colors!
-                ->pdf();                  // Returns the raw binary string
+                ->showBackground();        // Critical if you use Tailwind background colors!
+
+            if ($chromePath = $this->getBrowsershotExecutablePath()) {
+                $browserShot->setChromePath($chromePath);
+            }
+
+            $pdfRawBytes = $browserShot->pdf();                  // Returns the raw binary string
             // 4. Send using your existing Mailable fromData structure
             Mail::to('rizalkh.arnanda@gmail.com')->send(new PengajuanMail($pdfRawBytes));
 

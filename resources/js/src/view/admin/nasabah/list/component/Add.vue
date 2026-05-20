@@ -189,6 +189,15 @@
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-3 m-auto">
+                                                <label>No. NPWP</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <input type="text" v-model="model.data_pekerjaan.npwp" name="npwp"
+                                                    class="form-control" placeholder="" required="">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3 m-auto">
                                                 <label>No. BPJS Tenaga Kerja</label>
                                             </div>
                                             <div class="col-md-9">
@@ -794,6 +803,7 @@ export default {
                 data_pekerjaan: {
                     affiliasi_id: '',
                     nip: '',
+                    npwp: '',
                     no_bpjs: '',
                     jabatan: '',
                     status_kepegawaian: '',
