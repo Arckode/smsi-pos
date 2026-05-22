@@ -126,7 +126,7 @@ const router = createRouter({
             name: "admin.nasabahlist",
             component: A_NasabahListIndex,
             meta: {
-                breadcrumb: "Nasabah",
+                breadcrumb: "Nasabah Lists",
             },
         },
         //-----------------------------------------------------------------------------------------------------------------------------------

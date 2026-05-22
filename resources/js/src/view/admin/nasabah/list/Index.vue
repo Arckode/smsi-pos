@@ -9,239 +9,356 @@
     <div class="container-fluid py-4 px-5">
         <div class="row">
             <div class="col-12">
-                <div class="card border shadow-xs mb-4">
-                    <div class="card-header border-bottom pb-0">
-                        <div class="d-sm-flex align-items-center">
-                            <div>
-                                <h6 class="font-weight-semibold text-lg mb-0">Nasabah lists</h6>
-                                <p class="text-sm">Informasi Nasabah yang sudah diverifikasi</p>
+
+                <ul class="nav nav-pills mb-3" role="tablist">
+                    <li class="nav-item border-1 rounded-1" role="presentation">
+                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'notValidated' }"
+                            @click.prevent="switchTab('notValidated')" type="button" role="tab">
+                            <div class="d-flex flex-column align-items-start text-start">
+                                <h5 class="text-xs">Validasi Nasabah</h5>
+                                <p class="text-xxs text-muted">List pengajuan <b class="text-warning">Online & Belum
+                                        terverifikasi</b></p>
+                                <div class="progress w-100">
+                                    <div class="progress-bar bg-success w-25" role="progressbar" aria-valuenow="100"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="text-xxs text-end mt-3 mb-0">100 Nasabah</p>
                             </div>
-                            <div class="ms-auto d-flex">
-                                <button v-if="canCreateNasabah" @click.prevent="addUser"
-                                    class="btn btn-sm btn-primary d-flex align-items-center me-2" type="button"
-                                    :disabled="loadContent">
-                                    <span class="btn-inner--icon">
-                                        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 448 512" fill="currentColor" class="d-block me-2">
-                                            <path
-                                                d="M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
-                                        </svg>
-                                    </span>
-                                    Tambah Baru
-                                </button>
+                        </button>
+                    </li>
+                    <li class="nav-item border-1 rounded-1" role="presentation">
+                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'draft' }"
+                            @click.prevent="switchTab('draft')" type="button" role="tab">
+                            <div class="d-flex flex-column align-items-start text-start">
+                                <h5 class="text-xs">Drafting</h5>
+                                <p class="text-xxs text-muted">List nasabah yang <b class="text-danger">Belum Pengajuan
+                                        BI
+                                        Checking</b></p>
+                                <div class="progress w-100">
+                                    <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <h6 class="text-xxs text-muted mt-3 mb-0">Total : 50 nasabah</h6>
+                            </div>
+                        </button>
+                    </li>
+                    <li class="nav-item border-1 rounded-1" role="presentation">
+                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'submitted' }"
+                            @click.prevent="switchTab('submitted')" type="button" role="tab">
+                            <div class="d-flex flex-column align-items-start text-start">
+                                <h5 class="text-xs">Submitted</h5>
+                                <p class="text-xxs text-muted">List nasabah yang <b class="text-info">Sudah Menerima BI
+                                        Checking</b></p>
+                                <div class="progress w-100">
+                                    <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <h6 class="text-xxs text-muted mt-3 mb-0">Total : 50 nasabah</h6>
+                            </div>
+                        </button>
+                    </li>
+                    <li class="nav-item border-1 rounded-1" role="presentation">
+                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'rejected' }"
+                            @click.prevent="switchTab('rejected')" type="button" role="tab">
+                            <div class="d-flex flex-column align-items-start text-start">
+                                <h5 class="text-xs">Rejected</h5>
+                                <p class="text-xxs text-muted">List nasabah yang <b class="text-danger">Menolak Proposal
+                                        KB Bank</b></p>
+                                <div class="progress w-100">
+                                    <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <h6 class="text-xxs text-muted mt-3 mb-0">Total : 50 nasabah</h6>
+                            </div>
+                        </button>
+                    </li>
+                    <li class="nav-item border-1 rounded-1" role="presentation">
+                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'accepted' }"
+                            @click.prevent="switchTab('accepted')" type="button" role="tab">
+                            <div class="d-flex flex-column align-items-start text-start">
+                                <h5 class="text-xs">Accepted</h5>
+                                <p class="text-xxs text-muted">List nasabah yang <b class="text-success">Menerima
+                                        Proposal KB Bank</b></p>
+                                <div class="progress w-100">
+                                    <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <h6 class="text-xxs text-muted mt-3 mb-0">Total : 50 nasabah</h6>
+                            </div>
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="d-flex justify-content-center my-4 align-items-center">
+                    <hr class="ms-6 w-50">
+                    <a class="btn btn-xs btn-white text-xxs mb-0 py-1">
+                        <span class="text-xxs text-muted mb-0 fw-normal flex-shrink-0 d-flex align-items-center justify-content-center gap-1">
+                            <i class="fas fa-search text-info"></i> 
+                            <p class="mb-0 text-info text-xxs fw-normal flex-shrink-0">Find Nasabah</p>
+                        </span>
+                    </a>
+                    <hr class="me-6 w-50">
+                </div>
+
+                <div class="tab-content mt-4" id="pills-tabContent">
+
+                    <div v-show="meta.currentTab === 'notValidated'" class="tab-pane fade show"
+                        :class="meta.currentTab === 'notValidated' ? 'active' : ''" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="text-sm mb-0">Validasi Nasabah</h6>
+                                <p class="text-xxs text-muted mb-0">List pengajuan online yang belum terverifikasi.</p>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text text-body">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
+                                    </path>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control text-xxs"
+                                placeholder="Search nasabah yang belum terverifikasi"
+                                v-model="meta.search.notValidated">
+                        </div>
+
+                        <div v-if="loadContentUnvalidated" class="d-flex justify-content-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <table class="table table-hover align-items-center mb-0" style="background-color: white;">
+                                <thead class="bg-white-100">
+                                    <tr>
+                                        <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
+                                        <th class="text-xxs font-weight-bold">Tanggal Pengajuan</th>
+                                        <th class="text-xxs font-weight-bold text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-if="collection.nasabah.notValidated.data.length > 0">
+                                        <tr v-for="item in collection.nasabah.notValidated.data" :key="item.id">
+                                            <td class="text-xxs">
+                                                <div class="d-flex flex-column align-items-start ms-3">
+                                                    <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
+                                                        @click.prevent="editNasabah(item.id)">
+                                                        {{ item.nama_lengkap }}
+                                                    </a>
+                                                    <p class="text-xxs text-start text-secondary mb-0">
+                                                        {{ item.temp_affiliasi ? item.temp_affiliasi : '-' }}
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle text-start text-lg">
+                                                <p class="text-xxs text-secondary mb-0 ms-3">
+                                                    {{ item.created_at ? new
+                                                        Date(item.created_at).toLocaleDateString('id-ID', {
+                                                            day: '2-digit',
+                                                            month: 'long',
+                                                            year: 'numeric'
+                                                        }) : '-' }}
+                                                </p>
+                                            </td>
+                                            <td class="align-middle text-center text-xxs">
+                                                <a class="btn btn-sm mb-0 btn-secondary text-xxs"
+                                                    @click="confirmValidation(item.id)">
+                                                    Validate
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <div v-if="collection.nasabah.notValidated.data?.length > 0"
+                                class="d-flex justify-content-between px-3 py-3 align-items-center flex-wrap"
+                                style="background-color: white;">
+                                <div class="d-flex flex-column">
+                                    <p class="font-weight-semibold mb-0 pb-0 text-dark text-xxs">Halaman {{
+                                        meta.page.notValidated.current_page }} / {{
+                                            meta.page.notValidated.last_page }}
+                                    </p>
+                                    <p class="font-weight-semibold mb-0 pt-0 text-secondary text-xxs">
+                                        Total: {{ meta.total.notValidated }} Data
+                                    </p>
+                                </div>
+                                <div>
+                                    <button v-if="collection.nasabah.notValidated?.links"
+                                        v-for="(link, index) in collection.nasabah.notValidated.links" :key="index"
+                                        @click="changePageUnvalidatedNasabahList(link.url)"
+                                        class="btn btn-sm rounded-2 btn-white mb-0 text-xxs ms-1"
+                                        :disabled="link.active">
+                                        <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
+                                        <span
+                                            v-else-if="index === (collection.nasabah.notValidated?.links?.length - 1)"><i
+                                                class="fas fa-chevron-right"></i></span>
+                                        <span v-else>{{ link.label }}</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body px-0 py-0">
-                        <div class="px-3 pt-3">
-                            <div class="filter-wrapper">
-                                <div class="filter-sidebar p-2 border border-radius-lg"
-                                    :class="{ 'hidden': filterisHidden }">
-                                    <div class="d-flex justify-content-between gx-2 gy-2 align-items-center filter-toolbar"
-                                        ref="filterToolbar">
-                                        <div class="d-flex gx-3 gy-2 align-items-center w-70 overflow-x">
-                                            <div class="m-0">
-                                                <label class="form-label visually-hidden"
-                                                    for="user-search">Search</label>
-                                                <input id="user-search" type="text" class="form-control form-control-sm"
-                                                    placeholder="Search name or email" v-model="meta.search" />
-                                            </div>
-                                            <!-- <div class="ms-2">
-                                                <label class="form-label visually-hidden" for="filter-role">Role</label>
-                                                <select id="filter-role"
-                                                    class="form-select form-select-sm select2-filter"
-                                                    v-model="meta.role" @change="fetchUserList"
-                                                    aria-label="Filter Role">
-                                                    <option value="">All Role</option>
-                                                    <option v-for="role in collection.roles" :key="role.id"
-                                                        :value="role.name">
-                                                        {{ role.name }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div class="ms-2">
-                                                <label class="form-label visually-hidden" for="filter-unit">Unit</label>
-                                                <select id="filter-unit"
-                                                    class="form-select form-select-sm select2-filter"
-                                                    v-model="meta.unit" @change="fetchUserList"
-                                                    aria-label="Filter Unit">
-                                                    <option value="">All Unit</option>
-                                                    <option v-for="unit in collection.units" :key="unit.id"
-                                                        :value="unit.name">
-                                                        {{ unit.name }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div class="ms-2">
-                                                <label class="form-label visually-hidden"
-                                                    for="filter-status">Status</label>
-                                                <select id="filter-status"
-                                                    class="form-select form-select-sm select2-filter"
-                                                    v-model="meta.status" @change="fetchUserList"
-                                                    aria-label="Filter Status">
-                                                    <option value="">All Status</option>
-                                                    <option value="Active">Active</option>
-                                                    <option value="Inactive">Inactive</option>
-                                                </select>
-                                            </div> -->
-                                        </div>
-                                        <div class=" m-0 me-0 btn border-none shadow-none color-primary text-md h-100 px-0 d-flex justify-content-between align-items-center"
-                                            id="filter-toggleBtn" @click="filtertoggleSidebar">
-                                            <h6 class="text-sm m-0 ms-2 fw-normal">Filter</h6>
-                                            <i class="me-2"
-                                                :class="filterisHidden ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                        </div>
-                        <div class="p-3">
-                            <div v-if="loadContent" class="d-flex justify-content-center p-4">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
+                    <div v-show="meta.currentTab === 'draft'" class="tab-pane fade show"
+                        :class="meta.currentTab === 'draft' ? 'active' : ''" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="text-sm mb-0">Drafting</h6>
+                                <p class="text-xxs text-muted mb-0">List nasabah yang belum BI Checking.</p>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <div class="ms-auto d-flex gap-2">
+                                    <button @click.prevent="addUser"
+                                        class="btn btn-sm btn-primary d-flex align-items-center text-xxs fw-normal mb-0"
+                                        type="button" :disabled="loadContentDrafted">
+                                        <span class="btn-inner--icon">
+                                            <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 448 512" fill="currentColor" class="d-block me-2">
+                                                <path
+                                                    d="M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+                                            </svg>
+                                        </span>
+                                        Tambah Nasabah
+                                    </button>
+                                </div>
+                                <div class="ms-auto d-flex gap-2">
+                                    <button @click.prevent="createBatch"
+                                        class="btn btn-sm btn-info d-flex align-items-center text-xxs fw-normal mb-0"
+                                        type="button" :disabled="loadContentDrafted">
+                                        <span class="btn-inner--icon">
+                                            <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 448 512" fill="currentColor" class="d-block me-2">
+                                                <path
+                                                    d="M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+                                            </svg>
+                                        </span>
+                                        Batch Pengajuan
+                                    </button>
                                 </div>
                             </div>
-                            <div v-else-if="accessDenied" class="text-center p-5">
-                                <h6 class="text-danger">Anda tidak memiliki izin untuk melihat data pada halaman ini.
-                                </h6>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text text-body">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
+                                    </path>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control text-xxs"
+                                placeholder="Search nama nasabah" v-model="meta.search.draft">
+                        </div>
+                        <div v-if="loadContentDrafted" class="d-flex justify-content-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
                             </div>
-                            <div v-else class="table-responsive">
-                                <table class="table table-striped table-hover align-items-center mb-0">
-                                    <thead class="bg-gray-100">
-                                        <tr>
-                                            <th class="text-sm font-weight-semibold opacity-7">
-                                                Nama Nasabah
-                                                <br>
-                                                Affiliasi
-                                            </th>
-                                            <th class="text-sm font-weight-semibold opacity-7">Kelengkapan Dokumen</th>
-                                            <th class="text-sm font-weight-semibold opacity-7 text-center">Status Nasabah</th>
-                                            <th class="text-sm font-weight-semibold opacity-7">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="item in collection.users.data" :key="item.id">
+                        </div>
+                        <div v-else class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <table class="table table-hover align-items-center mb-0" style="background-color: white;">
+                                <thead class="bg-white-100">
+                                    <tr>
+                                        <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
+                                        <th class="text-xxs font-weight-bold">Tanggal Pengajuan</th>
+                                        <th class="text-xxs font-weight-bold text-center">Kelengkapan Dokumen</th>
+                                        <th class="text-xxs font-weight-bold text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-if="collection.nasabah.drafted.data?.length > 0">
+                                        <tr v-for="item in collection.nasabah.drafted.data" :key="item.id">
                                             <td class="align-middle text-lg">
                                                 <div class="d-flex px-3 py-1">
                                                     <div class="d-flex flex-column justify-content-start ms-1">
-                                                        <a class="mb-0 text-sm font-weight-semibold text-primary text-bold"
+                                                        <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
                                                             @click.prevent="editNasabah(item.id)">
                                                             {{ item.nama_lengkap }}
                                                         </a>
-                                                        <p class="text-sm text-secondary mb-0">
+                                                        <p class="text-xxs text-secondary mb-0">
                                                             {{ item.affiliasi ? item.affiliasi.nama_affiliasi : '-' }}
                                                         </p>
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="align-middle text-start text-lg">
+                                                <p class="text-xxs text-secondary mb-0 ms-3">
+                                                    {{ item.created_at ? new
+                                                        Date(item.created_at).toLocaleDateString('id-ID', {
+                                                            day: '2-digit',
+                                                            month: 'long',
+                                                            year: 'numeric'
+                                                        }) : '-' }}
+                                                </p>
+                                            </td>
                                             <td class="align-middle text-lg">
                                                 <div id="content">
                                                     <div id="horz-list">
-                                                        <ul class="d-flex flex-row">
+                                                        <ul class="d-flex flex-row justify-content-center">
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-sm text-secondary mb-0">
-                                                                        KTP
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">KTP
                                                                     </p>
-                                                                    <template v-if="item.dokumen_ktp != null">
-                                                                        <i class="fas fa-check-circle text-primary"></i>
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <i class="fas fa-times-circle text-danger"></i>
-                                                                    </template>
+                                                                    <i
+                                                                        :class="item.dokumen_ktp ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
                                                                 </div>
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-sm text-secondary mb-0">
-                                                                        KK
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">KK
                                                                     </p>
-                                                                    <template v-if="item.dokumen_kartu_keluarga != null">
-                                                                        <i class="fas fa-check-circle text-primary"></i>
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <i class="fas fa-times-circle text-danger"></i>
-                                                                    </template>
+                                                                    <i
+                                                                        :class="item.dokumen_kartu_keluarga ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
                                                                 </div>
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-sm text-secondary mb-0">
-                                                                        NPWP
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">NPWP
                                                                     </p>
-                                                                    <template v-if="item.dokumen_npwp != null">
-                                                                        <i class="fas fa-check-circle text-primary"></i>
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <i class="fas fa-times-circle text-danger"></i>
-                                                                    </template>
+                                                                    <i
+                                                                        :class="item.dokumen_npwp ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
                                                                 </div>
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-sm text-secondary mb-0">
-                                                                        Pasangan
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">KTP Pasangan
                                                                     </p>
-                                                                    <template v-if="item.dokumen_ktp_pasangan != null">
-                                                                        <i class="fas fa-check-circle text-primary"></i>
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <i class="fas fa-times-circle text-danger"></i>
-                                                                    </template>
+                                                                    <i
+                                                                        :class="item.dokumen_ktp_pasangan ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
                                                                 </div>
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-sm text-secondary mb-0">
-                                                                        Asuransi
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">Asuransi
                                                                     </p>
-                                                                    <template v-if="item.dokumen_asuransi != null">
-                                                                        <i class="fas fa-check-circle text-primary"></i>
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <i class="fas fa-times-circle text-danger"></i>
-                                                                    </template>
+                                                                    <i
+                                                                        :class="item.dokumen_asuransi ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
                                                                 </div>
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-sm text-secondary mb-0">
-                                                                        ID Card
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">ID Card
                                                                     </p>
-                                                                    <template
-                                                                        v-if="item.dokumen_id_card_perusahaan != null">
-                                                                        <i class="fas fa-check-circle text-primary"></i>
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <i class="fas fa-times-circle text-danger"></i>
-                                                                    </template>
+                                                                    <i
+                                                                        :class="item.dokumen_id_card_perusahaan ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
                                                                 </div>
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-sm text-secondary mb-0">
-                                                                        Selfie
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">Selfie
                                                                     </p>
-                                                                    <template v-if="item.dokumen_selfie != null">
-                                                                        <i class="fas fa-check-circle text-primary"></i>
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <i class="fas fa-times-circle text-danger"></i>
-                                                                    </template>
+                                                                    <i
+                                                                        :class="item.dokumen_selfie ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
                                                                 </div>
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-sm text-secondary mb-0">
-                                                                        Pernyataan
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">Pernyataan
                                                                     </p>
-                                                                    <template v-if="item.dokumen_surat_pernyataan != null">
-                                                                        <i class="fas fa-check-circle text-primary"></i>
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        <i class="fas fa-times-circle text-danger"></i>
-                                                                    </template>
+                                                                    <i
+                                                                        :class="item.dokumen_surat_pernyataan ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
                                                                 </div>
                                                             </li>
                                                         </ul>
@@ -249,56 +366,300 @@
                                                 </div>
                                             </td>
                                             <td class="align-middle text-center text-lg">
-                                                <a class="btn btn-sm mb-0 btn-secondary" @click="changeStatus(item.id)">
+                                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                                    <a class="btn btn-sm mb-0 mx-1 btn-success text-xxs"
+                                                        v-show="email_integration" @click="sendPengajuanEmail(item.id)">
+                                                        Kirim Email
+                                                    </a>
+                                                    <a v-if="!loadDownloadPdfPengajuan"
+                                                        class="btn btn-sm mb-0 mx-1 btn-info text-xxs"
+                                                        @click.prevent="downloadPreview(item.id, item.nama_lengkap)">
+                                                        <span>PDF Pengajuan</span>
+                                                    </a>
+                                                    <button v-else class="btn btn-info btn-sm m-0 py-2 text-xxs text-white" type="button" disabled>
+                                                        <span class="spinner-border spinner-border-sm text-white" role="status"
+                                                            aria-hidden="true"></span>
+                                                        Loading...
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <div v-if="collection.nasabah.drafted.data?.length > 0"
+                                class="d-flex justify-content-between px-3 py-3 align-items-center flex-wrap"
+                                style="background-color: white;">
+                                <div class="d-flex flex-column">
+                                    <p class="font-weight-semibold mb-0 pb-0 text-dark text-xxs">Halaman {{
+                                        meta.page.drafted.current_page }} / {{
+                                            meta.page.drafted.last_page }}
+                                    </p>
+                                    <p class="font-weight-semibold mb-0 pt-0 text-secondary text-xxs">
+                                        Total: {{ meta.total.drafted }} Data
+                                    </p>
+                                </div>
+                                <div>
+                                    <button v-if="collection.nasabah.drafted?.links"
+                                        v-for="(link, index) in collection.nasabah.drafted.links" :key="index"
+                                        @click="changePageDraftNasabahList(link.url)"
+                                        class="btn btn-sm rounded-2 btn-white mb-0 text-xxs ms-1"
+                                        :disabled="link.active">
+                                        <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
+                                        <span v-else-if="index === (collection.nasabah.drafted?.links?.length - 1)"><i
+                                                class="fas fa-chevron-right"></i></span>
+                                        <span v-else>{{ link.label }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div v-show="meta.currentTab === 'submitted'" class="tab-pane fade show"
+                        :class="meta.currentTab === 'submitted' ? 'active' : ''" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="text-sm mb-0">Submitted</h6>
+                                <p class="text-xxs text-muted mb-0">List nasabah yang sudah menerima BI Checking.
+                                </p>
+                            </div>
+                        </div>
+                        <div v-if="loadContent" class="d-flex justify-content-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <table class="table table-hover align-items-center mb-0" style="background-color: white;">
+                                <thead class="bg-white-100">
+                                    <tr>
+                                        <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
+                                        <th class="text-xxs font-weight-bold">Status</th>
+                                        <th class="text-xxs font-weight-bold">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-if="collection.users.submitted?.data?.length > 0">
+                                        <tr v-for="item in collection.users.submitted.data" :key="item.id">
+                                            <td class="align-middle text-lg">
+                                                <div class="d-flex px-3 py-1">
+                                                    <div class="d-flex flex-column justify-content-start ms-1">
+                                                        <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
+                                                            @click.prevent="editNasabah(item.id)">
+                                                            {{ item.nama_lengkap }}
+                                                        </a>
+                                                        <p class="text-xxs text-secondary mb-0">
+                                                            {{ item.affiliasi ? item.affiliasi.nama_affiliasi : '-'
+                                                            }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle text-center text-lg">
+                                                <a class="btn btn-sm mb-0 btn-info">
                                                     {{ item.status_pengajuan }}
                                                 </a>
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <a v-if="email_integration" class="btn btn-sm mb-0 btn-success" @click="sendPengajuanEmail(item.id)">
-                                                        Kirim email
+                                                    <a class="btn btn-sm mb-0 btn-info"
+                                                        @click.prevent="downloadPreview(item.id, item.nama_lengkap)">
+                                                        <span>PDF</span>
                                                     </a>
-                                                    <a class="btn btn-sm mb-0 btn-info" @click.prevent="downloadPreview(item.id, item.nama_lengkap)"><span>PDF Pengajuan</span></a>
                                                 </div>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    </template>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="border-top py-3 px-3 d-flex align-items-center flex-wrap">
                             <div class="d-flex flex-column">
                                 <p class="font-weight-semibold mb-0 text-dark text-sm">Halaman {{
-                                    meta.page.userList.current_page }} dari {{ meta.page.userList.last_page
-                                    }}
-                                </p>
+                                    meta.page.submitted.current_page }} dari {{ meta.page.submitted.last_page }}</p>
                                 <p class="font-weight-semibold mb-0 text-secondary text-sm">Total: {{ meta.total }}
-                                    Users
-                                </p>
+                                    Nasabah</p>
                             </div>
                             <div class="ms-auto">
-                                <button v-for="(link, index) in collection.nasabah.links"
-                                    v-on:click="changePageUserList(link.url)" class="btn btn-sm btn-white mb-0"
-                                    :disabled="link.active">
-                                    <span v-if="index === 0">
-                                        <i class="fas fa-chevron-left">
-                                            <span class="sr-only text-xs m-0">
-                                                Previous
-                                            </span>
-                                        </i>
-                                    </span>
-                                    <span v-else-if="index === collection.nasabah.links.length - 1">
-                                        <i class="fas fa-chevron-right">
-                                            <span class="sr-only text-xs m-0">
-                                                Next
-                                            </span>
-                                        </i>
-                                    </span>
-                                    <span v-else>{{ link.label }}</span>
-                                </button>
+                                <div class="ms-auto">
+                                    <button v-if="collection.users.submitted?.links"
+                                        v-for="(link, index) in collection.users.submitted.links" :key="index"
+                                        @click="changePageUserList(link.url)" class="btn btn-sm btn-white mb-0"
+                                        :disabled="link.active">
+                                        <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
+                                        <span v-else-if="index === (collection.users.submitted?.links?.length - 1)"><i
+                                                class="fas fa-chevron-right"></i></span>
+                                        <span v-else>{{ link.label }}</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+
+                    <!-- <div v-show="meta.currentTab === 'accepted'" class="tab-pane fade show"
+                        :class="meta.currentTab === 'accepted' ? 'active' : ''" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="text-sm mb-0">Accepted</h6>
+                                <p class="text-xxs text-muted mb-0">List nasabah yang menerima Proposal KB Bank.
+                                </p>
+                            </div>
+                        </div>
+                        <div v-if="loadContent" class="d-flex justify-content-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <table class="table table-hover align-items-center mb-0" style="background-color: white;">
+                                <thead class="bg-white-100">
+                                    <tr>
+                                        <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
+                                        <th class="text-xxs font-weight-bold">Status</th>
+                                        <th class="text-xxs font-weight-bold">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-if="collection.users.accepted?.data?.length > 0">
+                                        <tr v-for="item in collection.users.accepted.data" :key="item.id">
+                                            <td class="align-middle text-lg">
+                                                <div class="d-flex px-3 py-1">
+                                                    <div class="d-flex flex-column justify-content-start ms-1">
+                                                        <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
+                                                            @click.prevent="editNasabah(item.id)">
+                                                            {{ item.nama_lengkap }}
+                                                        </a>
+                                                        <p class="text-xxs text-secondary mb-0">
+                                                            {{ item.affiliasi ? item.affiliasi.nama_affiliasi :
+                                                                '-' }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle text-center text-lg">
+                                                <a class="btn btn-sm mb-0 btn-success">
+                                                    {{ item.status_pengajuan }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a class="btn btn-sm mb-0 btn-info"
+                                                        @click.prevent="downloadPreview(item.id, item.nama_lengkap)">
+                                                        <span>PDF</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="border-top py-3 px-3 d-flex align-items-center flex-wrap">
+                            <div class="d-flex flex-column">
+                                <p class="font-weight-semibold mb-0 text-dark text-sm">Halaman {{
+                                    meta.page.accepted.current_page }} dari {{ meta.page.accepted.last_page }}
+                                </p>
+                                <p class="font-weight-semibold mb-0 text-secondary text-sm">Total: {{ meta.total
+                                    }} Nasabah</p>
+                            </div>
+                            <div class="ms-auto">
+                                <div class="ms-auto">
+                                    <button v-if="collection.users.accepted?.links"
+                                        v-for="(link, index) in collection.users.accepted.links" :key="index"
+                                        @click="changePageUserList(link.url)" class="btn btn-sm btn-white mb-0"
+                                        :disabled="link.active">
+                                        <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
+                                        <span v-else-if="index === (collection.users.accepted?.links?.length - 1)"><i
+                                                class="fas fa-chevron-right"></i></span>
+                                        <span v-else>{{ link.label }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!-- <div v-show="meta.currentTab === 'rejected'" class="tab-pane fade show"
+                        :class="meta.currentTab === 'rejected' ? 'active' : ''" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="text-sm mb-0">Rejected</h6>
+                                <p class="text-xxs text-muted mb-0">List nasabah yang menolak Proposal KB
+                                    Bank.</p>
+                            </div>
+                        </div>
+                        <div v-if="loadContent" class="d-flex justify-content-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <table class="table table-hover align-items-center mb-0" style="background-color: white;">
+                                <thead class="bg-white-100">
+                                    <tr>
+                                        <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
+                                        <th class="text-xxs font-weight-bold">Status</th>
+                                        <th class="text-xxs font-weight-bold">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-if="collection.users.rejected?.data?.length > 0">
+                                        <tr v-for="item in collection.users.rejected.data" :key="item.id">
+                                            <td class="align-middle text-lg">
+                                                <div class="d-flex px-3 py-1">
+                                                    <div class="d-flex flex-column justify-content-start ms-1">
+                                                        <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
+                                                            @click.prevent="editNasabah(item.id)">
+                                                            {{ item.nama_lengkap }}
+                                                        </a>
+                                                        <p class="text-xxs text-secondary mb-0">
+                                                            {{ item.affiliasi ?
+                                                                item.affiliasi.nama_affiliasi : '-' }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle text-center text-lg">
+                                                <a class="btn btn-sm mb-0 btn-danger">
+                                                    {{ item.status_pengajuan }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a class="btn btn-sm mb-0 btn-info"
+                                                        @click.prevent="downloadPreview(item.id, item.nama_lengkap)">
+                                                        <span>PDF</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="border-top py-3 px-3 d-flex align-items-center flex-wrap">
+                            <div class="d-flex flex-column">
+                                <p class="font-weight-semibold mb-0 text-dark text-sm">Halaman {{
+                                    meta.page.rejected.current_page }} dari {{ meta.page.rejected.last_page
+                                    }}</p>
+                                <p class="font-weight-semibold mb-0 text-secondary text-sm">Total: {{
+                                    meta.total }} Nasabah</p>
+                            </div>
+                            <div class="ms-auto">
+                                <div class="ms-auto">
+                                    <button v-if="collection.users.rejected?.links"
+                                        v-for="(link, index) in collection.users.rejected.links" :key="index"
+                                        @click="changePageUserList(link.url)" class="btn btn-sm btn-white mb-0"
+                                        :disabled="link.active">
+                                        <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
+                                        <span v-else-if="index === (collection.users.rejected?.links?.length - 1)"><i
+                                                class="fas fa-chevron-right"></i></span>
+                                        <span v-else>{{ link.label }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
                 </div>
             </div>
         </div>
@@ -332,28 +693,53 @@ export default {
     data() {
         return {
             loadContent: true,
+            loadContentUnvalidated: true,
+            loadContentDrafted: true,
+            loadContentSubmitted: true,
+            loadContentAccepted: true,
+            loadContentRejected: true,
             filterisHidden: false,
             email_integration: false,
+            loadDownloadPdfPengajuan: false,
             meta: {
                 user: '',
                 page: {
-                    userList: {
-                        current_page: '',
-                        last_page: '',
-                    }
+                    notValidated: { current_page: 1, last_page: 1 },
+                    drafted: { current_page: 1, last_page: 1 },
+                    submitted: { current_page: 1, last_page: 1 },
+                    accepted: { current_page: 1, last_page: 1 },
+                    rejected: { current_page: 1, last_page: 1 },
                 },
-                search: '',
+                search: {
+                    notValidated: '',
+                    drafted: '',
+                    submitted: '',
+                    accepted: '',
+                    rejected: '',
+                },
                 role: '',
                 unit: '',
                 status: '',
                 requestStatus: '',
-                total: 0,
+                currentTab: 'notValidated',
+                total: {
+                    notValidated: 0,
+                    drafted: 0,
+                    submitted: 0,
+                    accepted: 0,
+                    rejected: 0,
+                },
                 accesses: [],
             },
             collection: {
                 documents: '',
-                nasabah: '',
-                users: null,
+                nasabah: {
+                    notValidated: { data: [], current_page: 1, last_page: 1 },
+                    drafted: { data: [], current_page: 1, last_page: 1 },
+                    submitted: { data: [], current_page: 1, last_page: 1 },
+                    accepted: { data: [], current_page: 1, last_page: 1 },
+                    rejected: { data: [], current_page: 1, last_page: 1 },
+                },
             },
             dataTable: null,
             requestCounter: 0,
@@ -372,7 +758,14 @@ export default {
             this.accessDenied = false;
             await this.fetchRoleList();
             await this.fetchUnitList();
-            await this.fetchUserList();
+            await this.fetchAffiliasi();
+            // await this.fetchUserListByStatus(this.meta.currentTab);
+            await this.fetchUnvalidatedNasabahList();
+            await this.fetchDraftedNasabahList();
+            await this.fetchSubmittedNasabahList();
+            await this.fetchAcceptedNasabahList();
+            await this.fetchRejectedNasabahList();
+            this.loadContent = false;
         } else {
             this.loadContent = false;
             this.accessDenied = true;
@@ -408,6 +801,19 @@ export default {
                 }
             } catch (error) {
                 console.log('User error: ', error)
+            }
+        },
+        async fetchAffiliasi() {
+            let endpoint = `${BASEURL}/api/affiliasi/options`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                this.collection.affiliasi = response.data.data;
+            } catch (error) {
+                console.error("Error fetching affiliasi: ", error);
             }
         },
         async preview(id) {
@@ -452,6 +858,7 @@ export default {
         },
 
         async downloadPreview(id, name) {
+            this.loadDownloadPdfPengajuan = true;
             let endpoint = `${BASEURL}/api/preview-pdf/${id}`;
             try {
                 let response = await axios.get(endpoint, {
@@ -469,8 +876,10 @@ export default {
                 anchor.click();
                 document.body.removeChild(anchor);
                 setTimeout(() => URL.revokeObjectURL(url), 100);
+                this.loadDownloadPdfPengajuan = false;
             } catch (error) {
                 console.error('Download preview error: ', error);
+                this.loadDownloadPdfPengajuan = false;
             }
         },
 
@@ -558,88 +967,64 @@ export default {
                 clearTimeout(this.searchTimer);
             }
             this.searchTimer = setTimeout(() => {
-                this.fetchUserList();
+                // this.fetchUserListByStatus(this.meta.currentTab);
             }, 400);
         },
 
-        initSelect2Filters() {
-            const selectElements = $(this.$el).find('select.select2-filter');
-            if (!selectElements.length || typeof $.fn.select2 !== 'function') {
-                return;
-            }
-            selectElements.select2({
-                theme: 'bootstrap-5',
-                width: '100%',
-                placeholder: 'All',
-                allowClear: true,
-                // minimumResultsForSearch: 0,
-                // dropdownParent: $(this.$el),
-            });
+        switchTab(status) {
+            this.meta.currentTab = status;
+            // this.fetchUserListByStatus(status);
         },
 
-        // initDataTable() {
-        //     this.$nextTick(() => {
-        //         if (!this.collection.users || !Array.isArray(this.collection.users.data)) {
-        //             return;
-        //         }
-
-        //         this.destroyDataTable();
-
-        //         this.dataTable = $(this.$refs.NasabahTable).DataTable({
-        //             dom: 't',
-        //             responsive: true,
-        //             autoWidth: false,
-        //             paging: false,
-        //             searching: false,
-        //             ordering: true,
-        //             info: false,
-        //             lengthChange: false,
-        //             language: {
-        //                 zeroRecords: "Tidak ada data yang cocok",
+        // async fetchUserListByStatus(status) {
+        //     this.destroyDataTable();
+        //     this.loadContent = true;
+        //     const requestId = ++this.requestCounter;
+        //     let endpoint = `${BASEURL}/api/nasabah`;
+        //     try {
+        //         let response = await axios.get(endpoint, {
+        //             headers: {
+        //                 Authorization: 'Bearer ' + this.$token(),
+        //             },
+        //             params: {
+        //                 'search': this.meta.search,
+        //                 'status': status,
         //             }
         //         });
 
-        //         this.initSelect2Filters();
-        //     });
+        //         if (requestId !== this.requestCounter) {
+        //             return;
+        //         }
+
+        //         // API returns paginated data - ensure proper structure
+        //         const paginatedData = response.data;
+        //         console.log(`${status} raw response:`, paginatedData);
+
+        //         // Maintain collection structure with data/pagination properties
+        //         this.collection.users[status] = {
+        //             data: paginatedData.data || paginatedData,
+        //             current_page: paginatedData.current_page || 1,
+        //             last_page: paginatedData.last_page || 1,
+        //             links: paginatedData.links || [],
+        //             total: paginatedData.total || 0,
+        //         };
+
+        //         console.log(`${status} processed:`, this.collection.users[status]);
+        //         this.meta.total = this.collection.users[status].total;
+        //         this.meta.page[status].current_page = this.collection.users[status].current_page;
+        //         this.meta.page[status].last_page = this.collection.users[status].last_page;
+        //         this.loadContent = false;
+        //     } catch (error) {
+        //         console.error(`Error fetching ${status} list:`, error);
+        //         if (requestId === this.requestCounter) {
+        //             this.loadContent = false;
+        //         }
+        //     }
         // },
 
-        async fetchUserList() {
-            this.destroyDataTable();
-            this.loadContent = false;
-            const requestId = ++this.requestCounter;
-            let endpoint = `${BASEURL}/api/nasabah`;
-            try {
-                this.loadContent = true
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                    params: {
-                        'search': this.meta.search,
-                        // 'role': this.meta.role,
-                        // 'unit': this.meta.unit,
-                        // 'status': this.meta.status,
-                    }
-                });
-
-                if (requestId !== this.requestCounter) {
-                    return;
-                }
-
-                this.collection.users = response.data.data
-                console.log(this.collection.users)
-                this.meta.total = response.data.data.total
-                this.meta.page.userList.current_page = this.collection.users.current_page
-                this.meta.page.userList.last_page = this.collection.users.last_page
-                this.loadContent = false
-                // this.initDataTable();
-            } catch (error) {
-                console.error("Error fetching document list: ", error);
-                if (requestId === this.requestCounter) {
-                    this.loadContent = false
-                }
-            }
-        },
+        // async fetchUserList() {
+        //     await this.fetchUserListByStatus(this.meta.currentTab);
+        // },
         async changeStatus(id) {
             let endpoint = `${BASEURL}/api/change/status/${id}`;
             try {
@@ -661,13 +1046,86 @@ export default {
                 this.$swal.fire('Failed!', error.response.data.message, 'error');
             }
         },
-        async resetPassword(id) {
-            let endpoint = `${BASEURL}/api/reset-password/${id}`;
+
+
+        async fetchUnvalidatedNasabahList() {
+            this.loadContentUnvalidated = true;
+            let endpoint = `${BASEURL}/api/nasabah/unvalidated`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.notValidated,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
+                    }
+                });
+                this.collection.nasabah.notValidated = response.data.data || response.data;
+                this.meta.total.notValidated = this.collection.nasabah.notValidated.total || 0;
+                this.meta.page.notValidated.current_page = this.collection.nasabah.notValidated.current_page || 1;
+                this.meta.page.notValidated.last_page = this.collection.nasabah.notValidated.last_page || 1;
+                console.log('Unvalidated nasabah list:', this.collection.nasabah.notValidated);
+                this.loadContentUnvalidated = false;
+            } catch (error) {
+                console.error("Error fetching unvalidated nasabah list: ", error);
+                this.loadContentUnvalidated = false;
+            }
+        },
+        confirmValidation(id) {
+            if (!Array.isArray(this.collection.affiliasi) || !this.collection.affiliasi.length) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'Affiliasi belum tersedia',
+                    text: 'Tidak ada opsi affiliasi untuk dipilih.',
+                });
+            }
+
+            const optionsHtml = this.collection.affiliasi
+                .map((aff) => `<option value="${aff.id}">${aff.nama ?? aff.name ?? aff.nama_affiliasi ?? aff.namaAffiliasi ?? aff.affiliasi ?? 'Affiliasi'}</option>`)
+                .join('');
+
+            Swal.fire({
+                html: `
+                    <label for="swal-affiliasi" class="form-label text-start w-100 mb-2 text-md">Pilih Affiliasi Nasabah</label>
+                    <select id="swal-affiliasi" class="form-select">
+                        <option value="">Pilih affiliasi</option>
+                        ${optionsHtml}
+                    </select>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Validate',
+                cancelButtonText: 'Batal',
+                preConfirm: () => {
+                    const selected = Swal.getPopup().querySelector('#swal-affiliasi');
+                    const selectedValue = selected ? selected.value : null;
+                    if (!selectedValue) {
+                        Swal.showValidationMessage('Silakan pilih affiliasi terlebih dahulu');
+                    }
+                    return selectedValue;
+                },
+                didOpen: () => {
+                    const select = Swal.getPopup().querySelector('#swal-affiliasi');
+                    if (select) {
+                        select.focus();
+                    }
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.validation(id, result.value);
+                }
+            });
+        },
+        async validation(id, affiliasiId) {
+            let endpoint = `${BASEURL}/api/nasabah/validation/${id}/${affiliasiId}`;
             try {
                 let response = await axios.post(endpoint, {}, {
                     headers: {
                         Authorization: 'Bearer ' + this.$token(),
-                    }
+                    },
                 });
                 Swal.fire({
                     icon: "success",
@@ -676,13 +1134,13 @@ export default {
                     showConfirmButton: false,
                     timer: 1500
                 });
+                this.fetchUnvalidatedNasabahList();
             } catch (error) {
-                console.log(error.response.data.message);
-                this.$swal.fire('Failed!', error.response.data.message, 'error');
+                console.log(error.response?.data?.message || error.message);
+                this.$swal.fire('Failed!', error.response?.data?.message || 'Terjadi kesalahan', 'error');
             }
         },
-
-        async changePageUserList(url) {
+        async changePageUnvalidatedNasabahList(url) {
             if (url == null) {
                 return false
             }
@@ -698,13 +1156,110 @@ export default {
                         Authorization: 'Bearer ' + this.$token(),
                     }
                 });
-                this.collection.users = response.data.data
-                this.meta.page.userList.current_page = this.collection.users.current_page
-                this.meta.page.userList.last_page = this.collection.users.last_page
+                this.collection.nasabah.notValidated = response.data.data;
+                this.meta.page.notValidated.current_page = this.collection.nasabah.notValidated.current_page;
+                this.meta.page.notValidated.last_page = this.collection.nasabah.notValidated.last_page;
                 Swal.close()
-                // this.initDataTable();
             } catch (error) {
                 console.error("Error fetching document list: ", error);
+            }
+        },
+
+
+        async fetchDraftedNasabahList() {
+            this.loadContentDrafted = true;
+            let endpoint = `${BASEURL}/api/nasabah/drafted`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.drafted,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
+                    }
+                });
+                this.collection.nasabah.drafted = response.data.data || response.data;
+                this.meta.total.drafted = this.collection.nasabah.drafted.total || 0;
+                this.meta.page.drafted.current_page = this.collection.nasabah.drafted.current_page || 1;
+                this.meta.page.drafted.last_page = this.collection.nasabah.drafted.last_page || 1;
+                this.loadContentDrafted = false;
+            } catch (error) {
+                console.error("Error fetching drafted nasabah list: ", error);
+                this.loadContentDrafted = false;
+            }
+        },
+        async fetchSubmittedNasabahList() {
+            this.loadContentSubmitted = true;
+            let endpoint = `${BASEURL}/api/nasabah/submitted`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.submitted,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
+                    }
+                });
+                this.collection.nasabah.submitted = response.data.data || response.data;
+                this.meta.total.submitted = this.collection.nasabah.submitted.total || 0;
+                this.meta.page.submitted.current_page = this.collection.nasabah.submitted.current_page || 1;
+                this.meta.page.submitted.last_page = this.collection.nasabah.submitted.last_page || 1;
+                this.loadContentSubmitted = false;
+            } catch (error) {
+                console.error("Error fetching submitted nasabah list: ", error);
+                this.loadContentSubmitted = false;
+            }
+        },
+        async fetchAcceptedNasabahList() {
+            this.loadContentAccepted = true;
+            let endpoint = `${BASEURL}/api/nasabah/accepted`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.accepted,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
+                    }
+                });
+                this.collection.nasabah.accepted = response.data.data || response.data;
+                this.meta.total.accepted = this.collection.nasabah.accepted.total || 0;
+                this.meta.page.accepted.current_page = this.collection.nasabah.accepted.current_page || 1;
+                this.meta.page.accepted.last_page = this.collection.nasabah.accepted.last_page || 1;
+                this.loadContentAccepted = false;
+            } catch (error) {
+                console.error("Error fetching accepted nasabah list: ", error);
+                this.loadContentAccepted = false;
+            }
+        },
+        async fetchRejectedNasabahList() {
+            this.loadContentRejected = true;
+            let endpoint = `${BASEURL}/api/nasabah/rejected`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.rejected,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
+                    }
+                });
+                this.collection.nasabah.rejected = response.data.data || response.data;
+                this.meta.total.rejected = this.collection.nasabah.rejected.total || 0;
+                this.meta.page.rejected.current_page = this.collection.nasabah.rejected.current_page || 1;
+                this.meta.page.rejected.last_page = this.collection.nasabah.rejected.last_page || 1;
+                this.loadContentRejected = false;
+            } catch (error) {
+                console.error("Error fetching rejected nasabah list: ", error);
+                this.loadContentRejected = false;
             }
         },
 
@@ -765,12 +1320,16 @@ export default {
 
     watch: {
         'meta.search': 'debounceSearchFetch',
+        'meta.search.notValidated': 'fetchUnvalidatedNasabahList',
         'meta.role': 'fetchUserList',
         'meta.unit': 'fetchUserList',
         'meta.status': 'fetchUserList',
         'meta.requestStatus': function (newVal, oldVal) {
             this.fetchUserList();
         },
+        // 'meta.currentTab': function (newTab) {
+        //     this.fetchUserListByStatus(newTab);
+        // },
     },
 }
 </script>
@@ -803,6 +1362,40 @@ export default {
         min-width: 200px;
         max-width: 300px;
     }
+}
+
+.nav-pills {
+    display: flex;
+    flex-wrap: nowrap;
+    text-align: start;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.nav-pills .nav-item {
+    margin: 0 0.25rem;
+    width: 250px;
+    /* overflow: hidden; */
+}
+
+.nav-pills .nav-link {
+    border: 1px solid #dee2e6;
+    background-color: #ffffff;
+    /* border-radius: 0.75rem; */
+    /* color: #495057; */
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-pills .nav-link:hover {
+    background-color: #f8f9fa;
+    border-color: #ced4da;
+    color: #212529;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #4d7cff09;
+    border-color: #4d7cff;
+    /* box-shadow: 0 0 0 0.15rem rgba(77, 124, 255, 0.25); */
 }
 
 @media (max-width: 425px) {

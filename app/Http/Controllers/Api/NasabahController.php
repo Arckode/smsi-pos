@@ -44,12 +44,33 @@ class NasabahController extends Controller
     //         abort(403, 'You do not have permission to perform this action.');
     //     }
     // }
+    public function drafted()
+    {
+        // $this->authorizeSubmoduleAction('read');
+        $relations = [
+            'affiliasi:id,nama_affiliasi',
+        ];
+
+        $data = Nasabah::with($relations)->where('validation', true)->where('status_pengajuan', 'draft')
+            ->when(
+                request()->has('search') && request()->search != '',
+                function ($q) {
+                    $q->where('nama_lengkap', 'like', '%' . request()->search . '%')
+                        ->orWhere('nik', 'like', '%' . request()->search . '%');
+                }
+            )
+            ->paginate(10);
+
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+        ]);
+    }
     public function unvalidated()
     {
         // $this->authorizeSubmoduleAction('read');
         $relations = [
             'affiliasi:id,nama_affiliasi',
-            // 'role:id,name'
         ];
 
         $data = Nasabah::with($relations)->where('validation', false)
@@ -60,23 +81,13 @@ class NasabahController extends Controller
                         ->orWhere('nik', 'like', '%' . request()->search . '%');
                 }
             )
-            // ->when(
-            //     request()->has('affiliasi') && request()->affiliasi != '',
-            //     function ($q) {
-            //         $q->orWhereHas('affiliasi', function ($q1) {
-            //             $q1->where('name', 'like', '%' . request()->affiliasi . '%');
-            //         });
-            //     }
-            // )
-            ->paginate(15);
+            ->paginate(10);
 
         return response()->json([
             'status' => true,
             'data' => $data,
         ]);
     }
-
-
     public function validation(int $id, int $affiliasiId)
     {
         try {
@@ -122,23 +133,33 @@ class NasabahController extends Controller
             // 'role:id,name'
         ];
 
-        $data = Nasabah::with($relations)->where('validation', true)
-            ->when(
-                request()->has('search') && request()->search != '',
-                function ($q) {
-                    $q->where('nama_lengkap', 'like', '%' . request()->search . '%')
-                        ->orWhere('nik', 'like', '%' . request()->search . '%');
-                }
-            )
-            // ->when(
-            //     request()->has('affiliasi') && request()->affiliasi != '',
-            //     function ($q) {
-            //         $q->orWhereHas('affiliasi', function ($q1) {
-            //             $q1->where('name', 'like', '%' . request()->affiliasi . '%');
-            //         });
-            //     }
-            // )
-            ->paginate(15);
+        $status = request()->get('status', 'notValidated');
+
+        $query = Nasabah::with($relations);
+
+        // Filter by status group
+        if ($status === 'notValidated') {
+            $query->where('validation', false);
+        } elseif ($status === 'draft') {
+            $query->where('validation', true)->where('status_pengajuan', 'draft');
+        } elseif ($status === 'submitted') {
+            $query->where('status_pengajuan', 'submit');
+        } elseif ($status === 'accepted') {
+            $query->where('status_pengajuan', 'accepted');
+        } elseif ($status === 'rejected') {
+            $query->where('status_pengajuan', 'rejected');
+        }
+
+        // Search filter
+        $query->when(
+            request()->has('search') && request()->search != '',
+            function ($q) {
+                $q->where('nama_lengkap', 'like', '%' . request()->search . '%')
+                    ->orWhere('nik', 'like', '%' . request()->search . '%');
+            }
+        );
+
+        $data = $query->paginate(5);
 
         return response()->json([
             'status' => true,
