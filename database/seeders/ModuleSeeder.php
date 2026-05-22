@@ -21,6 +21,7 @@ class ModuleSeeder extends Seeder
         DB::table('menu_submodules')->insert([
             ['module_id' => 1, 'sub_module_name' => 'User List', 'url' => '/users'],
             ['module_id' => 1, 'sub_module_name' => 'Manage User Access', 'url' => '/users/access'],
+            ['module_id' => 2, 'sub_module_name' => 'Validasi Pengajuan Nasabah', 'url' => '/nasabah/validation'],
             ['module_id' => 2, 'sub_module_name' => 'Nasabah Lists', 'url' => '/nasabah/lists'],
             ['module_id' => 2, 'sub_module_name' => 'Pengajuan BI Check', 'url' => '/nasabah/submit/request'],
             ['module_id' => 3, 'sub_module_name' => 'General Settings', 'url' => '/settings'],

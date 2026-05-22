@@ -44,6 +44,76 @@ class NasabahController extends Controller
     //         abort(403, 'You do not have permission to perform this action.');
     //     }
     // }
+    public function unvalidated()
+    {
+        // $this->authorizeSubmoduleAction('read');
+        $relations = [
+            'affiliasi:id,nama_affiliasi',
+            // 'role:id,name'
+        ];
+
+        $data = Nasabah::with($relations)->where('validation', false)
+            ->when(
+                request()->has('search') && request()->search != '',
+                function ($q) {
+                    $q->where('nama_lengkap', 'like', '%' . request()->search . '%')
+                        ->orWhere('nik', 'like', '%' . request()->search . '%');
+                }
+            )
+            // ->when(
+            //     request()->has('affiliasi') && request()->affiliasi != '',
+            //     function ($q) {
+            //         $q->orWhereHas('affiliasi', function ($q1) {
+            //             $q1->where('name', 'like', '%' . request()->affiliasi . '%');
+            //         });
+            //     }
+            // )
+            ->paginate(15);
+
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+        ]);
+    }
+
+
+    public function validation(int $id, int $affiliasiId)
+    {
+        try {
+            DB::beginTransaction();
+
+            $nasabah = Nasabah::findOrFail($id);
+            $nasabah->affiliasi_id = $affiliasiId;
+            $nasabah->validation = true;
+            $nasabah->validated_by = auth()->user()->id;
+            $nasabah->save();
+
+            NasabahLog::create([
+                'action' => 'Validasi',
+                'nasabah_id' => $nasabah->id,
+                'payload_before' => json_encode($nasabah->getOriginal()),
+                'payload_after' => json_encode($nasabah->toArray()),
+                'created_by' => auth()->user()->id,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Nasabah has been validated successfully.',
+                'data' => $nasabah,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to validate nasabah: ' . $e->getMessage(),
+            ], 500);
+        }   
+
+    }
+
     public function index()
     {
         // $this->authorizeSubmoduleAction('read');
@@ -52,7 +122,7 @@ class NasabahController extends Controller
             // 'role:id,name'
         ];
 
-        $data = Nasabah::with($relations)
+        $data = Nasabah::with($relations)->where('validation', true)
             ->when(
                 request()->has('search') && request()->search != '',
                 function ($q) {

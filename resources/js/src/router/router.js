@@ -19,7 +19,11 @@ import A_UserAccessIndex from "../view/admin/users/useraccess/Index.vue";
 import A_AffiliasiIndex from "../view/admin/management/affiliasi/Index.vue";
 // import A_BooksIndex from "../view/admin/book/Index.vue";
 
+import A_ValidasiListIndex from "../view/admin/nasabah/validasi/Index.vue";
 import A_NasabahListIndex from "../view/admin/nasabah/list/Index.vue";
+
+
+
 import A_PinjamanListIndex from "../view/admin/angsuran/pinjaman/list/Index.vue";
 import A_PembayaranListIndex from "../view/admin/angsuran/pembayaran/list/Index.vue";
 import A_NeracaIndex from "../view/admin/neraca/Index.vue";
@@ -107,6 +111,14 @@ const router = createRouter({
             component: A_UserAccessIndex,
             meta: {
                 breadcrumb: "User Access Management"
+            },
+        },
+        {
+            path: "/nasabah/validation",
+            name: "admin.validasilist",
+            component: A_ValidasiListIndex,
+            meta: {
+                breadcrumb: "Validasi Nasabah",
             },
         },
         {

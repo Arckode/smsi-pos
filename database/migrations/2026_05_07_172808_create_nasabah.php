@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('status_perkawinan')->nullable();
 
             // Section B: Data Pekerjaan
+            $table->string('temp_affiliasi')->nullable();
             $table->integer('affiliasi_id')->nullable();
             $table->string('nip')->nullable();
             $table->string('npwp')->nullable();
