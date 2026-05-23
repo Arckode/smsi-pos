@@ -78,6 +78,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/nasabah/options', [NasabahController::class, 'options']);
     Route::get('/nasabah/unvalidated', [NasabahController::class, 'unvalidated']);
     Route::get('/nasabah/drafted', [NasabahController::class, 'drafted']);
+    Route::get('/nasabah/available/batches', [NasabahController::class, 'availableBatches']);
+    Route::post('/nasabah/store/batches', [NasabahController::class, 'storeBatch']);
     Route::post('/nasabah/validation/{id}/{affiliasiId}', [NasabahController::class, 'validation']);
     Route::get('/preview-pdf/{id}', [NasabahController::class, 'downloadPreviewPdf']);
     Route::get('/preview/{id}', [NasabahController::class, 'showPreview']);

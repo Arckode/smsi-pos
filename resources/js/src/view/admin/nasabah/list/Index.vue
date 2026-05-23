@@ -6,6 +6,9 @@
     <!-- Modal Edit -->
     <edit-modal ref="editNasabah"></edit-modal>
 
+    <!-- Modal Add Batch -->
+    <add-batch-modal ref="addBatch"></add-batch-modal>
+
     <div class="container-fluid py-4 px-5">
         <div class="row">
             <div class="col-12">
@@ -669,6 +672,7 @@
 <script>
 import AddUserModal from './component/Add.vue';
 import EditNasabahModal from './component/Edit.vue';
+import AddBatchModal from './component/Batch.vue';
 import { emitter } from '../../../../../eventEmitter.js';
 import $ from 'jquery';
 window.$ = window.jQuery = $;
@@ -681,7 +685,8 @@ window.BASEURL = ''
 
 export default {
     created() {
-        emitter.on('fetchUserList', this.fetchUserList);
+        emitter.on('fetchUnvalidatedList', this.fetchUnvalidatedNasabahList);
+        emitter.on('fetchDraftedList', this.fetchDraftedNasabahList);
 
 
     },
@@ -689,6 +694,7 @@ export default {
     components: {
         'add-modal': AddUserModal,
         'edit-modal': EditNasabahModal,
+        'add-batch-modal': AddBatchModal,
     },
     data() {
         return {
@@ -778,6 +784,9 @@ export default {
         },
         addUser() {
             emitter.emit('AddNasabah', this.canCreateNasabah);
+        },
+        createBatch() {
+            emitter.emit('AddBatch', this.canCreateNasabah);
         },
         editNasabah(id) {
             emitter.emit('EditNasabah', [this.canUpdateNasabah, id]);

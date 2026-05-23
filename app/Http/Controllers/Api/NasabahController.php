@@ -7,6 +7,8 @@ use App\Http\Requests\UserAccessRequest;
 use App\Models\Nasabah;
 use App\Models\NasabahLog;
 use App\Models\NasabahStatusLog;
+use App\Models\BatchNasabah;
+use App\Models\BatchDetailNasabah;
 use App\Models\MenuModule;
 use App\Models\MenuSubmodule;
 use App\Models\User;
@@ -66,6 +68,87 @@ class NasabahController extends Controller
             'data' => $data,
         ]);
     }
+    public function availableBatches()
+    {
+        // $this->authorizeSubmoduleAction('read');
+        $relations = [
+            'affiliasi:id,nama_affiliasi',
+        ];
+
+        $data = Nasabah::with($relations)->where('validation', true)->whereNotIn('status_pengajuan', ['Approved', 'Rejected'])
+            ->when(
+                request()->has('search') && request()->search != '',
+                function ($q) {
+                    $q->where('nama_lengkap', 'like', '%' . request()->search . '%')
+                        ->orWhere('nik', 'like', '%' . request()->search . '%');
+                }
+            )
+            ->paginate(10);
+
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+            'batches' => 1,
+        ]);
+    }
+    public function storeBatch(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $data = $request->all();
+
+            $lastBatch = BatchNasabah::latest('id')->first();
+
+            if ($lastBatch && !empty($lastBatch->batch_number)) {
+                $parts = explode('-', $lastBatch->batch_number);
+                $nextSequence = (int)$parts[1] + 1;
+
+                if ($nextSequence > 9999) {
+                    $nextSequence = 1;
+                }
+            } else {
+                $nextSequence = 1;
+            }
+
+            $batchNumber = 'Batch-' . str_pad($nextSequence, 4, '0', STR_PAD_LEFT) . '-' . date('Ymd');
+
+            $batch = BatchNasabah::create([
+                'batch_number' => $batchNumber,
+                'tanggal_pengajuan' => now(),
+                'created_by' => auth()->user()->id,
+            ]);
+
+            $nasabahIds = $request->input('details', []);
+            $batchDetails = [];
+            foreach ($nasabahIds as $nasabahId) {
+                $batchDetails[] = [
+                    'batch_id' => $batch->id,
+                    'nasabah_id' => $nasabahId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                $nasabah = Nasabah::find($nasabahId);
+                $nasabah->status_pengajuan = 'User Review';
+                $nasabah->save();
+            }
+            BatchDetailNasabah::insert($batchDetails);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Batch created successfully.',
+                'data' => $batch,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to create batch: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
     public function unvalidated()
     {
         // $this->authorizeSubmoduleAction('read');
@@ -121,8 +204,7 @@ class NasabahController extends Controller
                 'status' => false,
                 'message' => 'Failed to validate nasabah: ' . $e->getMessage(),
             ], 500);
-        }   
-
+        }
     }
 
     public function index()
