@@ -242,7 +242,7 @@
                         </div>
                     </div>
 
-                    <div v-show="meta.currentTab === 'draft'" class="tab-pane fade  "
+                    <div v-show="meta.currentTab === 'draft'" class="tab-pane fade show"
                         :class="meta.currentTab === 'draft' ? 'active' : ''" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
