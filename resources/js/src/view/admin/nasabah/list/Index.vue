@@ -25,7 +25,11 @@
                             </div>
                             <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
-                                    <div class="progress-bar bg-success w-25" role="progressbar" aria-valuenow="100"
+                                    <div class="progress-bar"
+                                        :class="progressBarClass(progressVars.notValidated.bucket)"
+                                        :style="{ width: (100 - progressVars.notValidated.percent) + '%' }"
+                                        role="progressbar"
+                                        :aria-valuenow="progressVars.notValidated.bucket"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.notValidated.data?.length || 0 }} Nasabah</p>
@@ -34,7 +38,7 @@
                     </li>
                     <li class="nav-item border-1 rounded-1" role="presentation">
                         <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0"
-                            :class="{ active: meta.currentTab === 'draft' }" @click.prevent="switchTab('draft')"
+                            :class="{ active: meta.currentTab === 'drafted' }" @click.prevent="switchTab('drafted')"
                             type="button" role="tab">
                             <div class="d-flex flex-column align-items-start text-start mb-auto">
                                 <h5 class="text-xs">Drafting</h5>
@@ -44,7 +48,11 @@
                             </div>
                             <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
-                                    <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
+                                    <div class="progress-bar"
+                                        :class="progressBarClass(progressVars.drafted.bucket)"
+                                        :style="{ width: (100 - progressVars.drafted.percent) + '%' }"
+                                        role="progressbar"
+                                        :aria-valuenow="progressVars.drafted.bucket"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.drafted.data?.length || 0 }} Nasabah</p>
@@ -63,7 +71,11 @@
                             </div>
                             <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
-                                    <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
+                                    <div class="progress-bar"
+                                        :class="progressBarClass(progressVars.submitted.bucket)"
+                                        :style="{ width: (100 - progressVars.submitted.percent) + '%' }"
+                                        role="progressbar"
+                                        :aria-valuenow="progressVars.submitted.bucket"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.submitted.data?.length || 0 }} Nasabah</p>
@@ -80,7 +92,11 @@
                             </div>
                             <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
-                                    <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
+                                    <div class="progress-bar"
+                                        :class="progressBarClass(progressVars.rejected.bucket)"
+                                        :style="{ width: progressVars.rejected.percent + '%' }"
+                                        role="progressbar"
+                                        :aria-valuenow="progressVars.rejected.bucket"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.rejected.data?.length || 0 }} Nasabah</p>
@@ -97,7 +113,11 @@
                                         </div>
                                         <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
-                                    <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
+                                    <div class="progress-bar"
+                                        :class="progressBarClass(progressVars.accepted.bucket)"
+                                        :style="{ width: progressVars.accepted.percent + '%' }"
+                                        role="progressbar"
+                                        :aria-valuenow="progressVars.accepted.bucket"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.accepted.data?.length || 0 }} Nasabah</p>
@@ -106,15 +126,20 @@
                     </li>
                 </ul>
 
+                <!-- Debug progressVars for testing -->
+                <!-- <div class="mb-3 px-3 py-2 bg-light rounded">
+                    <strong>progressVars</strong>
+                    <span class="ms-2">total={{ progressVars.total }}</span>
+                    <span class="ms-2">notValidated={{ progressVars.notValidated.count }} | {{ progressVars.notValidated.percent }}% | {{ progressVars.notValidated.bucket }}</span>
+                    <span class="ms-2">drafted={{ progressVars.drafted.count }} | {{ progressVars.drafted.percent }}% | {{ progressVars.drafted.bucket }}</span>
+                    <span class="ms-2">submitted={{ progressVars.submitted.count }} | {{ progressVars.submitted.percent }}% | {{ progressVars.submitted.bucket }}</span>
+                    <span class="ms-2">accepted={{ progressVars.accepted.count }} | {{ progressVars.accepted.percent }}% | {{ progressVars.accepted.bucket }}</span>
+                    <span class="ms-2">rejected={{ progressVars.rejected.count }} | {{ progressVars.rejected.percent }}% | {{ progressVars.rejected.bucket }}</span>
+                    <span class="ms-2">finalTotal={{ progressVars.finalTotal }}</span>
+                </div> -->
+
                 <div class="d-flex justify-content-center my-4 align-items-center">
                     <hr class="ms-6 w-50">
-                    <!-- <a class="btn btn-white text-xxs mb-0 py-1">
-                        <span
-                            class="text-xxs text-muted mb-0 fw-normal flex-shrink-0 d-flex align-items-center justify-content-center gap-1">
-                            <i class="fas fa-search text-info"></i>
-                            <p class="mb-0 text-info text-xxs fw-normal flex-shrink-0">Find Nasabah</p>
-                        </span>
-                    </a> -->
                     <div
                         class="input-group mb-0 text-xxs w-auto d-flex align-items-center flex-row flex-shrink-0 gap-2 shadow-none">
                         <a @click.prevent="showGlobalSearch"
@@ -256,8 +281,8 @@
                         </div>
                     </div>
 
-                    <div v-show="meta.currentTab === 'draft'" class="tab-pane fade show"
-                        :class="meta.currentTab === 'draft' ? 'active' : ''" role="tabpanel">
+                    <div v-show="meta.currentTab === 'drafted'" class="tab-pane fade show"
+                        :class="meta.currentTab === 'drafted' ? 'active' : ''" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <h6 class="text-sm mb-0">Drafting</h6>
@@ -1564,6 +1589,31 @@ export default {
             console.log('Checking access for action:', action, this.userSubmoduleAccess?.actions?.includes(action) ?? false);
             return this.userSubmoduleAccess?.actions?.includes(action) ?? false;
         },
+        bucketThresholds() {
+            return [10, 25, 50, 75, 100];
+        },
+        roundToBucket(value) {
+            const n = Number(value) || 0;
+            if (n <= 0) return 0;
+            const thresholds = this.bucketThresholds();
+            let bucket = 0;
+            for (const threshold of thresholds) {
+                if (n >= threshold) {
+                    bucket = threshold;
+                } else {
+                    break;
+                }
+            }
+            return bucket;
+        },
+        progressBarClass(bucket) {
+            if (bucket >= 100) return 'bg-success';
+            if (bucket >= 75) return 'bg-info';
+            if (bucket >= 50) return 'bg-primary';
+            if (bucket >= 25) return 'bg-warning';
+            if (bucket >= 10) return 'bg-danger';
+            return 'bg-secondary';
+        },
     },
     beforeUnmount() {
         if (this.searchTimer) {
@@ -1591,6 +1641,42 @@ export default {
 
         canDeleteNasabah() {
             return this.canPerformAction('delete');
+        },
+        progressVars() {
+            const stages = ['notValidated', 'drafted', 'submitted'];
+            const finalStages = ['rejected', 'accepted'];
+            const totalCount = stages.reduce((sum, section) => {
+                return sum + (this.collection?.nasabah?.[section]?.data?.length || 0);
+            }, 0);
+
+            const counts = {};
+            for (const stage of stages) {
+                const count = this.collection?.nasabah?.[stage]?.data?.length || 0;
+                const percent = count === 0 ? 100 : totalCount ? Math.round((count / totalCount) * 100) : 0;
+                counts[stage] = {
+                    count,
+                    percent,
+                    bucket: this.roundToBucket(100 - percent),
+                };
+            }
+
+            const finalTotal = finalStages.reduce((sum, section) => {
+                return sum + (this.collection?.nasabah?.[section]?.data?.length || 0);
+            }, 0);
+
+            for (const stage of finalStages) {
+                const count = this.collection?.nasabah?.[stage]?.data?.length || 0;
+                const percent = finalTotal ? Math.round((count / finalTotal) * 100) : 0;
+                counts[stage] = {
+                    count,
+                    percent,
+                    bucket: this.roundToBucket(percent),
+                };
+            }
+
+            counts.total = totalCount;
+            counts.finalTotal = finalTotal;
+            return counts;
         },
     },
 
