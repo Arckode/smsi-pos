@@ -50,7 +50,7 @@
                             @click.prevent="switchTab('submitted')" type="button" role="tab">
                             <div class="d-flex flex-column align-items-start text-start">
                                 <h5 class="text-xs">Submitted</h5>
-                                <p class="text-xxs text-muted">List nasabah yang <b class="text-info">Sudah Menerima BI
+                                <p class="text-xxs text-muted">List nasabah yang <b class="text-info">Sudah Pengajuan / Menerima BI
                                         Checking</b></p>
                                 <div class="progress w-100">
                                     <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
@@ -94,14 +94,51 @@
 
                 <div class="d-flex justify-content-center my-4 align-items-center">
                     <hr class="ms-6 w-50">
-                    <a class="btn btn-xs btn-white text-xxs mb-0 py-1">
-                        <span class="text-xxs text-muted mb-0 fw-normal flex-shrink-0 d-flex align-items-center justify-content-center gap-1">
-                            <i class="fas fa-search text-info"></i> 
+                    <!-- <a class="btn btn-white text-xxs mb-0 py-1">
+                        <span
+                            class="text-xxs text-muted mb-0 fw-normal flex-shrink-0 d-flex align-items-center justify-content-center gap-1">
+                            <i class="fas fa-search text-info"></i>
                             <p class="mb-0 text-info text-xxs fw-normal flex-shrink-0">Find Nasabah</p>
                         </span>
-                    </a>
+                    </a> -->
+                    <div
+                        class="input-group mb-0 text-xxs w-auto d-flex align-items-center flex-row flex-shrink-0 gap-2 shadow-none">
+                        <a @click.prevent="showGlobalSearch"
+                            class="btn btn-white rounded-2 mb-0 d-flex align-items-center">
+                            <span class="text-xxs me-0" id="basic-addon1">
+                                <i class="fas fa-search"></i>
+                            </span>
+                        </a>
+                        <transition name="global-search">
+                            <div v-if="showGlobalSearchActive" class="search-input-wrapper width-100 position-relative">
+                                <input ref="globalInput" type="text" class="form-control text-xxs rounded-2"
+                                    placeholder="Find Nasabah" aria-label="Username" id="global-searching"
+                                    aria-describedby="basic-addon1" v-model="meta.search.global"
+                                    @input="onGlobalSearchInput" autocomplete="off"
+                                    style="width: 250px; margin-left: 8px;">
+
+                                <ul v-if="showSuggestions && suggestions.length"
+                                    class="suggestions-list list-unstyled p-0 py-3 shadow bg-white">
+                                    <li v-for="item in suggestions" :key="item.id" class="suggestion-item"
+                                        @click="selectSuggestion(item)">
+                                        <div class="card border border-1 rounded-1 mb-0">
+                                            <div class="card-body my-1">
+                                                <h5 class="card-title text-xxs">{{ item.nama_lengkap }}</h5>
+                                                <p class="card-text text-xxs">{{ item.nama_affiliasi ?
+                                                    item.nama_affiliasi : '-' }}</p>
+                                                <a class="btn btn-primary text-xxs">{{ item.validation ? 'Validated' :
+                                                    'Not Validated' }} - {{ item.status_pengajuan }}</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </transition>
+                    </div>
                     <hr class="me-6 w-50">
                 </div>
+
+
 
                 <div class="tab-content mt-4" id="pills-tabContent">
 
@@ -205,7 +242,7 @@
                         </div>
                     </div>
 
-                    <div v-show="meta.currentTab === 'draft'" class="tab-pane fade show"
+                    <div v-show="meta.currentTab === 'draft'" class="tab-pane fade  "
                         :class="meta.currentTab === 'draft' ? 'active' : ''" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
@@ -224,7 +261,7 @@
                                                     d="M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
                                             </svg>
                                         </span>
-                                        Tambah Nasabah
+                                        Nasabah Baru
                                     </button>
                                 </div>
                                 <div class="ms-auto d-flex gap-2">
@@ -252,8 +289,8 @@
                                     </path>
                                 </svg>
                             </span>
-                            <input type="text" class="form-control text-xxs"
-                                placeholder="Search nama nasabah" v-model="meta.search.draft">
+                            <input type="text" class="form-control text-xxs" placeholder="Search nama nasabah"
+                                v-model="meta.search.draft">
                         </div>
                         <div v-if="loadContentDrafted" class="d-flex justify-content-center p-4">
                             <div class="spinner-border text-primary" role="status">
@@ -326,7 +363,8 @@
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">KTP Pasangan
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">KTP
+                                                                        Pasangan
                                                                     </p>
                                                                     <i
                                                                         :class="item.dokumen_ktp_pasangan ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
@@ -334,7 +372,8 @@
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">Asuransi
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">
+                                                                        Asuransi
                                                                     </p>
                                                                     <i
                                                                         :class="item.dokumen_asuransi ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
@@ -342,7 +381,8 @@
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">ID Card
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">ID
+                                                                        Card
                                                                     </p>
                                                                     <i
                                                                         :class="item.dokumen_id_card_perusahaan ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
@@ -350,7 +390,8 @@
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">Selfie
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">
+                                                                        Selfie
                                                                     </p>
                                                                     <i
                                                                         :class="item.dokumen_selfie ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
@@ -358,7 +399,8 @@
                                                             </li>
                                                             <li>
                                                                 <div class="d-flex flex-column">
-                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">Pernyataan
+                                                                    <p class="text-xxs text-secondary mb-0 fw-bold">
+                                                                        Pernyataan
                                                                     </p>
                                                                     <i
                                                                         :class="item.dokumen_surat_pernyataan ? 'fas fa-check-circle text-primary' : 'fas fa-times-circle text-danger'"></i>
@@ -379,9 +421,11 @@
                                                         @click.prevent="downloadPreview(item.id, item.nama_lengkap)">
                                                         <span>PDF Pengajuan</span>
                                                     </a>
-                                                    <button v-else class="btn btn-info btn-sm m-0 py-2 text-xxs text-white" type="button" disabled>
-                                                        <span class="spinner-border spinner-border-sm text-white" role="status"
-                                                            aria-hidden="true"></span>
+                                                    <button v-else
+                                                        class="btn btn-info btn-sm m-0 py-2 text-xxs text-white"
+                                                        type="button" disabled>
+                                                        <span class="spinner-border spinner-border-sm text-white"
+                                                            role="status" aria-hidden="true"></span>
                                                         Loading...
                                                     </button>
                                                 </div>
@@ -418,16 +462,30 @@
                         </div>
                     </div>
 
-                    <!-- <div v-show="meta.currentTab === 'submitted'" class="tab-pane fade show"
+                    <div v-show="meta.currentTab === 'submitted'" class="tab-pane fade show"
                         :class="meta.currentTab === 'submitted' ? 'active' : ''" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <h6 class="text-sm mb-0">Submitted</h6>
-                                <p class="text-xxs text-muted mb-0">List nasabah yang sudah menerima BI Checking.
+                                <p class="text-xxs text-muted mb-0">List nasabah yang sudah pengajuan/menerima BI
+                                    Checking.
                                 </p>
                             </div>
                         </div>
-                        <div v-if="loadContent" class="d-flex justify-content-center p-4">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text text-body">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
+                                    </path>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control text-xxs"
+                                placeholder="Search nasabah yang sudah pengajuan/menerima BI Checking"
+                                v-model="meta.search.submitted">
+                        </div>
+                        <div v-if="loadContentSubmitted" class="d-flex justify-content-center p-4">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
@@ -437,13 +495,14 @@
                                 <thead class="bg-white-100">
                                     <tr>
                                         <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
-                                        <th class="text-xxs font-weight-bold">Status</th>
-                                        <th class="text-xxs font-weight-bold">Action</th>
+                                        <th class="text-xxs font-weight-bold">Tanggal Pengajuan</th>
+                                        <th class="text-xxs font-weight-bold text-center">Status</th>
+                                        <th class="text-xxs font-weight-bold text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <template v-if="collection.users.submitted?.data?.length > 0">
-                                        <tr v-for="item in collection.users.submitted.data" :key="item.id">
+                                    <template v-if="collection.nasabah.submitted.data?.length > 0">
+                                        <tr v-for="item in collection.nasabah.submitted.data" :key="item.id">
                                             <td class="align-middle text-lg">
                                                 <div class="d-flex px-3 py-1">
                                                     <div class="d-flex flex-column justify-content-start ms-1">
@@ -458,16 +517,28 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="align-middle text-xxs">
+                                                {{ item.created_at ? new
+                                                    Date(item.created_at).toLocaleDateString('id-ID', {
+                                                        day: '2-digit',
+                                                        month: 'long',
+                                                        year: 'numeric'
+                                                }) : '-' }}
+                                            </td>
                                             <td class="align-middle text-center text-lg">
-                                                <a class="btn btn-sm mb-0 btn-info">
+                                                <a class="btn btn-sm mb-0 text-xxs" :class="item.status_pengajuan == 'Submitted' ? 'btn-white' : 'btn-info'">
                                                     {{ item.status_pengajuan }}
                                                 </a>
                                             </td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <a class="btn btn-sm mb-0 btn-info"
-                                                        @click.prevent="downloadPreview(item.id, item.nama_lengkap)">
-                                                        <span>PDF</span>
+                                            <td class="align-middle text-center text-lg">
+                                                <div class="d-flex gap-2 justify-content-center">
+                                                    <a class="btn btn-sm mb-0 btn-warning text-xxs"
+                                                        @click.prevent="confirmRejectForm(item.id)">
+                                                        <span>Reject</span>
+                                                    </a>
+                                                    <a class="btn btn-sm mb-0 btn-success text-xxs"
+                                                        @click.prevent="confirmAcceptForm(item.id)">
+                                                        <span>Accept</span>
                                                     </a>
                                                 </div>
                                             </td>
@@ -475,113 +546,35 @@
                                     </template>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="border-top py-3 px-3 d-flex align-items-center flex-wrap">
-                            <div class="d-flex flex-column">
-                                <p class="font-weight-semibold mb-0 text-dark text-sm">Halaman {{
-                                    meta.page.submitted.current_page }} dari {{ meta.page.submitted.last_page }}</p>
-                                <p class="font-weight-semibold mb-0 text-secondary text-sm">Total: {{ meta.total }}
-                                    Nasabah</p>
-                            </div>
-                            <div class="ms-auto">
-                                <div class="ms-auto">
-                                    <button v-if="collection.users.submitted?.links"
-                                        v-for="(link, index) in collection.users.submitted.links" :key="index"
-                                        @click="changePageUserList(link.url)" class="btn btn-sm btn-white mb-0"
+                            <div v-if="collection.nasabah.drafted.data?.length > 0"
+                                class="d-flex justify-content-between px-3 py-3 align-items-center flex-wrap"
+                                style="background-color: white;">
+                                <div class="d-flex flex-column">
+                                    <p class="font-weight-semibold mb-0 pb-0 text-dark text-xxs">Halaman {{
+                                        meta.page.drafted.current_page }} / {{
+                                            meta.page.drafted.last_page }}
+                                    </p>
+                                    <p class="font-weight-semibold mb-0 pt-0 text-secondary text-xxs">
+                                        Total: {{ meta.total.drafted }} Data
+                                    </p>
+                                </div>
+                                <div>
+                                    <button v-if="collection.nasabah.drafted?.links"
+                                        v-for="(link, index) in collection.nasabah.submitted.links" :key="index"
+                                        @click="changePageSubmittedNasabahList(link.url)"
+                                        class="btn btn-sm rounded-2 btn-white mb-0 text-xxs ms-1"
                                         :disabled="link.active">
                                         <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
-                                        <span v-else-if="index === (collection.users.submitted?.links?.length - 1)"><i
+                                        <span v-else-if="index === (collection.nasabah.submitted?.links?.length - 1)"><i
                                                 class="fas fa-chevron-right"></i></span>
                                         <span v-else>{{ link.label }}</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
 
-                    <!-- <div v-show="meta.currentTab === 'accepted'" class="tab-pane fade show"
-                        :class="meta.currentTab === 'accepted' ? 'active' : ''" role="tabpanel">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h6 class="text-sm mb-0">Accepted</h6>
-                                <p class="text-xxs text-muted mb-0">List nasabah yang menerima Proposal KB Bank.
-                                </p>
-                            </div>
-                        </div>
-                        <div v-if="loadContent" class="d-flex justify-content-center p-4">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <div v-else class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
-                            <table class="table table-hover align-items-center mb-0" style="background-color: white;">
-                                <thead class="bg-white-100">
-                                    <tr>
-                                        <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
-                                        <th class="text-xxs font-weight-bold">Status</th>
-                                        <th class="text-xxs font-weight-bold">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template v-if="collection.users.accepted?.data?.length > 0">
-                                        <tr v-for="item in collection.users.accepted.data" :key="item.id">
-                                            <td class="align-middle text-lg">
-                                                <div class="d-flex px-3 py-1">
-                                                    <div class="d-flex flex-column justify-content-start ms-1">
-                                                        <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
-                                                            @click.prevent="editNasabah(item.id)">
-                                                            {{ item.nama_lengkap }}
-                                                        </a>
-                                                        <p class="text-xxs text-secondary mb-0">
-                                                            {{ item.affiliasi ? item.affiliasi.nama_affiliasi :
-                                                                '-' }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="align-middle text-center text-lg">
-                                                <a class="btn btn-sm mb-0 btn-success">
-                                                    {{ item.status_pengajuan }}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <a class="btn btn-sm mb-0 btn-info"
-                                                        @click.prevent="downloadPreview(item.id, item.nama_lengkap)">
-                                                        <span>PDF</span>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="border-top py-3 px-3 d-flex align-items-center flex-wrap">
-                            <div class="d-flex flex-column">
-                                <p class="font-weight-semibold mb-0 text-dark text-sm">Halaman {{
-                                    meta.page.accepted.current_page }} dari {{ meta.page.accepted.last_page }}
-                                </p>
-                                <p class="font-weight-semibold mb-0 text-secondary text-sm">Total: {{ meta.total
-                                    }} Nasabah</p>
-                            </div>
-                            <div class="ms-auto">
-                                <div class="ms-auto">
-                                    <button v-if="collection.users.accepted?.links"
-                                        v-for="(link, index) in collection.users.accepted.links" :key="index"
-                                        @click="changePageUserList(link.url)" class="btn btn-sm btn-white mb-0"
-                                        :disabled="link.active">
-                                        <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
-                                        <span v-else-if="index === (collection.users.accepted?.links?.length - 1)"><i
-                                                class="fas fa-chevron-right"></i></span>
-                                        <span v-else>{{ link.label }}</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
-                    <!-- <div v-show="meta.currentTab === 'rejected'" class="tab-pane fade show"
+                    <div v-show="meta.currentTab === 'rejected'" class="tab-pane fade show"
                         :class="meta.currentTab === 'rejected' ? 'active' : ''" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
@@ -590,7 +583,20 @@
                                     Bank.</p>
                             </div>
                         </div>
-                        <div v-if="loadContent" class="d-flex justify-content-center p-4">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text text-body">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
+                                    </path>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control text-xxs"
+                                placeholder="Search nasabah yang sudah pengajuan/menerima BI Checking"
+                                v-model="meta.search.rejected">
+                        </div>
+                        <div v-if="loadContentRejected" class="d-flex justify-content-center p-4">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
@@ -605,8 +611,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <template v-if="collection.users.rejected?.data?.length > 0">
-                                        <tr v-for="item in collection.users.rejected.data" :key="item.id">
+                                    <template v-if="collection.nasabah.rejected.data?.length > 0">
+                                        <tr v-for="item in collection.nasabah.rejected.data" :key="item.id">
                                             <td class="align-middle text-lg">
                                                 <div class="d-flex px-3 py-1">
                                                     <div class="d-flex flex-column justify-content-start ms-1">
@@ -638,31 +644,133 @@
                                     </template>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="border-top py-3 px-3 d-flex align-items-center flex-wrap">
-                            <div class="d-flex flex-column">
-                                <p class="font-weight-semibold mb-0 text-dark text-sm">Halaman {{
-                                    meta.page.rejected.current_page }} dari {{ meta.page.rejected.last_page
-                                    }}</p>
-                                <p class="font-weight-semibold mb-0 text-secondary text-sm">Total: {{
-                                    meta.total }} Nasabah</p>
-                            </div>
-                            <div class="ms-auto">
-                                <div class="ms-auto">
-                                    <button v-if="collection.users.rejected?.links"
-                                        v-for="(link, index) in collection.users.rejected.links" :key="index"
-                                        @click="changePageUserList(link.url)" class="btn btn-sm btn-white mb-0"
+                            <div v-if="collection.nasabah.rejected.data?.length > 0"
+                                class="d-flex justify-content-between px-3 py-3 align-items-center flex-wrap"
+                                style="background-color: white;">
+                                <div class="d-flex flex-column">
+                                    <p class="font-weight-semibold mb-0 pb-0 text-dark text-xxs">Halaman {{
+                                        meta.page.rejected.current_page }} / {{
+                                            meta.page.rejected.last_page }}
+                                    </p>
+                                    <p class="font-weight-semibold mb-0 pt-0 text-secondary text-xxs">
+                                        Total: {{ meta.total.rejected }} Data
+                                    </p>
+                                </div>
+                                <div>
+                                    <button v-if="collection.nasabah.rejected?.links"
+                                        v-for="(link, index) in collection.nasabah.rejected.links" :key="index"
+                                        @click="changePageRejectedNasabahList(link.url)"
+                                        class="btn btn-sm rounded-2 btn-white mb-0 text-xxs ms-1"
                                         :disabled="link.active">
                                         <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
-                                        <span v-else-if="index === (collection.users.rejected?.links?.length - 1)"><i
+                                        <span v-else-if="index === (collection.nasabah.rejected?.links?.length - 1)"><i
                                                 class="fas fa-chevron-right"></i></span>
                                         <span v-else>{{ link.label }}</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
 
+                      <div v-show="meta.currentTab === 'accepted'" class="tab-pane fade show"
+                        :class="meta.currentTab === 'accepted' ? 'active' : ''" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="text-sm mb-0">Accepted</h6>
+                                <p class="text-xxs text-muted mb-0">List nasabah yang menerima Proposal KB Bank.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text text-body">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
+                                    </path>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control text-xxs"
+                                placeholder="Search nasabah yang sudah pengajuan/menerima BI Checking"
+                                v-model="meta.search.accepted">
+                        </div>
+                        <div v-if="loadContentAccepted" class="d-flex justify-content-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                            <table class="table table-hover align-items-center mb-0" style="background-color: white;">
+                                <thead class="bg-white-100">
+                                    <tr>
+                                        <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
+                                        <th class="text-xxs font-weight-bold">Status</th>
+                                        <th class="text-xxs font-weight-bold">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-if="collection.nasabah.accepted.data?.length > 0">
+                                        <tr v-for="item in collection.nasabah.accepted.data" :key="item.id">
+                                            <td class="align-middle text-lg">
+                                                <div class="d-flex px-3 py-1">
+                                                    <div class="d-flex flex-column justify-content-start ms-1">
+                                                        <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
+                                                            @click.prevent="editNasabah(item.id)">
+                                                            {{ item.nama_lengkap }}
+                                                        </a>
+                                                        <p class="text-xxs text-secondary mb-0">
+                                                            {{ item.affiliasi ? item.affiliasi.nama_affiliasi :
+                                                                '-' }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle text-center text-lg">
+                                                <a class="btn btn-sm mb-0 btn-success">
+                                                    {{ item.status_pengajuan }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a class="btn btn-sm mb-0 btn-info"
+                                                        @click.prevent="downloadPreview(item.id, item.nama_lengkap)">
+                                                        <span>PDF</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <div v-if="collection.nasabah.accepted.data?.length > 0"
+                                class="d-flex justify-content-between px-3 py-3 align-items-center flex-wrap"
+                                style="background-color: white;">
+                                <div class="d-flex flex-column">
+                                    <p class="font-weight-semibold mb-0 pb-0 text-dark text-xxs">Halaman {{
+                                        meta.page.accepted.current_page }} / {{
+                                            meta.page.accepted.last_page }}
+                                    </p>
+                                    <p class="font-weight-semibold mb-0 pt-0 text-secondary text-xxs">
+                                        Total: {{ meta.total.accepted }} Data
+                                    </p>
+                                </div>
+                                <div>
+                                    <button v-if="collection.nasabah.accepted?.links"
+                                        v-for="(link, index) in collection.nasabah.accepted.links" :key="index"
+                                        @click="changePageAcceptedNasabahList(link.url)"
+                                        class="btn btn-sm rounded-2 btn-white mb-0 text-xxs ms-1"
+                                        :disabled="link.active">
+                                        <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
+                                        <span v-else-if="index === (collection.nasabah.accepted?.links?.length - 1)"><i
+                                                class="fas fa-chevron-right"></i></span>
+                                        <span v-else>{{ link.label }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
                 </div>
             </div>
         </div>
@@ -750,10 +858,14 @@ export default {
             dataTable: null,
             requestCounter: 0,
             searchTimer: null,
+            suggestionTimer: null,
+            suggestions: [],
+            showSuggestions: false,
             qrcode: '',
             qrCodeImage: '',
             currentPrintDet: '',
             accessDenied: false,
+            showGlobalSearchActive: false,
         }
     },
 
@@ -769,13 +881,22 @@ export default {
             await this.fetchUnvalidatedNasabahList();
             await this.fetchDraftedNasabahList();
             await this.fetchSubmittedNasabahList();
-            await this.fetchAcceptedNasabahList();
             await this.fetchRejectedNasabahList();
+            await this.fetchAcceptedNasabahList();
             this.loadContent = false;
         } else {
             this.loadContent = false;
             this.accessDenied = true;
         }
+
+        $(document).ready(function () {
+
+            $(".fa-search").click(function () {
+                $(".wrap, .input-search").toggleClass("active");
+                $("input[type='text']").focus();
+            });
+
+        });
     },
 
     methods: {
@@ -793,6 +914,55 @@ export default {
         },
         filtertoggleSidebar() {
             this.filterisHidden = !this.filterisHidden;
+        },
+        showGlobalSearch() {
+            this.showGlobalSearchActive = !this.showGlobalSearchActive;
+            if (this.showGlobalSearchActive) {
+                this.$nextTick(() => {
+                    if (this.$refs.globalInput) this.$refs.globalInput.focus();
+                });
+            } else {
+                this.showSuggestions = false;
+            }
+        },
+        async fetchNasabahSuggestions() {
+            const q = this.meta.search.global && this.meta.search.global.trim();
+            if (!q || q.length < 2) {
+                this.suggestions = [];
+                this.showSuggestions = false;
+                return;
+            }
+
+            try {
+                const endpoint = `${BASEURL}/api/nasabah/options`;
+                const response = await axios.get(endpoint, {
+                    headers: { Authorization: 'Bearer ' + this.$token() },
+                    params: { search: q },
+                });
+
+                const data = response.data?.data ?? response.data ?? [];
+                this.suggestions = Array.isArray(data) ? data : [];
+                this.showSuggestions = this.suggestions.length > 0;
+            } catch (err) {
+                console.error('Suggestion fetch error', err);
+                this.suggestions = [];
+                this.showSuggestions = false;
+            }
+        },
+
+        onGlobalSearchInput() {
+            if (this.suggestionTimer) {
+                clearTimeout(this.suggestionTimer);
+            }
+            this.suggestionTimer = setTimeout(() => {
+                this.fetchNasabahSuggestions();
+            }, 300);
+        },
+
+        selectSuggestion(item) {
+            const name = item.nama_lengkap;
+            this.meta.search.global = name;
+            this.showSuggestions = false;
         },
         async fetchCurrentUser() {
             let endpoint = `${BASEURL}/api/current-user`
@@ -1149,6 +1319,88 @@ export default {
                 this.$swal.fire('Failed!', error.response?.data?.message || 'Terjadi kesalahan', 'error');
             }
         },
+        confirmRejectForm(id) {
+            Swal.fire({
+                title: 'Apakah Nasabah menolak pengajuan ini?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.rejectStore(id)
+                }
+            })
+        },
+        async rejectStore(id) {
+            this.loading = true
+            let endpoint = `${BASEURL}/api/nasabah/store/rejected/${id}`;
+            try {
+                let response = await axios.post(endpoint, {}, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                console.log('Store response:', response);
+                Swal.fire(
+                    'Saved!',
+                    'User has been saved.',
+                    'success'
+                )
+            } catch (error) {
+                console.error("Error storing user: ", error);
+                Swal.fire(
+                    'Error!',
+                    'There was an error saving the user.',
+                    'error'
+                )
+            } finally {
+                this.loading = false
+            }
+        },
+        confirmAcceptForm(id) {
+            Swal.fire({
+                title: 'Apakah Nasabah menerima pengajuan ini?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.acceptStore(id)
+                }
+            })
+        },
+        async acceptStore(id) {
+            this.loading = true
+            let endpoint = `${BASEURL}/api/nasabah/store/accepted/${id}`;
+            try {
+                let response = await axios.post(endpoint, {}, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                console.log('Store response:', response);
+                Swal.fire(
+                    'Saved!',
+                    'User has been saved.',
+                    'success'
+                )
+            } catch (error) {
+                console.error("Error storing user: ", error);
+                Swal.fire(
+                    'Error!',
+                    'There was an error saving the user.',
+                    'error'
+                )
+            } finally {
+                this.loading = false
+            }
+        },
         async changePageUnvalidatedNasabahList(url) {
             if (url == null) {
                 return false
@@ -1330,18 +1582,98 @@ export default {
     watch: {
         'meta.search': 'debounceSearchFetch',
         'meta.search.notValidated': 'fetchUnvalidatedNasabahList',
-        'meta.role': 'fetchUserList',
-        'meta.unit': 'fetchUserList',
-        'meta.status': 'fetchUserList',
-        'meta.requestStatus': function (newVal, oldVal) {
-            this.fetchUserList();
+        'meta.search.global': function (newVal) {
+            if (this.suggestionTimer) clearTimeout(this.suggestionTimer);
+            this.suggestionTimer = setTimeout(() => this.fetchNasabahSuggestions(), 300);
         },
+        // 'meta.role': 'fetchUserList',
+        // 'meta.unit': 'fetchUserList',
+        // 'meta.status': 'fetchUserList',
+        // 'meta.requestStatus': function (newVal, oldVal) {
+        //     this.fetchUserList();
+        // },
         // 'meta.currentTab': function (newTab) {
         //     this.fetchUserListByStatus(newTab);
         // },
     },
 }
 </script>
+
+<style scoped>
+/* Global search label hide animation */
+.hide-onclick {
+    transition: opacity .22s ease, transform .22s ease;
+    display: inline-block;
+}
+
+.hidden-text {
+    opacity: 0;
+    transform: translateX(-6px);
+    pointer-events: none;
+    width: 0;
+    margin-left: 0 !important;
+    overflow: hidden;
+}
+
+/* Search input transition and wrapper to avoid whitespace when hidden */
+.search-input-wrapper {
+    display: inline-block;
+    vertical-align: middle;
+    overflow: visible;
+}
+
+.search-input-wrapper input {
+    /* width: 100%;
+    max-width: 520px; */
+    box-sizing: border-box;
+    transition: width .32s ease, opacity .22s ease;
+}
+
+/* Vue transition classes */
+.global-search-enter-from,
+.global-search-leave-to {
+    width: 0;
+    opacity: 0;
+}
+
+.global-search-enter-to,
+.global-search-leave-from {
+    width: 250px;
+    opacity: 1;
+}
+
+.global-search-enter-active,
+.global-search-leave-active {
+    transition: width .32s ease, opacity .22s ease;
+    display: inline-block;
+    overflow: hidden;
+}
+
+/* Small visual polish to keep the search aligned */
+.input-group .input-group-text {
+    cursor: pointer;
+    /* margin-right: 8px; */
+}
+
+.suggestions-list {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 50;
+    max-height: 260px;
+    overflow: auto;
+    border-radius: 6px;
+}
+
+.suggestion-item {
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #f1f5f9;
+}
+</style>
 
 <style scoped>
 .badge.bg-primary {

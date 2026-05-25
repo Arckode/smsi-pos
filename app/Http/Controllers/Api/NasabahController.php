@@ -128,7 +128,7 @@ class NasabahController extends Controller
                     'updated_at' => now(),
                 ];
                 $nasabah = Nasabah::find($nasabahId);
-                $nasabah->status_pengajuan = 'User Review';
+                $nasabah->status_pengajuan = 'Submitted';
                 $nasabah->save();
             }
             BatchDetailNasabah::insert($batchDetails);
@@ -157,6 +157,72 @@ class NasabahController extends Controller
         ];
 
         $data = Nasabah::with($relations)->where('validation', false)
+            ->when(
+                request()->has('search') && request()->search != '',
+                function ($q) {
+                    $q->where('nama_lengkap', 'like', '%' . request()->search . '%')
+                        ->orWhere('nik', 'like', '%' . request()->search . '%');
+                }
+            )
+            ->paginate(10);
+
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+        ]);
+    }
+    public function submitted()
+    {
+        // $this->authorizeSubmoduleAction('read');
+        $relations = [
+            'affiliasi:id,nama_affiliasi',
+        ];
+
+        $data = Nasabah::with($relations)->wherein('status_pengajuan', ['Submitted', 'User Review'])
+            ->when(
+                request()->has('search') && request()->search != '',
+                function ($q) {
+                    $q->where('nama_lengkap', 'like', '%' . request()->search . '%')
+                        ->orWhere('nik', 'like', '%' . request()->search . '%');
+                }
+            )
+            ->paginate(10);
+
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+        ]);
+    }
+    public function accepted()
+    {
+        // $this->authorizeSubmoduleAction('read');
+        $relations = [
+            'affiliasi:id,nama_affiliasi',
+        ];
+
+        $data = Nasabah::with($relations)->where('status_pengajuan', 'Approved')
+            ->when(
+                request()->has('search') && request()->search != '',
+                function ($q) {
+                    $q->where('nama_lengkap', 'like', '%' . request()->search . '%')
+                        ->orWhere('nik', 'like', '%' . request()->search . '%');
+                }
+            )
+            ->paginate(10);
+
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+        ]);
+    }
+    public function rejected()
+    {
+        // $this->authorizeSubmoduleAction('read');
+        $relations = [
+            'affiliasi:id,nama_affiliasi',
+        ];
+
+        $data = Nasabah::with($relations)->where('status_pengajuan', 'Rejected')
             ->when(
                 request()->has('search') && request()->search != '',
                 function ($q) {
@@ -206,6 +272,91 @@ class NasabahController extends Controller
             ], 500);
         }
     }
+    public function rejectingNasabah(int $id)
+    {
+        try {
+            DB::beginTransaction();
+            // $reason = $request->input('reason');
+
+            $nasabah = Nasabah::findOrFail($id);
+            $nasabah->status_pengajuan = 'Rejected';
+            $nasabah->save();
+
+            NasabahLog::create([
+                'action' => 'Reject',
+                'nasabah_id' => $nasabah->id,
+                'payload_before' => json_encode($nasabah->getOriginal()),
+                'payload_after' => json_encode($nasabah->toArray()),
+                'created_by' => auth()->user()->id,
+            ]);
+
+            NasabahStatusLog::create([
+                'nasabah_id' => $nasabah->id,
+                'status_before' => $nasabah->getOriginal('status_pengajuan'),
+                'status_after' => 'Rejected',
+                'status_changed_at' => now(),
+                'created_by' => auth()->user()->id,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Nasabah has been rejected successfully.',
+                'data' => $nasabah,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to reject nasabah: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function acceptingNasabah(int $id)
+    {
+        try {
+            DB::beginTransaction();
+            // $reason = $request->input('reason');
+
+            $nasabah = Nasabah::findOrFail($id);
+            $nasabah->status_pengajuan = 'Approved';
+            $nasabah->save();
+
+            NasabahLog::create([
+                'action' => 'Approved',
+                'nasabah_id' => $nasabah->id,
+                'payload_before' => json_encode($nasabah->getOriginal()),
+                'payload_after' => json_encode($nasabah->toArray()),
+                'created_by' => auth()->user()->id,
+            ]);
+
+            NasabahStatusLog::create([
+                'nasabah_id' => $nasabah->id,
+                'status_before' => $nasabah->getOriginal('status_pengajuan'),
+                'status_after' => 'Approved',
+                'status_changed_at' => now(),
+                'created_by' => auth()->user()->id,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Nasabah has been accepted successfully.',
+                'data' => $nasabah,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to accept nasabah: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
 
     public function index()
     {
@@ -225,7 +376,7 @@ class NasabahController extends Controller
         } elseif ($status === 'draft') {
             $query->where('validation', true)->where('status_pengajuan', 'draft');
         } elseif ($status === 'submitted') {
-            $query->where('status_pengajuan', 'submit');
+            $query->wherein('status_pengajuan', ['submitted', 'user_review']);
         } elseif ($status === 'accepted') {
             $query->where('status_pengajuan', 'accepted');
         } elseif ($status === 'rejected') {
@@ -246,6 +397,40 @@ class NasabahController extends Controller
         return response()->json([
             'status' => true,
             'data' => $data,
+        ]);
+    }
+
+    public function options(Request $request)
+    {
+        $relations = [
+            'affiliasi:id,nama_affiliasi',
+        ];
+        $q = $request->get('search', '') ?? '';
+
+        $data = Nasabah::with($relations)->when($q !== '', function ($query) use ($q) {
+            $query->where('nama_lengkap', 'like', '%' . $q . '%')
+                ->orWhere('nik', 'like', '%' . $q . '%')
+                ->orwhereHas('affiliasi', function ($q2) use ($q) {
+                    $q2->where('nama_affiliasi', 'like', '%' . $q . '%');
+                });
+        })
+            ->orderBy('nama_lengkap')
+            ->limit(15)
+            ->get(['id', 'nama_lengkap', 'temp_affiliasi', 'affiliasi_id', 'validation', 'status_pengajuan']);
+
+        $flattenedData = $data->map(function ($nasabah) {
+            return [
+                'id' => $nasabah->id,
+                'nama_lengkap' => $nasabah->nama_lengkap,
+                'validation' => $nasabah->validation,
+                'status_pengajuan' => $nasabah->status_pengajuan,
+                'nama_affiliasi' => $nasabah->affiliasi->nama_affiliasi ?? $nasabah->temp_affiliasi, // Falls back to '-' if no relation
+            ];
+        });
+
+        return response()->json([
+            'status' => true,
+            'data' => $flattenedData,
         ]);
     }
 
