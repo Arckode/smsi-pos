@@ -15,78 +15,92 @@
 
                 <ul class="nav nav-pills mb-3" role="tablist">
                     <li class="nav-item border-1 rounded-1" role="presentation">
-                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'notValidated' }"
+                        <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0"
+                            :class="{ active: meta.currentTab === 'notValidated' }"
                             @click.prevent="switchTab('notValidated')" type="button" role="tab">
-                            <div class="d-flex flex-column align-items-start text-start">
+                            <div class="d-flex flex-column align-items-start text-start mb-auto">
                                 <h5 class="text-xs">Validasi Nasabah</h5>
                                 <p class="text-xxs text-muted">List pengajuan <b class="text-warning">Online & Belum
                                         terverifikasi</b></p>
+                            </div>
+                            <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
                                     <div class="progress-bar bg-success w-25" role="progressbar" aria-valuenow="100"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <p class="text-xxs text-end mt-3 mb-0">100 Nasabah</p>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.notValidated.data?.length || 0 }} Nasabah</p>
                             </div>
                         </button>
                     </li>
                     <li class="nav-item border-1 rounded-1" role="presentation">
-                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'draft' }"
-                            @click.prevent="switchTab('draft')" type="button" role="tab">
-                            <div class="d-flex flex-column align-items-start text-start">
+                        <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0"
+                            :class="{ active: meta.currentTab === 'draft' }" @click.prevent="switchTab('draft')"
+                            type="button" role="tab">
+                            <div class="d-flex flex-column align-items-start text-start mb-auto">
                                 <h5 class="text-xs">Drafting</h5>
                                 <p class="text-xxs text-muted">List nasabah yang <b class="text-danger">Belum Pengajuan
                                         BI
                                         Checking</b></p>
+                            </div>
+                            <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
                                     <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <h6 class="text-xxs text-muted mt-3 mb-0">Total : 50 nasabah</h6>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.drafted.data?.length || 0 }} Nasabah</p>
                             </div>
                         </button>
                     </li>
                     <li class="nav-item border-1 rounded-1" role="presentation">
-                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'submitted' }"
-                            @click.prevent="switchTab('submitted')" type="button" role="tab">
-                            <div class="d-flex flex-column align-items-start text-start">
+                        <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0"
+                            :class="{ active: meta.currentTab === 'submitted' }" @click.prevent="switchTab('submitted')"
+                            type="button" role="tab">
+                            <div class="d-flex flex-column align-items-start text-start mb-auto">
                                 <h5 class="text-xs">Submitted</h5>
-                                <p class="text-xxs text-muted">List nasabah yang <b class="text-info">Sudah Pengajuan / Menerima BI
+                                <p class="text-xxs text-muted">List nasabah yang <b class="text-info">Sudah Pengajuan /
+                                        Menerima BI
                                         Checking</b></p>
+                            </div>
+                            <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
                                     <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <h6 class="text-xxs text-muted mt-3 mb-0">Total : 50 nasabah</h6>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.submitted.data?.length || 0 }} Nasabah</p>
                             </div>
                         </button>
                     </li>
                     <li class="nav-item border-1 rounded-1" role="presentation">
-                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'rejected' }"
+                        <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0" :class="{ active: meta.currentTab === 'rejected' }"
                             @click.prevent="switchTab('rejected')" type="button" role="tab">
-                            <div class="d-flex flex-column align-items-start text-start">
+                            <div class="d-flex flex-column align-items-start text-start mb-auto">
                                 <h5 class="text-xs">Rejected</h5>
                                 <p class="text-xxs text-muted">List nasabah yang <b class="text-danger">Menolak Proposal
                                         KB Bank</b></p>
+                            </div>
+                            <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
                                     <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <h6 class="text-xxs text-muted mt-3 mb-0">Total : 50 nasabah</h6>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.rejected.data?.length || 0 }} Nasabah</p>
                             </div>
                         </button>
                     </li>
                     <li class="nav-item border-1 rounded-1" role="presentation">
-                        <button class="nav-link p-4 m-0" :class="{ active: meta.currentTab === 'accepted' }"
+                        <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0" :class="{ active: meta.currentTab === 'accepted' }"
                             @click.prevent="switchTab('accepted')" type="button" role="tab">
-                            <div class="d-flex flex-column align-items-start text-start">
+                            <div class="d-flex flex-column align-items-start text-start mb-auto">
                                 <h5 class="text-xs">Accepted</h5>
                                 <p class="text-xxs text-muted">List nasabah yang <b class="text-success">Menerima
                                         Proposal KB Bank</b></p>
+                                        </div>
+                                        <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
                                     <div class="progress-bar bg-primary w-50" role="progressbar" aria-valuenow="50"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <h6 class="text-xxs text-muted mt-3 mb-0">Total : 50 nasabah</h6>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.accepted.data?.length || 0 }} Nasabah</p>
                             </div>
                         </button>
                     </li>
@@ -523,10 +537,11 @@
                                                         day: '2-digit',
                                                         month: 'long',
                                                         year: 'numeric'
-                                                }) : '-' }}
+                                                    }) : '-' }}
                                             </td>
                                             <td class="align-middle text-center text-lg">
-                                                <a class="btn btn-sm mb-0 text-xxs" :class="item.status_pengajuan == 'Submitted' ? 'btn-white' : 'btn-info'">
+                                                <a class="btn btn-sm mb-0 text-xxs"
+                                                    :class="item.status_pengajuan == 'Submitted' ? 'btn-white' : 'btn-info'">
                                                     {{ item.status_pengajuan }}
                                                 </a>
                                             </td>
@@ -672,7 +687,7 @@
                         </div>
                     </div>
 
-                      <div v-show="meta.currentTab === 'accepted'" class="tab-pane fade show"
+                    <div v-show="meta.currentTab === 'accepted'" class="tab-pane fade show"
                         :class="meta.currentTab === 'accepted' ? 'active' : ''" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
@@ -770,7 +785,7 @@
                         </div>
                     </div>
 
-                    
+
                 </div>
             </div>
         </div>
@@ -1722,6 +1737,7 @@ export default {
 .nav-pills .nav-link {
     border: 1px solid #dee2e6;
     background-color: #ffffff;
+    height: 100%;
     /* border-radius: 0.75rem; */
     /* color: #495057; */
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
