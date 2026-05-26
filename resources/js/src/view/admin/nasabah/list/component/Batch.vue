@@ -171,6 +171,7 @@ export default {
                     'Batch has been saved.',
                     'success'
                 )
+                emitter.emit("batchStored")
                 this.closeComponent()
             } catch (error) {
                 console.error("Error storing batch: ", error);

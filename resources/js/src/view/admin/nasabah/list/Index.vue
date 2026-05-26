@@ -26,13 +26,13 @@
                             <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
                                     <div class="progress-bar"
-                                        :class="progressBarClass(progressVars.notValidated.bucket)"
-                                        :style="{ width: (100 - progressVars.notValidated.percent) + '%' }"
-                                        role="progressbar"
-                                        :aria-valuenow="progressVars.notValidated.bucket"
+                                        :class="progressBarClass(100 - progressVars.notValidated.percent != 0 ? 100 - progressVars.notValidated.percent : 100)"
+                                        :style="{ width: (100 - progressVars.notValidated.percent != 0 ? 100 - progressVars.notValidated.percent : 100) + '%' }"
+                                        role="progressbar" :aria-valuenow="progressVars.notValidated.bucket"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.notValidated.data?.length || 0 }} Nasabah</p>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.notValidated.count || 0 }}
+                                    Nasabah</p>
                             </div>
                         </button>
                     </li>
@@ -49,13 +49,13 @@
                             <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
                                     <div class="progress-bar"
-                                        :class="progressBarClass(progressVars.drafted.bucket)"
-                                        :style="{ width: (100 - progressVars.drafted.percent) + '%' }"
-                                        role="progressbar"
-                                        :aria-valuenow="progressVars.drafted.bucket"
+                                        :class="progressBarClass(100 - progressVars.drafted.percent != 0 ? 100 - progressVars.drafted.percent : 100)"
+                                        :style="{ width: (100 - progressVars.drafted.percent != 0 ? 100 - progressVars.drafted.percent : 100) + '%' }"
+                                        role="progressbar" :aria-valuenow="progressVars.drafted.bucket"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.drafted.data?.length || 0 }} Nasabah</p>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.drafted.count || 0 }}
+                                    Nasabah</p>
                             </div>
                         </button>
                     </li>
@@ -72,19 +72,20 @@
                             <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
                                     <div class="progress-bar"
-                                        :class="progressBarClass(progressVars.submitted.bucket)"
-                                        :style="{ width: (100 - progressVars.submitted.percent) + '%' }"
-                                        role="progressbar"
-                                        :aria-valuenow="progressVars.submitted.bucket"
+                                        :class="progressBarClass(100 - progressVars.submitted.percent != 0 ? 100 - progressVars.submitted.percent : 100)"
+                                        :style="{ width: (100 - progressVars.submitted.percent != 0 ? 100 - progressVars.submitted.percent : 100) + '%' }"
+                                        role="progressbar" :aria-valuenow="progressVars.submitted.bucket"
                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.submitted.data?.length || 0 }} Nasabah</p>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.submitted.count || 0 }}
+                                    Nasabah</p>
                             </div>
                         </button>
                     </li>
                     <li class="nav-item border-1 rounded-1" role="presentation">
-                        <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0" :class="{ active: meta.currentTab === 'rejected' }"
-                            @click.prevent="switchTab('rejected')" type="button" role="tab">
+                        <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0"
+                            :class="{ active: meta.currentTab === 'rejected' }" @click.prevent="switchTab('rejected')"
+                            type="button" role="tab">
                             <div class="d-flex flex-column align-items-start text-start mb-auto">
                                 <h5 class="text-xs">Rejected</h5>
                                 <p class="text-xxs text-muted">List nasabah yang <b class="text-danger">Menolak Proposal
@@ -92,35 +93,34 @@
                             </div>
                             <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
-                                    <div class="progress-bar"
-                                        :class="progressBarClass(progressVars.rejected.bucket)"
-                                        :style="{ width: progressVars.rejected.percent + '%' }"
-                                        role="progressbar"
-                                        :aria-valuenow="progressVars.rejected.bucket"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" :class="progressBarClass(progressVars.rejected.bucket)"
+                                        :style="{ width: progressVars.rejected.percent + '%' }" role="progressbar"
+                                        :aria-valuenow="progressVars.rejected.bucket" aria-valuemin="0"
+                                        aria-valuemax="100"></div>
                                 </div>
-                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.rejected.data?.length || 0 }} Nasabah</p>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.rejected.count || 0 }}
+                                    Nasabah</p>
                             </div>
                         </button>
                     </li>
                     <li class="nav-item border-1 rounded-1" role="presentation">
-                        <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0" :class="{ active: meta.currentTab === 'accepted' }"
-                            @click.prevent="switchTab('accepted')" type="button" role="tab">
+                        <button class="nav-link d-flex flex-column align-items-start text-start p-4 m-0"
+                            :class="{ active: meta.currentTab === 'accepted' }" @click.prevent="switchTab('accepted')"
+                            type="button" role="tab">
                             <div class="d-flex flex-column align-items-start text-start mb-auto">
                                 <h5 class="text-xs">Accepted</h5>
                                 <p class="text-xxs text-muted">List nasabah yang <b class="text-success">Menerima
                                         Proposal KB Bank</b></p>
-                                        </div>
-                                        <div class="d-flex flex-column w-100">
+                            </div>
+                            <div class="d-flex flex-column w-100">
                                 <div class="progress w-100">
-                                    <div class="progress-bar"
-                                        :class="progressBarClass(progressVars.accepted.bucket)"
-                                        :style="{ width: progressVars.accepted.percent + '%' }"
-                                        role="progressbar"
-                                        :aria-valuenow="progressVars.accepted.bucket"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" :class="progressBarClass(progressVars.accepted.bucket)"
+                                        :style="{ width: progressVars.accepted.percent + '%' }" role="progressbar"
+                                        :aria-valuenow="progressVars.accepted.bucket" aria-valuemin="0"
+                                        aria-valuemax="100"></div>
                                 </div>
-                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.accepted.data?.length || 0 }} Nasabah</p>
+                                <p class="text-xxs text-end mt-3 mb-0">{{ collection.nasabah.accepted.count || 0 }}
+                                    Nasabah</p>
                             </div>
                         </button>
                     </li>
@@ -329,7 +329,7 @@
                                 </svg>
                             </span>
                             <input type="text" class="form-control text-xxs" placeholder="Search nama nasabah"
-                                v-model="meta.search.draft">
+                                v-model="meta.search.drafted">
                         </div>
                         <div v-if="loadContentDrafted" class="d-flex justify-content-center p-4">
                             <div class="spinner-border text-primary" role="status">
@@ -835,6 +835,11 @@ export default {
     created() {
         emitter.on('fetchUnvalidatedList', this.fetchUnvalidatedNasabahList);
         emitter.on('fetchDraftedList', this.fetchDraftedNasabahList);
+        emitter.on('fetchSubmittedList', this.fetchSubmittedNasabahList);
+        emitter.on('fetchAcceptedList', this.fetchAcceptedNasabahList);
+        emitter.on('fetchRejectedList', this.fetchRejectedNasabahList);
+
+        emitter.on('batchStored', [this.fetchSubmittedNasabahList, this.fetchDraftedNasabahList]);
 
 
     },
@@ -955,6 +960,78 @@ export default {
         filtertoggleSidebar() {
             this.filterisHidden = !this.filterisHidden;
         },
+        async fetchCurrentUser() {
+            let endpoint = `${BASEURL}/api/current-user`
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    }
+                })
+
+                if (response.data) {
+                    this.meta.user = response.data.user || response.data;
+                    // console.log('User accesses:', response.data.accesses);
+                    this.meta.accesses = response.data.accesses ?? [];
+                }
+            } catch (error) {
+                console.log('User error: ', error)
+            }
+        },
+        async fetchAffiliasi() {
+            let endpoint = `${BASEURL}/api/affiliasi/options`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                this.collection.affiliasi = response.data.data;
+            } catch (error) {
+                console.error("Error fetching affiliasi: ", error);
+            }
+        },
+        async fetchRoleList() {
+            let endpoint = `${BASEURL}/api/role/options`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                this.collection.roles = response.data.data
+                // console.log('Role list:', this.collection.roles);
+            } catch (error) {
+                console.error("Error fetching role list: ", error);
+            }
+        },
+        async fetchUnitList() {
+            let endpoint = `${BASEURL}/api/unit/options`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+                this.collection.units = response.data.data
+                // console.log('Unit list:', this.collection.units);
+            } catch (error) {
+                console.error("Error fetching unit list: ", error);
+            }
+        },
+
+        /**
+         * Group Fungsi untuk menghandle Global Search Nasabah.
+         *
+         *  
+         * 
+         * @function showGlobalSearch Mengaktifkan atau menonaktifkan tampilan global search, dan fokus pada input saat diaktifkan.
+         * @function fetchNasabahSuggestions Mengambil daftar saran nasabah dari server berdasarkan input pencarian global, dan menampilkan saran jika ada hasil yang ditemukan.
+         * @function onGlobalSearchInput Menangani input pada pencarian global dengan memberikan jeda sebelum memanggil fungsi fetchNasabahSuggestions untuk mengurangi jumlah permintaan saat pengguna mengetik.
+         * @function selectSuggestion Mengisi input pencarian global dengan nama nasabah yang dipilih dari daftar saran, dan menutup tampilan saran.
+         * 
+         * 
+         */
         showGlobalSearch() {
             this.showGlobalSearchActive = !this.showGlobalSearchActive;
             if (this.showGlobalSearchActive) {
@@ -989,7 +1066,6 @@ export default {
                 this.showSuggestions = false;
             }
         },
-
         onGlobalSearchInput() {
             if (this.suggestionTimer) {
                 clearTimeout(this.suggestionTimer);
@@ -998,275 +1074,94 @@ export default {
                 this.fetchNasabahSuggestions();
             }, 300);
         },
-
         selectSuggestion(item) {
             const name = item.nama_lengkap;
             this.meta.search.global = name;
             this.showSuggestions = false;
         },
-        async fetchCurrentUser() {
-            let endpoint = `${BASEURL}/api/current-user`
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    }
-                })
 
-                if (response.data) {
-                    this.meta.user = response.data.user || response.data;
-                    console.log('User accesses:', response.data.accesses);
-                    this.meta.accesses = response.data.accesses ?? [];
-                }
-            } catch (error) {
-                console.log('User error: ', error)
-            }
-        },
-        async fetchAffiliasi() {
-            let endpoint = `${BASEURL}/api/affiliasi/options`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                });
-                this.collection.affiliasi = response.data.data;
-            } catch (error) {
-                console.error("Error fetching affiliasi: ", error);
-            }
-        },
-        async preview(id) {
-            let endpoint = `${BASEURL}/api/preview/${id}`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: { Authorization: 'Bearer ' + this.$token() }
-                });
 
-                const blob = new Blob([response.data], { type: 'text/html' });
-
-                const url = URL.createObjectURL(blob);
-
-                // Open the URL in a new tab (optional, if you want to show the preview before downloading)
-                window.open(url, '_blank');
-
-                setTimeout(() => URL.revokeObjectURL(url), 100);
-
-            } catch (error) {
-                console.error('Preview error: ', error);
-            }
-        },
-        async preview_asuransi(id) {
-            let endpoint = `${BASEURL}/api/asuransi/${id}`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: { Authorization: 'Bearer ' + this.$token() }
-                });
-
-                const blob = new Blob([response.data], { type: 'text/html' });
-
-                const url = URL.createObjectURL(blob);
-
-                // Open the URL in a new tab (optional, if you want to show the preview before downloading)
-                window.open(url, '_blank');
-
-                setTimeout(() => URL.revokeObjectURL(url), 100);
-
-            } catch (error) {
-                console.error('Preview error: ', error);
-            }
-        },
-
-        async downloadPreview(id, name) {
-            this.loadDownloadPdfPengajuan = true;
-            let endpoint = `${BASEURL}/api/preview-pdf/${id}`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: { Authorization: 'Bearer ' + this.$token() },
-                    responseType: 'blob',
-                });
-
-                const blob = new Blob([response.data], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
-                const anchor = document.createElement('a');
-                const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '_') : 'nasabah';
-                anchor.href = url;
-                anchor.download = `preview_nasabah_${safeName}_${id}.pdf`;
-                document.body.appendChild(anchor);
-                anchor.click();
-                document.body.removeChild(anchor);
-                setTimeout(() => URL.revokeObjectURL(url), 100);
-                this.loadDownloadPdfPengajuan = false;
-            } catch (error) {
-                console.error('Download preview error: ', error);
-                this.loadDownloadPdfPengajuan = false;
-            }
-        },
-
-        async sendPengajuanEmail(nasabahId) {
-            // Show a loading indicator here if you want (e.g., changing button text to "Sending...")
-            console.log("Sending email for Nasabah ID: " + nasabahId);
-
-            try {
-                const response = await fetch(`/api/nasabah/${nasabahId}/send-pengajuan`, {
-                    method: 'POST',
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    }
-                });
-
-                const data = await response.json();
-
-                if (data.status) {
-                    alert('Success: ' + data.message);
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An unexpected error occurred.');
-            }
-        },
-
-        async fetchRoleList() {
-            let endpoint = `${BASEURL}/api/role/options`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                });
-                this.collection.roles = response.data.data
-                console.log('Role list:', this.collection.roles);
-            } catch (error) {
-                console.error("Error fetching role list: ", error);
-            }
-        },
-
-        async fetchUnitList() {
-            let endpoint = `${BASEURL}/api/unit/options`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                });
-                this.collection.units = response.data.data
-                console.log('Unit list:', this.collection.units);
-            } catch (error) {
-                console.error("Error fetching unit list: ", error);
-            }
-        },
-
-        destroySelect2() {
-            const selectElements = $(this.$el).find('select.select2-filter');
-            if (!selectElements.length) {
-                return;
-            }
-
-            selectElements.each(function () {
-                if ($(this).data('select2')) {
-                    $(this).select2('destroy');
-                }
-            });
-        },
-
-        destroyDataTable() {
-            this.destroySelect2();
-
-            if (this.dataTable) {
-                this.dataTable.destroy();
-                this.dataTable = null;
-            }
-        },
-
-        debounceSearchFetch() {
-            if (this.searchTimer) {
-                clearTimeout(this.searchTimer);
-            }
-            this.searchTimer = setTimeout(() => {
-                // this.fetchUserListByStatus(this.meta.currentTab);
-            }, 400);
-        },
-
+        /**
+         * Group Fungsi untuk menghandle Tabs & Progress Bar.
+         *
+         *  
+         * 
+         * @function switchTab Mengubah tab yang aktif berdasarkan status nasabah yang dipilih.
+         * @function bucketThresholds Mengembalikan array ambang batas untuk bucket progress bar
+         * @function roundToBucket Mengelompokkan nilai ke dalam bucket berdasarkan ambang batas yang ditentukan.
+         * @function progressBarClass Mengembalikan kelas CSS untuk progress bar berdasarkan bucket yang dihitung.
+         * 
+         * 
+         */
         switchTab(status) {
             this.meta.currentTab = status;
-            // this.fetchUserListByStatus(status);
+        },
+        bucketThresholds() {
+            return [10, 25, 50, 75, 100];
+        },
+        roundToBucket(value) {
+            const n = Number(value) || 0;
+            if (n <= 0) return 0;
+            const thresholds = this.bucketThresholds();
+            let bucket = 0;
+            for (const threshold of thresholds) {
+                if (n >= threshold) {
+                    bucket = threshold;
+                } else {
+                    break;
+                }
+            }
+            return bucket;
+        },
+        progressBarClass(bucket) {
+            if (bucket >= 100) return 'bg-success';
+            if (bucket >= 75) return 'bg-info';
+            if (bucket >= 50) return 'bg-primary';
+            if (bucket >= 25) return 'bg-warning';
+            if (bucket >= 10) return 'bg-danger';
+            return 'bg-secondary';
         },
 
-        // async fetchUserListByStatus(status) {
-        //     this.destroyDataTable();
-        //     this.loadContent = true;
-        //     const requestId = ++this.requestCounter;
-        //     let endpoint = `${BASEURL}/api/nasabah`;
-        //     try {
-        //         let response = await axios.get(endpoint, {
-        //             headers: {
-        //                 Authorization: 'Bearer ' + this.$token(),
-        //             },
-        //             params: {
-        //                 'search': this.meta.search,
-        //                 'status': status,
-        //             }
-        //         });
 
-        //         if (requestId !== this.requestCounter) {
-        //             return;
-        //         }
-
-        //         // API returns paginated data - ensure proper structure
-        //         const paginatedData = response.data;
-        //         console.log(`${status} raw response:`, paginatedData);
-
-        //         // Maintain collection structure with data/pagination properties
-        //         this.collection.users[status] = {
-        //             data: paginatedData.data || paginatedData,
-        //             current_page: paginatedData.current_page || 1,
-        //             last_page: paginatedData.last_page || 1,
-        //             links: paginatedData.links || [],
-        //             total: paginatedData.total || 0,
-        //         };
-
-        //         console.log(`${status} processed:`, this.collection.users[status]);
-        //         this.meta.total = this.collection.users[status].total;
-        //         this.meta.page[status].current_page = this.collection.users[status].current_page;
-        //         this.meta.page[status].last_page = this.collection.users[status].last_page;
-        //         this.loadContent = false;
-        //     } catch (error) {
-        //         console.error(`Error fetching ${status} list:`, error);
-        //         if (requestId === this.requestCounter) {
-        //             this.loadContent = false;
-        //         }
-        //     }
-        // },
-
-        // async fetchUserList() {
-        //     await this.fetchUserListByStatus(this.meta.currentTab);
-        // },
-        async changeStatus(id) {
-            let endpoint = `${BASEURL}/api/change/status/${id}`;
+        /**
+         * Group Fungsi untuk menghandle Unvalidated Nasabah.
+         *
+         *  
+         * 
+         * @function changePageUnvalidatedNasabahList Mengambil data nasabah yang belum divalidasi berdasarkan URL halaman yang dipilih.
+         * @function fetchUnvalidatedNasabahList Mengambil daftar nasabah yang belum divalidasi dari server dengan parameter pencarian, role, dan unit yang sesuai.
+         * @function confirmValidation Menampilkan dialog konfirmasi untuk memvalidasi nasabah dan memilih affiliasi yang sesuai sebelum melakukan validasi.
+         * @function validation Mengirim permintaan validasi nasabah ke server dengan ID nasabah dan ID affiliasi yang dipilih, kemudian memperbarui daftar nasabah yang
+         * 
+         * 
+         */
+        async changePageUnvalidatedNasabahList(url) {
+            if (url == null) {
+                return false
+            }
             try {
-                let response = await axios.post(endpoint, {}, {
+                Swal.fire({
+                    background: '#ffffff00',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                })
+                let response = await axios.get(url, {
                     headers: {
                         Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.notValidated,
                     }
                 });
-                Swal.fire({
-                    icon: "success",
-                    title: "Sukses",
-                    text: response.data.message,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                this.fetchUserList();
+                this.collection.nasabah.notValidated = response.data.data;
+                this.meta.page.notValidated.current_page = this.collection.nasabah.notValidated.current_page;
+                this.meta.page.notValidated.last_page = this.collection.nasabah.notValidated.last_page;
+                Swal.close()
             } catch (error) {
-                console.log(error.response.data.message);
-                this.$swal.fire('Failed!', error.response.data.message, 'error');
+                console.error("Error fetching document list: ", error);
             }
         },
-
-
         async fetchUnvalidatedNasabahList() {
             this.loadContentUnvalidated = true;
             let endpoint = `${BASEURL}/api/nasabah/unvalidated`;
@@ -1285,7 +1180,6 @@ export default {
                 this.meta.total.notValidated = this.collection.nasabah.notValidated.total || 0;
                 this.meta.page.notValidated.current_page = this.collection.nasabah.notValidated.current_page || 1;
                 this.meta.page.notValidated.last_page = this.collection.nasabah.notValidated.last_page || 1;
-                console.log('Unvalidated nasabah list:', this.collection.nasabah.notValidated);
                 this.loadContentUnvalidated = false;
             } catch (error) {
                 console.error("Error fetching unvalidated nasabah list: ", error);
@@ -1354,9 +1248,269 @@ export default {
                     timer: 1500
                 });
                 this.fetchUnvalidatedNasabahList();
+                this.fetchDraftedNasabahList();
             } catch (error) {
                 console.log(error.response?.data?.message || error.message);
                 this.$swal.fire('Failed!', error.response?.data?.message || 'Terjadi kesalahan', 'error');
+            }
+        },
+
+
+        /**
+         * Group Fungsi untuk menghandle Drafted Nasabah.
+         *
+         *  
+         * 
+         * @function changePageDraftNasabahList Mengambil data nasabah yang masih dalam status drafted berdasarkan URL halaman yang dipilih.
+         * @function fetchDraftedNasabahList Mengambil daftar nasabah yang masih dalam status drafted dari server dengan parameter pencarian, role, dan unit yang sesuai.
+         * @function preview Menampilkan pratinjau dokumen nasabah berdasarkan ID yang diberikan.
+         * @function preview_asuransi Menampilkan pratinjau dokumen asuransi nasabah berdasarkan ID yang diberikan.
+         * @function downloadPreview Mengunduh pratinjau dokumen nasabah dalam format PDF berdasarkan ID dan nama nasabah yang diberikan.
+         * @function sendPengajuanEmail Mengirim email pengajuan nasabah ke pihak terkait berdasarkan ID nasabah yang diberikan, kemudian menampilkan notifikasi keberhasilan atau kegagalan pengiriman email.
+         * 
+         * 
+         */
+        async changePageDraftNasabahList(url) {
+            if (url == null) {
+                return false
+            }
+            try {
+                Swal.fire({
+                    background: '#ffffff00',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                })
+                let response = await axios.get(url, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.drafted,
+                    }
+                });
+                this.collection.nasabah.drafted = response.data.data;
+                this.meta.page.drafted.current_page = this.collection.nasabah.drafted.current_page;
+                this.meta.page.drafted.last_page = this.collection.nasabah.drafted.last_page;
+                Swal.close()
+            } catch (error) {
+                console.error("Error fetching document list: ", error);
+            }
+        },
+        async fetchDraftedNasabahList() {
+            this.loadContentDrafted = true;
+            let endpoint = `${BASEURL}/api/nasabah/drafted`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.drafted,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
+                    }
+                });
+                this.collection.nasabah.drafted = response.data.data || response.data;
+                this.meta.total.drafted = this.collection.nasabah.drafted.total || 0;
+                this.meta.page.drafted.current_page = this.collection.nasabah.drafted.current_page || 1;
+                this.meta.page.drafted.last_page = this.collection.nasabah.drafted.last_page || 1;
+                this.loadContentDrafted = false;
+            } catch (error) {
+                console.error("Error fetching drafted nasabah list: ", error);
+                this.loadContentDrafted = false;
+            }
+        },
+        async preview(id) {
+            let endpoint = `${BASEURL}/api/preview/${id}`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: { Authorization: 'Bearer ' + this.$token() }
+                });
+
+                const blob = new Blob([response.data], { type: 'text/html' });
+
+                const url = URL.createObjectURL(blob);
+
+                // Open the URL in a new tab (optional, if you want to show the preview before downloading)
+                window.open(url, '_blank');
+
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+
+            } catch (error) {
+                console.error('Preview error: ', error);
+            }
+        },
+        async preview_asuransi(id) {
+            let endpoint = `${BASEURL}/api/asuransi/${id}`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: { Authorization: 'Bearer ' + this.$token() }
+                });
+
+                const blob = new Blob([response.data], { type: 'text/html' });
+
+                const url = URL.createObjectURL(blob);
+
+                // Open the URL in a new tab (optional, if you want to show the preview before downloading)
+                window.open(url, '_blank');
+
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+
+            } catch (error) {
+                console.error('Preview error: ', error);
+            }
+        },
+        async downloadPreview(id, name) {
+            this.loadDownloadPdfPengajuan = true;
+            let endpoint = `${BASEURL}/api/preview-pdf/${id}`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: { Authorization: 'Bearer ' + this.$token() },
+                    responseType: 'blob',
+                });
+
+                const blob = new Blob([response.data], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const anchor = document.createElement('a');
+                const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '_') : 'nasabah';
+                anchor.href = url;
+                anchor.download = `preview_nasabah_${safeName}_${id}.pdf`;
+                document.body.appendChild(anchor);
+                anchor.click();
+                document.body.removeChild(anchor);
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+                this.loadDownloadPdfPengajuan = false;
+            } catch (error) {
+                console.error('Download preview error: ', error);
+                this.loadDownloadPdfPengajuan = false;
+            }
+        },
+        async sendPengajuanEmail(nasabahId) {
+            // Show a loading indicator here if you want (e.g., changing button text to "Sending...")
+            console.log("Sending email for Nasabah ID: " + nasabahId);
+
+            try {
+                const response = await fetch(`/api/nasabah/${nasabahId}/send-pengajuan`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.status) {
+                    alert('Success: ' + data.message);
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+            }
+        },
+
+
+        /**
+         * Group Fungsi untuk menghandle Submitted Nasabah.
+         *
+         *  
+         * 
+         * @function changePageSubmittedNasabahList Mengambil data nasabah yang sudah dalam status submitted berdasarkan URL halaman yang dipilih.
+         * @function fetchSubmittedNasabahList Mengambil daftar nasabah yang sudah dalam status submitted dari server dengan parameter pencarian, role, dan unit yang sesuai.
+         * 
+         * 
+         */
+        async fetchSubmittedNasabahList() {
+            this.loadContentSubmitted = true;
+            let endpoint = `${BASEURL}/api/nasabah/submitted`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.submitted,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
+                    }
+                });
+                this.collection.nasabah.submitted = response.data.data || response.data;
+                this.meta.total.submitted = this.collection.nasabah.submitted.total || 0;
+                this.meta.page.submitted.current_page = this.collection.nasabah.submitted.current_page || 1;
+                this.meta.page.submitted.last_page = this.collection.nasabah.submitted.last_page || 1;
+                this.loadContentSubmitted = false;
+            } catch (error) {
+                console.error("Error fetching submitted nasabah list: ", error);
+                this.loadContentSubmitted = false;
+            }
+        },
+        async changePageSubmittedNasabahList(url) {
+            if (url == null) {
+                return false
+            }
+            try {
+                Swal.fire({
+                    background: '#ffffff00',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                })
+                let response = await axios.get(url, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.submitted,
+                    }
+                });
+                this.collection.nasabah.submitted = response.data.data;
+                this.meta.page.submitted.current_page = this.collection.nasabah.submitted.current_page;
+                this.meta.page.submitted.last_page = this.collection.nasabah.submitted.last_page;
+                Swal.close()
+            } catch (error) {
+                console.error("Error fetching document list: ", error);
+            }
+        },
+
+
+        /**
+         * Group Fungsi untuk menghandle Rejected Nasabah.
+         *
+         *  
+         * 
+         * @function changePageRejectedNasabahList Mengambil data nasabah yang sudah dalam status rejected berdasarkan URL halaman yang dipilih.
+         * @function fetchRejectedNasabahList Mengambil daftar nasabah yang sudah dalam status rejected dari server dengan parameter pencarian, role, dan unit yang sesuai.
+         * @function confirmRejectForm Menampilkan dialog konfirmasi untuk menolak nasabah sebelum melakukan penolakan.
+         * @function rejectStore Mengirim permintaan penolakan nasabah ke server dengan ID nasabah yang diberikan, kemudian memperbarui daftar nasabah yang sudah ditolak dan yang sudah dia
+         * 
+         * 
+         */
+        async fetchRejectedNasabahList() {
+            this.loadContentRejected = true;
+            let endpoint = `${BASEURL}/api/nasabah/rejected`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.rejected,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
+                    }
+                });
+                this.collection.nasabah.rejected = response.data.data || response.data;
+                this.meta.total.rejected = this.collection.nasabah.rejected.total || 0;
+                this.meta.page.rejected.current_page = this.collection.nasabah.rejected.current_page || 1;
+                this.meta.page.rejected.last_page = this.collection.nasabah.rejected.last_page || 1;
+                this.loadContentRejected = false;
+            } catch (error) {
+                console.error("Error fetching rejected nasabah list: ", error);
+                this.loadContentRejected = false;
             }
         },
         confirmRejectForm(id) {
@@ -1383,7 +1537,8 @@ export default {
                         Authorization: 'Bearer ' + this.$token(),
                     },
                 });
-                console.log('Store response:', response);
+                emitter.emit("fetchRejectedList");
+                emitter.emit("fetchSubmittedList");
                 Swal.fire(
                     'Saved!',
                     'User has been saved.',
@@ -1398,6 +1553,71 @@ export default {
                 )
             } finally {
                 this.loading = false
+            }
+        },
+        async changePageRejectedNasabahList(url) {
+            if (url == null) {
+                return false
+            }
+            try {
+                Swal.fire({
+                    background: '#ffffff00',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                })
+                let response = await axios.get(url, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.rejected,
+                    }
+                });
+                this.collection.nasabah.rejected = response.data.data;
+                this.meta.page.rejected.current_page = this.collection.nasabah.rejected.current_page;
+                this.meta.page.rejected.last_page = this.collection.nasabah.rejected.last_page;
+                Swal.close()
+            } catch (error) {
+                console.error("Error fetching document list: ", error);
+            }
+        },
+
+
+        /**
+         * Group Fungsi untuk menghandle Accepted Nasabah.
+         *
+         *  
+         * 
+         * @function changePageAcceptedNasabahList Mengambil data nasabah yang sudah dalam status accepted berdasarkan URL halaman yang dipilih.
+         * @function fetchAcceptedNasabahList Mengambil daftar nasabah yang sudah dalam status accepted dari server dengan parameter pencarian, role, dan unit yang sesuai.
+         * @function confirmAcceptForm Menampilkan dialog konfirmasi untuk menerima nasabah sebelum melakukan penerimaan.
+         * @function acceptStore Mengirim permintaan penerimaan nasabah ke server dengan ID nasabah yang diberikan, kemudian memperbarui daftar nasabah yang sudah diterima dan yang sudah diajukan.
+         * 
+         * 
+         */
+        async fetchAcceptedNasabahList() {
+            this.loadContentAccepted = true;
+            let endpoint = `${BASEURL}/api/nasabah/accepted`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.accepted,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
+                    }
+                });
+                this.collection.nasabah.accepted = response.data.data || response.data;
+                this.meta.total.accepted = this.collection.nasabah.accepted.total || 0;
+                this.meta.page.accepted.current_page = this.collection.nasabah.accepted.current_page || 1;
+                this.meta.page.accepted.last_page = this.collection.nasabah.accepted.last_page || 1;
+                this.loadContentAccepted = false;
+            } catch (error) {
+                console.error("Error fetching accepted nasabah list: ", error);
+                this.loadContentAccepted = false;
             }
         },
         confirmAcceptForm(id) {
@@ -1424,7 +1644,8 @@ export default {
                         Authorization: 'Bearer ' + this.$token(),
                     },
                 });
-                console.log('Store response:', response);
+                emitter.emit("fetchAcceptedList");
+                emitter.emit("fetchSubmittedList");
                 Swal.fire(
                     'Saved!',
                     'User has been saved.',
@@ -1441,7 +1662,7 @@ export default {
                 this.loading = false
             }
         },
-        async changePageUnvalidatedNasabahList(url) {
+        async changePageAcceptedNasabahList(url) {
             if (url == null) {
                 return false
             }
@@ -1455,11 +1676,14 @@ export default {
                 let response = await axios.get(url, {
                     headers: {
                         Authorization: 'Bearer ' + this.$token(),
+                    },
+                    params: {
+                        'search': this.meta.search.accepted,
                     }
                 });
-                this.collection.nasabah.notValidated = response.data.data;
-                this.meta.page.notValidated.current_page = this.collection.nasabah.notValidated.current_page;
-                this.meta.page.notValidated.last_page = this.collection.nasabah.notValidated.last_page;
+                this.collection.nasabah.accepted = response.data.data;
+                this.meta.page.accepted.current_page = this.collection.nasabah.accepted.current_page;
+                this.meta.page.accepted.last_page = this.collection.nasabah.accepted.last_page;
                 Swal.close()
             } catch (error) {
                 console.error("Error fetching document list: ", error);
@@ -1467,106 +1691,8 @@ export default {
         },
 
 
-        async fetchDraftedNasabahList() {
-            this.loadContentDrafted = true;
-            let endpoint = `${BASEURL}/api/nasabah/drafted`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                    params: {
-                        'search': this.meta.search.drafted,
-                        'role': this.meta.role,
-                        'unit': this.meta.unit,
-                    }
-                });
-                this.collection.nasabah.drafted = response.data.data || response.data;
-                this.meta.total.drafted = this.collection.nasabah.drafted.total || 0;
-                this.meta.page.drafted.current_page = this.collection.nasabah.drafted.current_page || 1;
-                this.meta.page.drafted.last_page = this.collection.nasabah.drafted.last_page || 1;
-                this.loadContentDrafted = false;
-            } catch (error) {
-                console.error("Error fetching drafted nasabah list: ", error);
-                this.loadContentDrafted = false;
-            }
-        },
-        async fetchSubmittedNasabahList() {
-            this.loadContentSubmitted = true;
-            let endpoint = `${BASEURL}/api/nasabah/submitted`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                    params: {
-                        'search': this.meta.search.submitted,
-                        'role': this.meta.role,
-                        'unit': this.meta.unit,
-                    }
-                });
-                this.collection.nasabah.submitted = response.data.data || response.data;
-                this.meta.total.submitted = this.collection.nasabah.submitted.total || 0;
-                this.meta.page.submitted.current_page = this.collection.nasabah.submitted.current_page || 1;
-                this.meta.page.submitted.last_page = this.collection.nasabah.submitted.last_page || 1;
-                this.loadContentSubmitted = false;
-            } catch (error) {
-                console.error("Error fetching submitted nasabah list: ", error);
-                this.loadContentSubmitted = false;
-            }
-        },
-        async fetchAcceptedNasabahList() {
-            this.loadContentAccepted = true;
-            let endpoint = `${BASEURL}/api/nasabah/accepted`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                    params: {
-                        'search': this.meta.search.accepted,
-                        'role': this.meta.role,
-                        'unit': this.meta.unit,
-                    }
-                });
-                this.collection.nasabah.accepted = response.data.data || response.data;
-                this.meta.total.accepted = this.collection.nasabah.accepted.total || 0;
-                this.meta.page.accepted.current_page = this.collection.nasabah.accepted.current_page || 1;
-                this.meta.page.accepted.last_page = this.collection.nasabah.accepted.last_page || 1;
-                this.loadContentAccepted = false;
-            } catch (error) {
-                console.error("Error fetching accepted nasabah list: ", error);
-                this.loadContentAccepted = false;
-            }
-        },
-        async fetchRejectedNasabahList() {
-            this.loadContentRejected = true;
-            let endpoint = `${BASEURL}/api/nasabah/rejected`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                    params: {
-                        'search': this.meta.search.rejected,
-                        'role': this.meta.role,
-                        'unit': this.meta.unit,
-                    }
-                });
-                this.collection.nasabah.rejected = response.data.data || response.data;
-                this.meta.total.rejected = this.collection.nasabah.rejected.total || 0;
-                this.meta.page.rejected.current_page = this.collection.nasabah.rejected.current_page || 1;
-                this.meta.page.rejected.last_page = this.collection.nasabah.rejected.last_page || 1;
-                this.loadContentRejected = false;
-            } catch (error) {
-                console.error("Error fetching rejected nasabah list: ", error);
-                this.loadContentRejected = false;
-            }
-        },
-
-
         getSubmoduleAccessByUrl(url) {
-            console.log('Checking access for URL:', this.meta.accesses);
+            // console.log('Checking access for URL:', this.meta.accesses);
             if (!Array.isArray(this.meta.accesses)) {
                 return null;
             }
@@ -1586,41 +1712,12 @@ export default {
         },
 
         canPerformAction(action) {
-            console.log('Checking access for action:', action, this.userSubmoduleAccess?.actions?.includes(action) ?? false);
+            // console.log('Checking access for action:', action, this.userSubmoduleAccess?.actions?.includes(action) ?? false);
             return this.userSubmoduleAccess?.actions?.includes(action) ?? false;
-        },
-        bucketThresholds() {
-            return [10, 25, 50, 75, 100];
-        },
-        roundToBucket(value) {
-            const n = Number(value) || 0;
-            if (n <= 0) return 0;
-            const thresholds = this.bucketThresholds();
-            let bucket = 0;
-            for (const threshold of thresholds) {
-                if (n >= threshold) {
-                    bucket = threshold;
-                } else {
-                    break;
-                }
-            }
-            return bucket;
-        },
-        progressBarClass(bucket) {
-            if (bucket >= 100) return 'bg-success';
-            if (bucket >= 75) return 'bg-info';
-            if (bucket >= 50) return 'bg-primary';
-            if (bucket >= 25) return 'bg-warning';
-            if (bucket >= 10) return 'bg-danger';
-            return 'bg-secondary';
         },
     },
     beforeUnmount() {
-        if (this.searchTimer) {
-            clearTimeout(this.searchTimer);
-            this.searchTimer = null;
-        }
-        this.destroyDataTable();
+        
     },
     computed: {
         userSubmoduleAccess() {
@@ -1646,12 +1743,12 @@ export default {
             const stages = ['notValidated', 'drafted', 'submitted'];
             const finalStages = ['rejected', 'accepted'];
             const totalCount = stages.reduce((sum, section) => {
-                return sum + (this.collection?.nasabah?.[section]?.data?.length || 0);
+                return sum + (this.collection?.nasabah?.[section]?.count || 0);
             }, 0);
 
             const counts = {};
             for (const stage of stages) {
-                const count = this.collection?.nasabah?.[stage]?.data?.length || 0;
+                const count = this.collection?.nasabah?.[stage]?.count || 0;
                 const percent = count === 0 ? 100 : totalCount ? Math.round((count / totalCount) * 100) : 0;
                 counts[stage] = {
                     count,
@@ -1661,11 +1758,11 @@ export default {
             }
 
             const finalTotal = finalStages.reduce((sum, section) => {
-                return sum + (this.collection?.nasabah?.[section]?.data?.length || 0);
+                return sum + (this.collection?.nasabah?.[section]?.count || 0);
             }, 0);
 
             for (const stage of finalStages) {
-                const count = this.collection?.nasabah?.[stage]?.data?.length || 0;
+                const count = this.collection?.nasabah?.[stage]?.count || 0;
                 const percent = finalTotal ? Math.round((count / finalTotal) * 100) : 0;
                 counts[stage] = {
                     count,
@@ -1681,21 +1778,15 @@ export default {
     },
 
     watch: {
-        'meta.search': 'debounceSearchFetch',
         'meta.search.notValidated': 'fetchUnvalidatedNasabahList',
+        'meta.search.drafted': 'fetchDraftedNasabahList',
+        'meta.search.submitted': 'fetchSubmittedNasabahList',
+        'meta.search.accepted': 'fetchAcceptedNasabahList',
+        'meta.search.rejected': 'fetchRejectedNasabahList',
         'meta.search.global': function (newVal) {
             if (this.suggestionTimer) clearTimeout(this.suggestionTimer);
             this.suggestionTimer = setTimeout(() => this.fetchNasabahSuggestions(), 300);
         },
-        // 'meta.role': 'fetchUserList',
-        // 'meta.unit': 'fetchUserList',
-        // 'meta.status': 'fetchUserList',
-        // 'meta.requestStatus': function (newVal, oldVal) {
-        //     this.fetchUserList();
-        // },
-        // 'meta.currentTab': function (newTab) {
-        //     this.fetchUserListByStatus(newTab);
-        // },
     },
 }
 </script>

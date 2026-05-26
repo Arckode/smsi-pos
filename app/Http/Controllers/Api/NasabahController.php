@@ -53,7 +53,7 @@ class NasabahController extends Controller
             'affiliasi:id,nama_affiliasi',
         ];
 
-        $data = Nasabah::with($relations)->where('validation', true)->where('status_pengajuan', 'draft')
+        $paginator = Nasabah::with($relations)->where('validation', true)->where('status_pengajuan', 'draft')
             ->when(
                 request()->has('search') && request()->search != '',
                 function ($q) {
@@ -62,7 +62,9 @@ class NasabahController extends Controller
                 }
             )
             ->paginate(10);
+        $data = $paginator->toArray();
 
+        $data['count'] = Nasabah::where('validation', true)->where('status_pengajuan', 'draft')->count();
         return response()->json([
             'status' => true,
             'data' => $data,
@@ -156,7 +158,7 @@ class NasabahController extends Controller
             'affiliasi:id,nama_affiliasi',
         ];
 
-        $data = Nasabah::with($relations)->where('validation', false)
+        $paginator = Nasabah::with($relations)->where('validation', false)
             ->when(
                 request()->has('search') && request()->search != '',
                 function ($q) {
@@ -165,7 +167,9 @@ class NasabahController extends Controller
                 }
             )
             ->paginate(10);
+        $data = $paginator->toArray();
 
+        $data['count'] = Nasabah::where('validation', false)->count();
         return response()->json([
             'status' => true,
             'data' => $data,
@@ -178,7 +182,7 @@ class NasabahController extends Controller
             'affiliasi:id,nama_affiliasi',
         ];
 
-        $data = Nasabah::with($relations)->wherein('status_pengajuan', ['Submitted', 'User Review'])
+        $paginator = Nasabah::with($relations)->wherein('status_pengajuan', ['Submitted', 'User Review'])
             ->when(
                 request()->has('search') && request()->search != '',
                 function ($q) {
@@ -187,8 +191,10 @@ class NasabahController extends Controller
                 }
             )
             ->paginate(10);
+        $data = $paginator->toArray();
 
-        return response()->json([
+        $data['count'] = Nasabah::wherein('status_pengajuan', ['Submitted', 'User Review'])->count();
+            return response()->json([
             'status' => true,
             'data' => $data,
         ]);
@@ -200,7 +206,7 @@ class NasabahController extends Controller
             'affiliasi:id,nama_affiliasi',
         ];
 
-        $data = Nasabah::with($relations)->where('status_pengajuan', 'Approved')
+        $paginator = Nasabah::with($relations)->where('status_pengajuan', 'Approved')
             ->when(
                 request()->has('search') && request()->search != '',
                 function ($q) {
@@ -209,7 +215,9 @@ class NasabahController extends Controller
                 }
             )
             ->paginate(10);
+        $data = $paginator->toArray();
 
+        $data['count'] = Nasabah::where('status_pengajuan', 'Approved')->count();    
         return response()->json([
             'status' => true,
             'data' => $data,
@@ -222,7 +230,7 @@ class NasabahController extends Controller
             'affiliasi:id,nama_affiliasi',
         ];
 
-        $data = Nasabah::with($relations)->where('status_pengajuan', 'Rejected')
+        $paginator = Nasabah::with($relations)->where('status_pengajuan', 'Rejected')
             ->when(
                 request()->has('search') && request()->search != '',
                 function ($q) {
@@ -231,7 +239,9 @@ class NasabahController extends Controller
                 }
             )
             ->paginate(10);
+        $data = $paginator->toArray();
 
+        $data['count'] = Nasabah::where('status_pengajuan', 'Rejected')->count();
         return response()->json([
             'status' => true,
             'data' => $data,
