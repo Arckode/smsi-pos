@@ -138,6 +138,17 @@
                     <span class="ms-2">finalTotal={{ progressVars.finalTotal }}</span>
                 </div> -->
 
+                <div class="toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 p-0 m-3" style="z-index: 110" role="alert" aria-live="assertive"
+                    aria-atomic="true" id="liveToast">
+                    <div class="d-flex text-xxs">
+                        <div class="toast-body">
+                            Nasabah Found in the System
+                        </div>
+                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+
                 <div class="d-flex justify-content-center my-4 align-items-center">
                     <hr class="ms-6 w-50">
                     <div
@@ -159,8 +170,8 @@
                                 <ul v-if="showSuggestions && suggestions.length"
                                     class="suggestions-list list-unstyled p-0 m-3 border border-1 border-light rounded-3 shadow-lg"
                                     style="width: 70em;">
-                                    <li v-for="item in suggestions" :key="item.id" class="suggestion-item border border-1"
-                                        @click="selectSuggestion(item)">
+                                    <li v-for="item in suggestions" :key="item.id"
+                                        class="suggestion-item border border-1" @click="selectSuggestion(item)">
                                         <div class="card mb-0 p-3">
                                             <div class="card-header text-end mb-0 pb-0">
                                                 <p class="text-xxs mb-0">Status</p>
@@ -1110,6 +1121,14 @@ export default {
 
             this.showSuggestions = false;
             this.showGlobalSearch()
+            this.showToast();
+        },
+        showToast() {
+            const toastElement = document.getElementById('liveToast');
+            if (toastElement) {
+                const toast = new bootstrap.Toast(toastElement);
+                toast.show();
+            }
         },
 
 
