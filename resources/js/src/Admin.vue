@@ -514,6 +514,16 @@ export default {
 </script>
 
 <style scoped>
+.main-content {
+    /* For Firefox */
+    scrollbar-width: none;
+
+    /* For Internet Explorer and Edge */
+    -ms-overflow-style: none;
+
+    /* Ensure scrolling is still allowed */
+    overflow-x: auto;
+}
 #sidenav-collapse-main {
     -ms-overflow-style: none;
     scrollbar-width: none;
