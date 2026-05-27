@@ -157,16 +157,21 @@
                                     style="width: 250px; margin-left: 8px;">
 
                                 <ul v-if="showSuggestions && suggestions.length"
-                                    class="suggestions-list list-unstyled p-0 py-3 shadow bg-white">
-                                    <li v-for="item in suggestions" :key="item.id" class="suggestion-item"
+                                    class="suggestions-list list-unstyled p-0 m-3 border border-1 border-light rounded-3 shadow-lg"
+                                    style="width: 70em;">
+                                    <li v-for="item in suggestions" :key="item.id" class="suggestion-item border border-1"
                                         @click="selectSuggestion(item)">
-                                        <div class="card border border-1 rounded-1 mb-0">
-                                            <div class="card-body my-1">
-                                                <h5 class="card-title text-xxs">{{ item.nama_lengkap }}</h5>
+                                        <div class="card mb-0 p-3">
+                                            <div class="card-header text-end mb-0 pb-0">
+                                                <p class="text-xxs mb-0">Status</p>
+                                                <h6 class="text-xs">
+                                                    {{ item.status_pengajuan }}
+                                                </h6>
+                                            </div>
+                                            <div class="card-body mt-0 pt-0">
+                                                <h6 class="text-sm mb-0">{{ item.nama_lengkap }}</h6>
                                                 <p class="card-text text-xxs">{{ item.nama_affiliasi ?
                                                     item.nama_affiliasi : '-' }}</p>
-                                                <a class="btn btn-primary text-xxs">{{ item.validation ? 'Validated' :
-                                                    'Not Validated' }} - {{ item.status_pengajuan }}</a>
                                             </div>
                                         </div>
                                     </li>
@@ -1075,9 +1080,36 @@ export default {
             }, 300);
         },
         selectSuggestion(item) {
+            console.log('Selected suggestion:', item);
             const name = item.nama_lengkap;
-            this.meta.search.global = name;
+            const statusPengajuan = item.status_pengajuan || '';
+
+            // If validation is 0, put it on notValidated
+            if (item.validation === 0) {
+                this.meta.search.notValidated = name;
+                this.meta.currentTab = 'notValidated';
+                this.showSuggestions = false;
+                return;
+            }
+
+            // Map status_pengajuan to tab names
+            const statusMap = {
+                'drafted': 'drafted',
+                'submitted': 'submitted',
+                'approved': 'accepted',
+                'rejected': 'rejected',
+            };
+
+            const tabName = statusMap[statusPengajuan.toLowerCase()] || 'drafted';
+
+            // Set search based on the tab
+            this.meta.search[tabName] = name;
+
+            // Switch to the appropriate tab
+            this.meta.currentTab = tabName;
+
             this.showSuggestions = false;
+            this.showGlobalSearch()
         },
 
 
@@ -1717,7 +1749,7 @@ export default {
         },
     },
     beforeUnmount() {
-        
+
     },
     computed: {
         userSubmoduleAccess() {
@@ -1850,12 +1882,21 @@ export default {
 .suggestions-list {
     position: absolute;
     top: calc(100% + 6px);
-    left: 0;
+    left: calc(10% - 300px);
     right: 0;
     z-index: 50;
     max-height: 260px;
     overflow: auto;
     border-radius: 6px;
+
+    /* For Firefox */
+    scrollbar-width: none;
+
+    /* For Internet Explorer and Edge */
+    -ms-overflow-style: none;
+
+    /* Ensure scrolling is still allowed */
+    overflow-x: auto;
 }
 
 .suggestion-item {
@@ -1950,6 +1991,22 @@ export default {
     -ms-overflow-style: none;
     scrollbar-width: none;
     overflow-x: scroll;
+}
+
+.tab-pane {
+    animation: fadeInSlide 0.4s ease-in-out;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .filter-toolbar input.form-control-sm,
