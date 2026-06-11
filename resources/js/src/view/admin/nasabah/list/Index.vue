@@ -476,6 +476,11 @@
                                                         @click.prevent="downloadPreview(item.id, item.nama_lengkap)">
                                                         <span>PDF Pengajuan</span>
                                                     </a>
+                                                    <a v-if="!loadDownloadPdfPengajuan"
+                                                        class="btn btn-sm mb-0 mx-1 btn-info text-xxs"
+                                                        @click.prevent="preview_asuransi(item.id, item.nama_lengkap)">
+                                                        <span>PDF Asuransi</span>
+                                                    </a>
                                                     <button v-else
                                                         class="btn btn-info btn-sm m-0 py-2 text-xxs text-white"
                                                         type="button" disabled>

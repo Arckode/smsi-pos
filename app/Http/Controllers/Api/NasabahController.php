@@ -420,6 +420,7 @@ class NasabahController extends Controller
         $data = Nasabah::with($relations)->when($q !== '', function ($query) use ($q) {
             $query->where('nama_lengkap', 'like', '%' . $q . '%')
                 ->orWhere('nik', 'like', '%' . $q . '%')
+                ->orWhere('temp_affiliasi', 'like', '%' . $q . '%')
                 ->orwhereHas('affiliasi', function ($q2) use ($q) {
                     $q2->where('nama_affiliasi', 'like', '%' . $q . '%');
                 });
@@ -760,7 +761,7 @@ class NasabahController extends Controller
                 $filename = date('dmY_Hi') . '_' . str_replace(' ', '', $nasabah->nama_lengkap) . '_' . $request->input('jenis_dokumen') . '.' . $file->getClientOriginalExtension();
                 $filePath = $file->storeAs('uploads', $filename, 'public');
 
-                $column = 'dokumen_' . $request->input('jenis_dokumen');
+                $column = $request->input('jenis_dokumen');
                 $nasabah->$column = $filePath;
 
                 $logData = [

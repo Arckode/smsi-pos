@@ -198,9 +198,12 @@
                                                         <label>Nama Perusahaan / Instansi</label>
                                                     </div>
                                                     <div class="col-md-9">
-                                                        <select v-model="model.data_pekerjaan.affiliasi_id" name="affiliasi_id" class="form-select" required>
-                                                            <option value="" selected>Pilih Nama Perusahaan / Instansi</option>
-                                                            <option v-for="item in collections.affiliasi" :key="item.id" :value="item.id">
+                                                        <select v-model="model.data_pekerjaan.affiliasi_id"
+                                                            name="affiliasi_id" class="form-select" required>
+                                                            <option value="" selected>Pilih Nama Perusahaan / Instansi
+                                                            </option>
+                                                            <option v-for="item in collections.affiliasi" :key="item.id"
+                                                                :value="item.id">
                                                                 {{ item.nama_affiliasi }}
                                                             </option>
                                                         </select>
@@ -220,8 +223,8 @@
                                                         <label>No. NPWP</label>
                                                     </div>
                                                     <div class="col-md-9">
-                                                        <input type="text" v-model="model.data_pekerjaan.npwp" name="npwp"
-                                                            class="form-control" placeholder="" required="">
+                                                        <input type="text" v-model="model.data_pekerjaan.npwp"
+                                                            name="npwp" class="form-control" placeholder="" required="">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
@@ -810,10 +813,360 @@
 
                 <div class="tab-pane fade" id="docs" role="tabpanel" aria-labelledby="docs-tab">
 
+                    <div class="d-flex flex-wrap">
+
+                        <div class="d-flex flex-column list-docs overflowy-hidden-style" aria-orientation="vertical">
+                            <button class="border-0 my-1 p-0 bg-transparent " type="button" role="tab" aria-selected="true"
+                                @click.prevent="selectedDocs('dokumen_ktp')">
+                                <div class="card shadow-none border-1 rounded-3" style="max-width: 540px;">
+                                    <div class="d-flex flex-row">
+                                        <div class="col-md-4 p-4 align-self-center">
+                                            <template v-if="model.data_dokumen.dokumen_ktp">
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_ktp}`)">
+                                            </template>
+                                            <template v-else>
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/images/no_content.jpg`)">
+                                            </template>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 p-4">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-start">
+                                                    KTP
+                                                </h5>
+                                                <p class="card-text text-start mb-0">
+                                                    Dokumen Pendukung KTP Nasabah
+                                                </p>
+                                                <p class="card-text text-start">
+                                                    <small class="text-muted">
+                                                        Uploaded by
+                                                    </small>
+                                                </p>
+                                                <p class="card-text text-end mt-auto">
+                                                    <small class="text-muted">
+                                                        Last uploaded at 3 mins ago
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+
+                            <button class="border-0 my-1 p-0 bg-transparent" type="button" role="tab" aria-selected="true"
+                                @click.prevent="selectedDocs('dokumen_kartu_keluarga')">
+                                <div class="card shadow-none border-1 rounded-3" style="max-width: 540px;">
+                                    <div class="d-flex flex-row">
+                                        <div class="col-md-4 p-4 align-self-center">
+                                            <template v-if="model.data_dokumen.dokumen_kk">
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_kk}`)">
+                                            </template>
+                                            <template v-else>
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/images/no_content.jpg`)">
+                                            </template>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 p-4">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-start">
+                                                    KK
+                                                </h5>
+                                                <p class="card-text text-start mb-0">
+                                                    Dokumen Pendukung Kartu Keluarga
+                                                </p>
+                                                <p class="card-text text-start">
+                                                    <small class="text-muted">
+                                                        Uploaded by
+                                                    </small>
+                                                </p>
+                                                <p class="card-text text-end mt-auto">
+                                                    <small class="text-muted">
+                                                        Last uploaded at 3 mins ago
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+
+                            <button class="border-0 my-1 p-0 bg-transparent" type="button" role="tab" aria-selected="true"
+                                @click.prevent="selectedDocs('dokumen_npwp')">
+                                <div class="card shadow-none border-1 rounded-3" style="max-width: 540px;">
+                                    <div class="d-flex flex-row">
+                                        <div class="col-md-4 p-4 align-self-center">
+                                            <template v-if="model.data_dokumen.dokumen_npwp">
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_npwp}`)">
+                                            </template>
+                                            <template v-else>
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/images/no_content.jpg`)">
+                                            </template>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 p-4">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-start">
+                                                    NPWP
+                                                </h5>
+                                                <p class="card-text text-start mb-0">
+                                                    Dokumen Pendukung NPWP
+                                                </p>
+                                                <p class="card-text text-start">
+                                                    <small class="text-muted">
+                                                        Uploaded by
+                                                    </small>
+                                                </p>
+                                                <p class="card-text text-end mt-auto">
+                                                    <small class="text-muted">
+                                                        Last uploaded at 3 mins ago
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+                            
+
+                            <button class="border-0 my-1 p-0 bg-transparent" type="button" role="tab" aria-selected="true"
+                                @click.prevent="selectedDocs('dokumen_ktp_pasangan')">
+                                <div class="card shadow-none border-1 rounded-3" style="max-width: 540px;">
+                                    <div class="d-flex flex-row">
+                                        <div class="col-md-4 p-4 align-self-center">
+                                            <template v-if="model.data_dokumen.dokumen_ktp_pasangan">
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_ktp_pasangan}`)">
+                                            </template>
+                                            <template v-else>
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/images/no_content.jpg`)">
+                                            </template>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 p-4">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-start">
+                                                    KTP Pasangan
+                                                </h5>
+                                                <p class="card-text text-start mb-0">
+                                                    Dokumen Pendukung KTP Pasangan
+                                                </p>
+                                                <p class="card-text text-start">
+                                                    <small class="text-muted">
+                                                        Uploaded by
+                                                    </small>
+                                                </p>
+                                                <p class="card-text text-end mt-auto">
+                                                    <small class="text-muted">
+                                                        Last uploaded at 3 mins ago
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+                            
+
+                            <button class="border-0 my-1 p-0 bg-transparent" type="button" role="tab" aria-selected="true"
+                                @click.prevent="selectedDocs('dokumen_asuransi')">
+                                <div class="card shadow-none border-1 rounded-3" style="max-width: 540px;">
+                                    <div class="d-flex flex-row">
+                                        <div class="col-md-4 p-4 align-self-center">
+                                            <template v-if="model.data_dokumen.dokumen_asuransi">
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_asuransi}`)">
+                                            </template>
+                                            <template v-else>
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/images/no_content.jpg`)">
+                                            </template>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 p-4">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-start">
+                                                    Asuransi
+                                                </h5>
+                                                <p class="card-text text-start mb-0">
+                                                    Dokumen Pendukung Asuransi
+                                                </p>
+                                                <p class="card-text text-start">
+                                                    <small class="text-muted">
+                                                        Uploaded by
+                                                    </small>
+                                                </p>
+                                                <p class="card-text text-end mt-auto">
+                                                    <small class="text-muted">
+                                                        Last uploaded at 3 mins ago
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+                            
+
+                            <button class="border-0 my-1 p-0 bg-transparent" type="button" role="tab" aria-selected="true"
+                                @click.prevent="selectedDocs('dokumen_id_card_perusahaan')">
+                                <div class="card shadow-none border-1 rounded-3" style="max-width: 540px;">
+                                    <div class="d-flex flex-row">
+                                        <div class="col-md-4 p-4 align-self-center">
+                                            <template v-if="model.data_dokumen.dokumen_id_card_perusahaan">
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_id_card_perusahaan}`)">
+                                            </template>
+                                            <template v-else>
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/images/no_content.jpg`)">
+                                            </template>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 p-4">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-start">
+                                                    ID Card Perusahaan
+                                                </h5>
+                                                <p class="card-text text-start mb-0">
+                                                    Dokumen Pendukung ID Card Perusahaan
+                                                </p>
+                                                <p class="card-text text-start">
+                                                    <small class="text-muted">
+                                                        Uploaded by
+                                                    </small>
+                                                </p>
+                                                <p class="card-text text-end mt-auto">
+                                                    <small class="text-muted">
+                                                        Last uploaded at 3 mins ago
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+                            
+
+                            <button class="border-0 my-1 p-0 bg-transparent" type="button" role="tab" aria-selected="true"
+                                @click.prevent="selectedDocs('dokumen_selfie')">
+                                <div class="card shadow-none border-1 rounded-3" style="max-width: 540px;">
+                                    <div class="d-flex flex-row">
+                                        <div class="col-md-4 p-4 align-self-center">
+                                            <template v-if="model.data_dokumen.dokumen_selfie">
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_selfie}`)">
+                                            </template>
+                                            <template v-else>
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/images/no_content.jpg`)">
+                                            </template>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 p-4">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-start">
+                                                    Selfie
+                                                </h5>
+                                                <p class="card-text text-start mb-0">
+                                                    Dokumen Pendukung Selfie
+                                                </p>
+                                                <p class="card-text text-start">
+                                                    <small class="text-muted">
+                                                        Uploaded by
+                                                    </small>
+                                                </p>
+                                                <p class="card-text text-end mt-auto">
+                                                    <small class="text-muted">
+                                                        Last uploaded at 3 mins ago
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+                            
+
+                            <button class="border-0 my-1 p-0 bg-transparent" type="button" role="tab" aria-selected="true"
+                                @click.prevent="selectedDocs('dokumen_surat_pernyataan')">
+                                <div class="card shadow-none border-1 rounded-3" style="max-width: 540px;">
+                                    <div class="d-flex flex-row">
+                                        <div class="col-md-4 p-4 align-self-center">
+                                            <template v-if="model.data_dokumen.dokumen_surat_pernyataan">
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_surat_pernyataan}`)">
+                                            </template>
+                                            <template v-else>
+                                                <img class="img-fluid rounded-2 border border-light" alt="..."
+                                                    :src="asset(`/images/no_content.jpg`)">
+                                            </template>
+                                        </div>
+                                        <div class="d-flex flex-column w-100 p-4">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-start">
+                                                    Surat Pernyataan
+                                                </h5>
+                                                <p class="card-text text-start mb-0">
+                                                    Dokumen Pendukung Surat Pernyataan
+                                                </p>
+                                                <p class="card-text text-start">
+                                                    <small class="text-muted">
+                                                        Uploaded by
+                                                    </small>
+                                                </p>
+                                                <p class="card-text text-end mt-auto">
+                                                    <small class="text-muted">
+                                                        Last uploaded at 3 mins ago
+                                                    </small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+                            
+                        </div>
+                        <div class="tab-content mt-1 ms-6 p-4 border border-1 rounded-3" id="v-pills-tabContent">
+                            <div class="card shadow-none" style="width: 18rem;">
+                                <template v-if="file_management.selected_preview">
+                                    <img class="img-fluid" alt="..." style="height: 380px; width: auto; object-fit: contain;"
+                                        :src="asset(`/storage/${file_management.selected_preview}`)">
+                                </template>
+                                <template v-else>
+                                    <img class="img-fluid rounded-2 border border-light" alt="..."
+                                        :src="asset(`/images/no_content.jpg`)">
+                                </template>
+                                <h6 class="card-title text-lg mt-2 mb-1">File {{ file_management.label }}</h6>
+                                <template v-if="file_management.selected_preview">
+                                    <div class="card-body d-flex flex-column pb-0">
+                                        <a @click.prevent="show_preview(file_management.selected_preview)" class="card-text text-sm mb-1"><i class="fas fa-expand-arrows-alt me-3"></i>Preview</a>
+                                        <a @click.prevent="download(file_management.selected_preview)" class="card-text text-sm mb-1"><i class="fas fa-download me-3"></i>Download</a>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input d-flex align-items-center text-xs"
+                                            style="height: 20px;" type="checkbox" id="flexSwitchCheckCheckedx"
+                                            true-value="1" false-value="0"
+                                            v-model="file_management.changeFileToggle">
+                                        <label class="form-check-label text-sm mb-1 text-secondary"
+                                            for="flexSwitchCheckCheckedx">Change File</label>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <p class="text-warning fw-light text-sm mb-0">Currently user has not uploaded any file</p>    
+                                    <p class="text-warning fw-light text-sm">Please upload a file</p>    
+                                </template>
+                                <input v-if="file_management.changeFileToggle == 1 || !file_management.selected_preview" class="form-control form-control-sm text-sm text-secondary" type="file" accept="image/*"
+                                    @change="handleFileChange($event, file_management.selected_preview)">
+                                    <a @click.prevent="uploadFile" class="btn btn-primary w-100 mt-2 mb-0">Save</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="d-flex flex-wrap gap-4 mt-4">
 
-                        <div class="card" id="ktp" style="width: 16rem;">
-                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_ktp}`)" class="card-img-top" alt="image KTP" style="max-height: fit-content; max-width: fit-content;">
+                        <!-- <div class="card" id="ktp" style="width: 16rem;">
+                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_ktp}`)" class="card-img-top"
+                                alt="image KTP" style="max-height: fit-content; max-width: fit-content;">
                             <div class="card-body">
                                 <p class="card-text mb-0">Dokumen</p>
                                 <h5 class="card-title">KTP</h5>
@@ -823,14 +1176,16 @@
                                 </div>
                                 <div class="mb-1">
                                     <label for="formFileSm" class="form-label">Ubah Dokumen KTP</label>
-                                    <input class="form-control form-control-sm" id="formFileSm" type="file" accept="image/*"
-                                        @change="handleFileChange($event, 'dokumen_ktp')">
+                                    <input class="form-control form-control-sm" id="formFileSm" type="file"
+                                        accept="image/*" @change="handleFileChange($event, 'dokumen_ktp')">
                                 </div>
                                 <a @click.prevent="upload('ktp')" class="btn btn-warning w-100">Save</a>
                             </div>
                         </div>
                         <div class="card" id="kk" style="width: 16rem;">
-                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_kartu_keluarga}`)" class="card-img-top" alt="image KK" style="max-height: fit-content; max-width: fit-content;">
+                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_kartu_keluarga}`)"
+                                class="card-img-top" alt="image KK"
+                                style="max-height: fit-content; max-width: fit-content;">
                             <div class="card-body">
                                 <p class="card-text mb-0">Dokumen</p>
                                 <h5 class="card-title">Kartu Keluarga</h5>
@@ -840,15 +1195,16 @@
                                 </div>
                                 <div class="mb-1">
                                     <label for="formFileSm" class="form-label">Ubah Dokumen KK</label>
-                                    <input class="form-control form-control-sm" id="formFileSm" type="file" accept="image/*"
-                                        @change="handleFileChange($event, 'dokumen_kartu_keluarga')">
+                                    <input class="form-control form-control-sm" id="formFileSm" type="file"
+                                        accept="image/*" @change="handleFileChange($event, 'dokumen_kartu_keluarga')">
                                 </div>
                                 <a @click.prevent="upload('kartu_keluarga')" class="btn btn-warning w-100">Save</a>
                             </div>
                         </div>
-                        <!-- ktp pasangan -->
                         <div class="card" id="ktp-pasangan" style="width: 16rem;">
-                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_ktp_pasangan}`)" class="card-img-top" alt="image KTP Pasangan" style="max-height: fit-content; max-width: fit-content;">
+                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_ktp_pasangan}`)"
+                                class="card-img-top" alt="image KTP Pasangan"
+                                style="max-height: fit-content; max-width: fit-content;">
                             <div class="card-body">
                                 <p class="card-text mb-0">Dokumen</p>
                                 <h5 class="card-title">KTP Pasangan</h5>
@@ -863,9 +1219,9 @@
                                 <a @click.prevent="updateKtpPasangan" class="btn btn-warning w-100">Save</a>
                             </div>
                         </div>
-                        <!-- npwp -->
                         <div class="card" id="npwp" style="width: 16rem;">
-                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_npwp}`)" class="card-img-top" alt="image NPWP" style="max-height: fit-content; max-width: fit-content;">
+                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_npwp}`)" class="card-img-top"
+                                alt="image NPWP" style="max-height: fit-content; max-width: fit-content;">
                             <div class="card-body">
                                 <p class="card-text mb-0">Dokumen</p>
                                 <h5 class="card-title">NPWP</h5>
@@ -880,9 +1236,10 @@
                                 <a @click.prevent="updateNPWP" class="btn btn-warning w-100">Save</a>
                             </div>
                         </div>
-                        <!-- id card perusahaan -->
                         <div class="card" id="id-card" style="width: 16rem;">
-                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_id_card_perusahaan}`)" class="card-img-top" alt="image ID Card Perusahaan" style="max-height: fit-content; max-width: fit-content;">
+                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_id_card_perusahaan}`)"
+                                class="card-img-top" alt="image ID Card Perusahaan"
+                                style="max-height: fit-content; max-width: fit-content;">
                             <div class="card-body">
                                 <p class="card-text mb-0">Dokumen</p>
                                 <h5 class="card-title">ID Card Perusahaan</h5>
@@ -897,9 +1254,9 @@
                                 <a @click.prevent="updateIDCard" class="btn btn-warning w-100">Save</a>
                             </div>
                         </div>
-                        <!-- asuransi -->
                         <div class="card" id="asuransi" style="width: 16rem;">
-                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_asuransi}`)" class="card-img-top" alt="image Asuransi" style="max-height: fit-content; max-width: fit-content;">
+                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_asuransi}`)" class="card-img-top"
+                                alt="image Asuransi" style="max-height: fit-content; max-width: fit-content;">
                             <div class="card-body">
                                 <p class="card-text mb-0">Dokumen</p>
                                 <h5 class="card-title">Asuransi</h5>
@@ -914,9 +1271,10 @@
                                 <a @click.prevent="updateAsuransi" class="btn btn-warning w-100">Save</a>
                             </div>
                         </div>
-                        <!-- surat pernyataan -->
                         <div class="card" id="surat-pernyataan" style="width: 16rem;">
-                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_surat_pernyataan}`)" class="card-img-top" alt="image Surat Pernyataan" style="max-height: fit-content; max-width: fit-content;">
+                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_surat_pernyataan}`)"
+                                class="card-img-top" alt="image Surat Pernyataan"
+                                style="max-height: fit-content; max-width: fit-content;">
                             <div class="card-body">
                                 <p class="card-text mb-0">Dokumen</p>
                                 <h5 class="card-title">Surat Pernyataan</h5>
@@ -931,9 +1289,9 @@
                                 <a @click.prevent="updatePernyataan" class="btn btn-warning w-100">Save</a>
                             </div>
                         </div>
-                        <!-- selfie -->
                         <div class="card" id="selfie" style="width: 16rem;">
-                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_selfie}`)" class="card-img-top" alt="image Selfie" style="max-height: fit-content; max-width: fit-content;">
+                            <img :src="asset(`/storage/${model.data_dokumen.dokumen_selfie}`)" class="card-img-top"
+                                alt="image Selfie" style="max-height: fit-content; max-width: fit-content;">
                             <div class="card-body">
                                 <p class="card-text mb-0">Dokumen</p>
                                 <h5 class="card-title">Foto Selfie</h5>
@@ -947,7 +1305,7 @@
                                 </div>
                                 <a @click.prevent="updateSelfie" class="btn btn-warning w-100">Save</a>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
 
@@ -984,6 +1342,13 @@ export default {
             modalEdit: "",
             loading: false,
             componentload: false,
+            file_management: {
+                selected_docs_section: 'dokumen_ktp',
+                label: 'KTP',
+                changeFileToggle: 0,
+                selected_preview: null,
+                attach_file: null,
+            },
             userid: null,
             collections: {
                 affiliasi: [],
@@ -1080,15 +1445,15 @@ export default {
             data_model_data_jaminan: 'kosong',
             data_model_data_kontak: 'kosong',
             previews: {
-                    dokumen_ktp: null,
-                    dokumen_kartu_keluarga: null,
-                    dokumen_npwp: null,
-                    dokumen_ktp_pasangan: null,
-                    dokumen_asuransi: null,
-                    dokumen_id_card_perusahaan: null,
-                    dokumen_selfie: null,
-                    dokumen_surat_pernyataan: null,
-                },
+                dokumen_ktp: null,
+                dokumen_kartu_keluarga: null,
+                dokumen_npwp: null,
+                dokumen_ktp_pasangan: null,
+                dokumen_asuransi: null,
+                dokumen_id_card_perusahaan: null,
+                dokumen_selfie: null,
+                dokumen_surat_pernyataan: null,
+            },
         };
     },
 
@@ -1128,6 +1493,71 @@ export default {
             } catch (error) {
                 console.error("Error fetching affiliasi: ", error);
             }
+        },
+        selectedDocs(e) {
+            this.file_management.selected_docs_section = e
+            if (this.file_management.selected_docs_section == 'dokumen_ktp') {
+                this.file_management.label = 'KTP'
+            } else if (this.file_management.selected_docs_section == 'dokumen_kartu_keluarga') {
+                this.file_management.label = 'Kartu Keluarga'
+            } else if (this.file_management.selected_docs_section == 'dokumen_npwp') {
+                this.file_management.label = 'NPWP'
+            } else if (this.file_management.selected_docs_section == 'dokumen_ktp_pasangan') {
+                this.file_management.label = 'KTP Pasangan'
+            } else if (this.file_management.selected_docs_section == 'dokumen_asuransi') {
+                this.file_management.label = 'Asuransi'
+            } else if (this.file_management.selected_docs_section == 'dokumen_id_card_perusahaan') {
+                this.file_management.label = 'ID Card Perusahaan'
+            } else if (this.file_management.selected_docs_section == 'dokumen_selfie') {
+                this.file_management.label = 'Foto Selfie'
+            } else if (this.file_management.selected_docs_section == 'dokumen_surat_pernyataan') {
+                this.file_management.label = 'Surat Pernyataan'
+            }
+            this.file_management.selected_preview = this.model.data_dokumen[e]
+        },
+        handleFileChange(event, fieldName) {
+            console.log(`File change detected for ${fieldName}, event:`, event);
+            const file = event.target.files[0];
+
+            if (file) {
+                // This dynamically sets the file to the correct key in your model
+                this.model.data_dokumen[fieldName] = file;
+                this.file_management.attach_file = file;
+                this.file_management.selected_preview = URL.createObjectURL(file);
+
+                console.log(`Uploaded ${fieldName}:`, file.name);
+            }
+        },
+        async uploadFile() {
+            let endpoint = `${BASEURL}/api/nasabah/upload/`;
+            try {
+                let payload = {
+                    id: this.userid,
+                    jenis_dokumen: this.file_management.selected_docs_section,
+                    file: this.file_management.attach_file,
+                }
+                console.log('Uploading with payload:', payload);
+                let response = await axios.post(endpoint, payload, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                console.log('Update response:', response);
+                Swal.fire(
+                    'Saved!',
+                    'User has been saved.',
+                    'success'
+                )
+            } catch (error) {
+                console.error(`Error uploading ${this.file_management.selected_docs_section}: `, error);
+                Swal.fire(
+                    'Error!',
+                    `There was an error uploading the ${this.file_management.selected_docs_section}.`,
+                    'error'
+                )
+            }
+
         },
         async fetchNasabah(id) {
             let endpoint = `${BASEURL}/api/nasabah/${id}`;
@@ -1282,48 +1712,37 @@ export default {
             }
         },
 
-        handleFileChange(event, fieldName) {
-            const file = event.target.files[0];
 
-            if (file) {
-                // This dynamically sets the file to the correct key in your model
-                this.model.data_dokumen[fieldName] = file;
-                this.previews[fieldName] = URL.createObjectURL(file);
-
-                console.log(`Uploaded ${fieldName}:`, file.name);
-            }
-        },
-
-        async upload(type) {
-            let endpoint = `${BASEURL}/api/nasabah/upload/`;
-            try {
-                let payload = {
-                    id: this.userid,
-                    jenis_dokumen: type,
-                    file: this.model.data_dokumen[`dokumen_${type}`],
-                }
-                console.log('Uploading with payload:', payload);
-                let response = await axios.post(endpoint, payload, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-                console.log('Update response:', response);
-                Swal.fire(
-                    'Saved!',
-                    'User has been saved.',
-                    'success'
-                )
-            } catch (error) {
-                console.error(`Error uploading ${type}: `, error);
-                Swal.fire(
-                    'Error!',
-                    `There was an error uploading the ${type}.`,
-                    'error'
-                )
-            }
-        },
+        // async upload(type) {
+        //     let endpoint = `${BASEURL}/api/nasabah/upload/`;
+        //     try {
+        //         let payload = {
+        //             id: this.userid,
+        //             jenis_dokumen: type,
+        //             file: this.model.data_dokumen[`dokumen_${type}`],
+        //         }
+        //         console.log('Uploading with payload:', payload);
+        //         let response = await axios.post(endpoint, payload, {
+        //             headers: {
+        //                 Authorization: 'Bearer ' + this.$token(),
+        //                 'Content-Type': 'multipart/form-data',
+        //             },
+        //         });
+        //         console.log('Update response:', response);
+        //         Swal.fire(
+        //             'Saved!',
+        //             'User has been saved.',
+        //             'success'
+        //         )
+        //     } catch (error) {
+        //         console.error(`Error uploading ${type}: `, error);
+        //         Swal.fire(
+        //             'Error!',
+        //             `There was an error uploading the ${type}.`,
+        //             'error'
+        //         )
+        //     }
+        // },
         async openModal() {
             this.modalEdit.show();
         },
@@ -1530,6 +1949,10 @@ export default {
     /* Firefox */
 }
 
+.list-docs {
+    height: 50vh;
+    overflow-y: auto;
+}
 
 .entry-content h3 {
     margin: 0;

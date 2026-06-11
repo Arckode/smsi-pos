@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\UserRolesController;
 use App\Http\Controllers\Api\AffiliasiController;
 use App\Http\Controllers\Api\NasabahController;
+use App\Http\Controllers\Api\PengajuanKreditController;
 
 
 
@@ -51,11 +52,12 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::prefix('/public')->group(function () {
-    Route::get('/qr/{number}', [QrController::class, 'showByQr']);
-    Route::post('/batches', [BatchController::class, 'store']);
-    Route::put('/batches/{number}', [BatchController::class, 'update']);
-    Route::get('/edocs/received-by-bod/list', [EdocController::class, 'receivedByBod']);
-    Route::post('/edoc/status/{id}', [EdocController::class, 'updateEdocStatus']);
+    Route::apiResource('/pengajuan-kredit', PengajuanKreditController::class);
+    // Route::get('/qr/{number}', [QrController::class, 'showByQr']);
+    // Route::post('/batches', [BatchController::class, 'store']);
+    // Route::put('/batches/{number}', [BatchController::class, 'update']);
+    // Route::get('/edocs/received-by-bod/list', [EdocController::class, 'receivedByBod']);
+    // Route::post('/edoc/status/{id}', [EdocController::class, 'updateEdocStatus']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
