@@ -1,7 +1,8 @@
 <template>
-    <!-- offcanvas Add New Document -->
-    <div class="offcanvas offcanvas-end responsive-offcanvas p-6" tabindex="-1" id="offcanvasEditRight"
-        data-bs-keyboard="false" aria-labelledby="offcanvasEditRightLabel">
+    <div>
+        <!-- offcanvas Add New Document -->
+        <div class="offcanvas offcanvas-end responsive-offcanvas p-6" tabindex="-1" id="offcanvasEditRight"
+            data-bs-keyboard="false" aria-labelledby="offcanvasEditRightLabel">
 
         <div class="offcanvas-header">
             <h5 id="offcanvasEditRightLabel">Edit Data Nasabah</h5>
@@ -859,9 +860,9 @@
                                 <div class="card shadow-none border-1 rounded-3" style="max-width: 540px;">
                                     <div class="d-flex flex-row">
                                         <div class="col-md-4 p-4 align-self-center">
-                                            <template v-if="model.data_dokumen.dokumen_kk">
+                                            <template v-if="model.data_dokumen.dokumen_kartu_keluarga">
                                                 <img class="img-fluid rounded-2 border border-light" alt="..."
-                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_kk}`)">
+                                                    :src="asset(`/storage/${model.data_dokumen.dokumen_kartu_keluarga}`)">
                                             </template>
                                             <template v-else>
                                                 <img class="img-fluid rounded-2 border border-light" alt="..."
@@ -1323,6 +1324,23 @@
             <button class="btn btn-primary" @click.prevent="confirmUpdate">Submit</button>
         </div>
     </div>
+
+    <div class="modal fade" id="previewImageModal" ref="previewModal" tabindex="-1"
+        aria-labelledby="previewImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewImageModalLabel">Preview {{ file_management.label }}</h5>
+                    <button type="button" class="btn-close" @click.prevent="closePreview" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-center align-items-center p-0">
+                    <img v-if="file_management.preview_src" :src="previewImageUrl"
+                        class="img-fluid" alt="Preview image" style="max-height: 80vh; width: auto;" />
+                    <p v-else class="text-center text-muted p-4 mb-0">No image selected.</p>
+                </div>
+            </div>
+        </div>
+    </div></div>
 </template>
 
 <script>
@@ -1340,6 +1358,7 @@ export default {
     data() {
         return {
             modalEdit: "",
+            modalPreview: null,
             loading: false,
             componentload: false,
             file_management: {
@@ -1347,6 +1366,7 @@ export default {
                 label: 'KTP',
                 changeFileToggle: 0,
                 selected_preview: null,
+                preview_src: null,
                 attach_file: null,
             },
             userid: null,
@@ -1464,6 +1484,9 @@ export default {
                 this.modalEdit = new bootstrap.Offcanvas("#offcanvasEditRight", {
                     backdrop: false,
                     keyboard: false,
+                });
+                this.modalPreview = new bootstrap.Modal(this.$refs.previewModal, {
+                    backdrop: true,
                 });
                 this.userid = id;
                 this.componentload = true;
@@ -1653,7 +1676,64 @@ export default {
                 console.error("Error fetching role list: ", error);
             }
         },
+        show_preview(file) {
+            if (!file) {
+                return;
+            }
+            this.file_management.preview_src = file;
+            if (!this.modalPreview) {
+                this.modalPreview = new bootstrap.Modal(this.$refs.previewModal, {
+                    backdrop: true,
+                });
+            }
+            this.modalPreview.show();
+        },
+        closePreview() {
+            if (this.modalPreview) {
+                this.modalPreview.hide();
+            }
+            this.file_management.preview_src = null;
+        },
+        async download(file) {
+            if (!file) {
+                return;
+            }
 
+            const isLocalPath = typeof file === 'string' && !file.startsWith('blob:') && !file.startsWith('data:') && !file.startsWith('http');
+            const url = isLocalPath ? this.asset(`/storage/${file}`) : file;
+            const filename = typeof file === 'string'
+                ? file.split('/').pop().split('?')[0] || 'download'
+                : 'download';
+
+            try {
+                if (url.startsWith('data:') || url.startsWith('blob:')) {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    return;
+                }
+
+                const response = await fetch(url, { mode: 'cors' });
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(blobUrl);
+                document.body.removeChild(a);
+            } catch (error) {
+                console.error('Error downloading image:', error);
+                Swal.fire('Error!', 'Unable to download the image.', 'error');
+            }
+        },
         async fetchUnits() {
             let endpoint = `${BASEURL}/api/unit/options`;
             try {
@@ -1785,7 +1865,21 @@ export default {
             });
         },
     },
-    computed: {},
+    computed: {
+        previewImageUrl() {
+            const src = this.file_management.preview_src;
+            if (!src) {
+                return '';
+            }
+            if (typeof src !== 'string') {
+                return src;
+            }
+            if (src.startsWith('blob:') || src.startsWith('data:') || src.startsWith('http')) {
+                return src;
+            }
+            return this.asset(`/storage/${src}`);
+        },
+    },
     watch: {
         'model.data_pemohon': {
             handler(newVal) {
