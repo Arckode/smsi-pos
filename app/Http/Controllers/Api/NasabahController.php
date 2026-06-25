@@ -741,6 +741,29 @@ class NasabahController extends Controller
         ]);
     }
 
+    public function DWshowAsuransi(int $id)
+    {
+        $nasabah = Nasabah::findOrFail($id);
+        $html = view('asuransi', ['data' => $nasabah])->render();
+
+        $browserShot = Browsershot::html($html)
+            ->format('A4')
+            ->margins(10, 10, 10, 10)
+            ->showBackground();
+
+        if ($chromePath = $this->getBrowsershotExecutablePath()) {
+            $browserShot->setChromePath($chromePath);
+        }
+
+        $pdfRawBytes = $browserShot->pdf();
+
+        $fileName = 'Pengajuan_nasabah_' . preg_replace('/[^a-zA-Z0-9-_]/', '_', $nasabah->nama_lengkap ?? 'nasabah') . '.pdf';
+
+        return response($pdfRawBytes, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
+    }
     public function showAsuransi(int $id)
     {
         $nasabah = Nasabah::findOrFail($id);

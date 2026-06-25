@@ -91,6 +91,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/preview-pdf/{id}', [NasabahController::class, 'downloadPreviewPdf']);
     Route::get('/preview/{id}', [NasabahController::class, 'showPreview']);
     Route::get('/asuransi/{id}', [NasabahController::class, 'showAsuransi']);
+    Route::get('/dwasuransi/{id}', [NasabahController::class, 'DWshowAsuransi']);
     Route::post('/nasabah/upload', [NasabahController::class, 'upload']);
     Route::post('/nasabah/{id}/send-pengajuan', [NasabahController::class, 'sendPengajuan']);
 

@@ -481,6 +481,11 @@
                                                         @click.prevent="preview_asuransi(item.id, item.nama_lengkap)">
                                                         <span>PDF Asuransi</span>
                                                     </a>
+                                                    <a v-if="!loadDownloadPdfPengajuan"
+                                                        class="btn btn-sm mb-0 mx-1 btn-info text-xxs"
+                                                        @click.prevent="downloadAsransi(item.id, item.nama_lengkap)">
+                                                        <span>DW PDF Asuransi</span>
+                                                    </a>
                                                     <button v-else
                                                         class="btn btn-info btn-sm m-0 py-2 text-xxs text-white"
                                                         type="button" disabled>
@@ -1420,6 +1425,31 @@ export default {
         async downloadPreview(id, name) {
             this.loadDownloadPdfPengajuan = true;
             let endpoint = `${BASEURL}/api/preview-pdf/${id}`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: { Authorization: 'Bearer ' + this.$token() },
+                    responseType: 'blob',
+                });
+
+                const blob = new Blob([response.data], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const anchor = document.createElement('a');
+                const safeName = name ? name.replace(/[^a-zA-Z0-9-_]/g, '_') : 'nasabah';
+                anchor.href = url;
+                anchor.download = `preview_nasabah_${safeName}_${id}.pdf`;
+                document.body.appendChild(anchor);
+                anchor.click();
+                document.body.removeChild(anchor);
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+                this.loadDownloadPdfPengajuan = false;
+            } catch (error) {
+                console.error('Download preview error: ', error);
+                this.loadDownloadPdfPengajuan = false;
+            }
+        },
+        async downloadAsransi(id, name) {
+            this.loadDownloadPdfPengajuan = true;
+            let endpoint = `${BASEURL}/api/dwasuransi/${id}`;
             try {
                 let response = await axios.get(endpoint, {
                     headers: { Authorization: 'Bearer ' + this.$token() },
