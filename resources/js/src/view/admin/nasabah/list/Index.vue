@@ -564,7 +564,7 @@
                             </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
-                            <div v-if="!loadContentSubmitted" class="tab-pane fade show active" id="pills-list-batch-details" role="tabpanel"
+                            <div v-show="!loadContentSubmitted" class="tab-pane fade show active" id="pills-list-batch-details" role="tabpanel"
                                 aria-labelledby="pills-list-batch-details-tab">
                                 <div class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
                                     <table class="table table-hover align-items-center mb-0"
@@ -662,7 +662,7 @@
                                     </div> -->
                                 </div>
                             </div>
-                            <div v-if="!loadContentSubmitted" class="tab-pane fade" id="pills-list-batch" role="tabpanel"
+                            <div v-show="!loadContentSubmitted" class="tab-pane fade" id="pills-list-batch" role="tabpanel"
                                 aria-labelledby="pills-list-batch-tab">
                                 <div class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
                                     <table class="table table-hover align-items-center mb-0"
@@ -726,12 +726,9 @@
                                                                                 '-' }}</span></p>
                                                                             
                                                                             <span
-                                                                                class="badge rounded-pill" :class="{
-                                                                                    'bg-success': detail.nasabah.status_pengajuan === 'Disetujui',
-                                                                                    'bg-warning': detail.nasabah.status_pengajuan === 'Dalam Proses',
-                                                                                    'bg-danger': detail.nasabah.status_pengajuan === 'Ditolak'
-                                                                                }">
-                                                                                {{ detail.nasabah.status_pengajuan ? detail.nasabah.status_pengajuan : '-' }}
+                                                                                class="rounded-pill p-1 text-xxs text-white"
+                                                                                :class="statusBadgeClass(detail?.nasabah?.status_pengajuan)">
+                                                                                {{ detail?.nasabah?.status_pengajuan ? detail.nasabah.status_pengajuan : '-' }}
                                                                             </span>
                                                                         </li>
                                                                     </ul>
@@ -1068,7 +1065,9 @@ export default {
             },
             dataTable: null,
             requestCounter: 0,
+            submittedRequestToken: 0,
             searchTimer: null,
+            submittedSearchTimer: null,
             suggestionTimer: null,
             suggestions: [],
             showSuggestions: false,
@@ -1113,6 +1112,23 @@ export default {
     methods: {
         asset(path) {
             return `${BASEURL}${path}`
+        },
+        statusBadgeClass(status) {
+            const normalized = (status || '').toString().trim().toLowerCase();
+
+            if (['disetujui', 'approved', 'accepted', 'approve'].includes(normalized)) {
+                return 'bg-success';
+            }
+
+            if (['dalam proses', 'proses', 'pending', 'submitted', 'review', 'in progress'].includes(normalized)) {
+                return 'bg-warning';
+            }
+
+            if (['ditolak', 'rejected', 'declined', 'cancelled'].includes(normalized)) {
+                return 'bg-danger';
+            }
+
+            return 'bg-secondary';
         },
         addUser() {
             emitter.emit('AddNasabah', this.canCreateNasabah);
@@ -1651,15 +1667,22 @@ export default {
          * 
          */
         async fetchSubmitted() {
+            const requestToken = ++this.submittedRequestToken;
             this.loadContentSubmitted = true;
-            await this.fetchSubmittedNasabahList();
+            await this.fetchSubmittedNasabahList(requestToken);
+
+            if (requestToken !== this.submittedRequestToken) {
+                return;
+            }
 
             this.collection.nasabah.submitted.count = this.collection.nasabah.submittedDetails.count;
             // console.log('Submitted count:', this.collection.nasabah.submittedDetails);
-            await this.fetchSubmittedBatchList();
-            this.loadContentSubmitted = false;
+            await this.fetchSubmittedBatchList(requestToken);
+            if (requestToken === this.submittedRequestToken) {
+                this.loadContentSubmitted = false;
+            }
         },
-        async fetchSubmittedNasabahList() {
+        async fetchSubmittedNasabahList(requestToken = null) {
             // this.loadContentSubmitted = true;
             let endpoint = `${BASEURL}/api/nasabah/submitted/details`;
             try {
@@ -1673,6 +1696,10 @@ export default {
                         'unit': this.meta.unit,
                     }
                 });
+                if (requestToken !== null && requestToken !== this.submittedRequestToken) {
+                    return;
+                }
+
                 // this.collection.nasabah.submitted.count = response.data.data.count;
                 this.collection.nasabah.submittedDetails = response.data.data || response.data;
                 this.meta.total.submittedDetails = this.collection.nasabah.submittedDetails.total || 0;
@@ -1684,7 +1711,7 @@ export default {
                 this.loadContentSubmitted = false;
             }
         },
-        async fetchSubmittedBatchList() {
+        async fetchSubmittedBatchList(requestToken = null) {
             // this.loadContentSubmitted = true;
             let endpoint = `${BASEURL}/api/nasabah/submitted/batch`;
             try {
@@ -1698,6 +1725,10 @@ export default {
                         'unit': this.meta.unit,
                     }
                 });
+                if (requestToken !== null && requestToken !== this.submittedRequestToken) {
+                    return;
+                }
+
                 this.collection.nasabah.submittedBatch = response.data.data || response.data;
                 this.meta.total.submittedBatch = this.collection.nasabah.submittedBatch.total || 0;
                 this.meta.page.submittedBatch.current_page = this.collection.nasabah.submittedBatch.current_page || 1;
@@ -2067,7 +2098,14 @@ export default {
     watch: {
         'meta.search.notValidated': 'fetchUnvalidatedNasabahList',
         'meta.search.drafted': 'fetchDraftedNasabahList',
-        'meta.search.submitted': 'fetchSubmitted',
+        'meta.search.submitted': function () {
+            if (this.submittedSearchTimer) {
+                clearTimeout(this.submittedSearchTimer);
+            }
+            this.submittedSearchTimer = setTimeout(() => {
+                this.fetchSubmitted();
+            }, 300);
+        },
         'meta.search.accepted': 'fetchAcceptedNasabahList',
         'meta.search.rejected': 'fetchRejectedNasabahList',
         'meta.search.global': function (newVal) {
