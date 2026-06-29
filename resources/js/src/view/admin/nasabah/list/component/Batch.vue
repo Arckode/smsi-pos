@@ -129,7 +129,7 @@ export default {
                         Authorization: 'Bearer ' + this.$token(),
                     },
                 });
-                this.collections.nasabah = response.data.data.data;
+                this.collections.nasabah = response.data.data;
                 this.model.batch = response.data.batch;
                 console.log('Available batches: ', this.collections.nasabah);
             } catch (error) {
@@ -171,8 +171,8 @@ export default {
                     'Batch has been saved.',
                     'success'
                 )
-                emitter.emit("batchStored")
-                this.closeComponent()
+                // emitter.emit("batchStored")
+                // this.closeComponent()
             } catch (error) {
                 console.error("Error storing batch: ", error);
                 Swal.fire(

@@ -1,36 +1,41 @@
 <template>
-    <!-- offcanvas Add New Document -->
+    <!-- offcanvas Edit Affiliasi -->
     <div class="modal shadow-lg" id="modalEdit" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-body p-5">
                     <template v-if="!componentload">
                         <div class="mb-3">
-                            <label for="exampleFormControlNama" class="form-label mb-0">Nama</label>
-                            <input type="text" class="form-control" id="exampleFormControlNama" placeholder="Nama"
-                                v-model="model.name">
+                            <label for="inputNamaAffiliasi" class="form-label mb-0">Nama Affiliasi</label>
+                            <input type="text" class="form-control" id="inputNamaAffiliasi" placeholder="Nama Affiliasi"
+                                v-model="model.nama_affiliasi">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label mb-0">Email address</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput1"
-                                placeholder="name@example.com" v-model="model.email">
+                            <label for="inputKota" class="form-label mb-0">Kota</label>
+                            <input type="text" class="form-control" id="inputKota" placeholder="Kota"
+                                v-model="model.kota">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleFormControlIRole" class="form-label mb-0">Role</label>
-                            <select id="filter-role" class="form-select form-select-sm select2-filter"
-                                v-model="model.role_id" aria-label="Filter Role">
-                                <option v-for="role in collections.roles" :key="role.id" :value="role.id">
-                                    {{ role.name }}
-                                </option>
-                            </select>
+                            <label for="inputTelepon" class="form-label mb-0">No. Telepon</label>
+                            <input type="text" class="form-control" id="inputTelepon" placeholder="No. Telepon"
+                                v-model="model.no_telepon">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label mb-0">Email</label>
+                            <input type="email" class="form-control" id="inputEmail" placeholder="Email"
+                                v-model="model.email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPIC" class="form-label mb-0">PIC</label>
+                            <input type="text" class="form-control" id="inputPIC" placeholder="PIC"
+                                v-model="model.pic_name">
                         </div>
                         <div class="mb-5">
-                            <label for="exampleFormControlIUnit" class="form-label mb-0">Unit</label>
-                            <select id="filter-unit" class="form-select form-select-sm select2-filter"
-                                v-model="model.unit_id" aria-label="Filter Unit">
-                                <option v-for="unit in collections.units" :key="unit.id" :value="unit.id">
-                                    {{ unit.name }}
-                                </option>
+                            <label for="selectStatus" class="form-label mb-0">Status</label>
+                            <select id="selectStatus" class="form-select form-select-sm"
+                                v-model.number="model.status">
+                                <option :value="1">Active</option>
+                                <option :value="0">Inactive</option>
                             </select>
                         </div>
                         <div class="d-flex justify-content-end mb-0 pb-0">
@@ -63,33 +68,24 @@
 </template>
 
 <script>
-import { VMoney } from 'v-money'
 import $ from "jquery";
 import Swal from "sweetalert2";
-import QRCode from "qrcode";
 import { emitter } from '../../../../../../eventEmitter.js';
-import html2pdf from "html2pdf.js";
-import ExcelJS from 'exceljs';
-import html2canvas from 'html2canvas';
 export default {
-    directives: { money: VMoney },
-    name: "EditUserOffcanvas",
+    name: "EditAffiliasiModal",
     data() {
         return {
-            modalEdit: "",
+            modalEdit: null,
             loading: false,
             componentload: false,
-            userid: null,
-            collections: {
-                roles: [],
-                units: [],
-            },
+            affiliasiId: null,
             model: {
-                name: "",
+                nama_affiliasi: "",
+                kota: "",
+                no_telepon: "",
                 email: "",
-                password: "",
-                role_id: null,
-                unit_id: null,
+                pic_name: "",
+                status: 1,
             },
         };
     },
@@ -102,63 +98,36 @@ export default {
                     backdrop: 'static',
                     keyboard: false,
                 });
-                this.userid = id;
-                await this.openModal();
-
+                this.affiliasiId = id;
                 this.componentload = true;
-                await this.fetchRoles();
-                await this.fetchUnits();
-                await this.fetchUser(this.userid);
+                await this.fetchAffiliasi(id);
                 this.componentload = false;
+                await this.openModal();
             }
-
         });
     },
     methods: {
-        asset(path) {
-            return `${BASEURL}${path}`;
-        },
-        async fetchUser(id) {
-            let endpoint = `${BASEURL}/api/users/${id}`;
+        async fetchAffiliasi(id) {
+            let endpoint = `${BASEURL}/api/affiliasi/${id}`;
             try {
                 let response = await axios.get(endpoint, {
                     headers: {
                         Authorization: 'Bearer ' + this.$token(),
                     },
                 });
-                this.model = response.data.data
-                console.log('User data:', this.model);
+                const data = response.data.data ?? response.data;
+                this.model = {
+                    nama_affiliasi: data.nama_affiliasi || "",
+                    kota: data.kota || "",
+                    no_telepon: data.no_telepon || "",
+                    email: data.email || "",
+                    pic_name: data.pic_name || "",
+                    status: Number(data.status) === 1 ? 1 : 0,
+                };
+                console.log('Affiliasi data:', this.model);
             } catch (error) {
-                console.error("Error fetching user data: ", error);
-            }
-        },
-        async fetchRoles() {
-            let endpoint = `${BASEURL}/api/role/options`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                });
-                this.collections.roles = response.data.data
-                console.log('Role list:', this.collections.roles);
-            } catch (error) {
-                console.error("Error fetching role list: ", error);
-            }
-        },
-
-        async fetchUnits() {
-            let endpoint = `${BASEURL}/api/unit/options`;
-            try {
-                let response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$token(),
-                    },
-                });
-                this.collections.units = response.data.data
-                console.log('Unit list:', this.collections.units);
-            } catch (error) {
-                console.error("Error fetching unit list: ", error);
+                console.error("Error fetching affiliasi data: ", error);
+                Swal.fire('Error', 'Gagal memuat data affiliasi.', 'error');
             }
         },
         confirmUpdate() {
@@ -172,14 +141,13 @@ export default {
                 confirmButtonText: 'Yes, save it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.update()
+                    this.update();
                 }
-            })
+            });
         },
         async update() {
-            this.loading = true
-            
-            let endpoint = `${BASEURL}/api/users/${this.userid}`;
+            this.loading = true;
+            let endpoint = `${BASEURL}/api/affiliasi/${this.affiliasiId}`;
             try {
                 let response = await axios.put(endpoint, this.model, {
                     headers: {
@@ -187,68 +155,34 @@ export default {
                     },
                 });
                 console.log('Update response:', response);
-                Swal.fire(
-                    'Saved!',
-                    'User has been saved.',
-                    'success'
-                )
-                this.closeComponent()
+                Swal.fire('Saved!', 'Affiliasi has been saved.', 'success');
+                this.closeComponent();
             } catch (error) {
-                console.error("Error updating user: ", error);
-                Swal.fire(
-                    'Error!',
-                    'There was an error saving the user.',
-                    'error'
-                )
+                console.error("Error updating affiliasi: ", error);
+                Swal.fire('Error!', 'There was an error saving the affiliasi.', 'error');
             } finally {
-                this.loading = false
+                this.loading = false;
             }
         },
         async openModal() {
             this.modalEdit.show();
         },
         closeComponent() {
-            this.modalEdit.hide()
-            this.resetForm()
-            emitter.emit("fetchUserList")
+            this.modalEdit.hide();
+            this.resetForm();
+            emitter.emit("fetchUserList");
         },
         resetForm() {
-            this.model.name = ""
-            this.model.email = ""
-            this.model.password = ""
-            this.model.role_id = null
-            this.model.unit_id = null
+            this.affiliasiId = null;
+            this.model = {
+                nama_affiliasi: "",
+                kota: "",
+                no_telepon: "",
+                email: "",
+                pic_name: "",
+                status: 1,
+            };
         },
-        initSelect2Filters() {
-            const selectElements = $(this.$el).find('select.select2-filter');
-            if (!selectElements.length || typeof $.fn.select2 !== 'function') {
-                return;
-            }
-            selectElements.select2({
-                theme: 'bootstrap-5',
-                width: '100%',
-                // placeholder: 'All',
-                allowClear: true,
-                // minimumResultsForSearch: 0,
-                // dropdownParent: $(this.$el),
-            });
-        },
-        destroySelect2() {
-            const selectElements = $(this.$el).find('select.select2-filter');
-            if (!selectElements.length) {
-                return;
-            }
-
-            selectElements.each(function () {
-                if ($(this).data('select2')) {
-                    $(this).select2('destroy');
-                }
-            });
-        },
-    },
-    computed: {},
-    watch: {
-
     },
 };
 </script>

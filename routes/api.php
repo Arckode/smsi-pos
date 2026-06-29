@@ -82,7 +82,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/nasabah/drafted', [NasabahController::class, 'drafted']);
     Route::get('/nasabah/available/batches', [NasabahController::class, 'availableBatches']);
     Route::post('/nasabah/store/batches', [NasabahController::class, 'storeBatch']);
-    Route::get('/nasabah/submitted', [NasabahController::class, 'submitted']);
+    // Route::get('/nasabah/submitted', [NasabahController::class, 'submitted']);
+    Route::get('/nasabah/submitted/details', [NasabahController::class, 'submittedDetails']);
+    Route::get('/nasabah/submitted/batch', [NasabahController::class, 'submittedBatch']);
     Route::get('/nasabah/accepted', [NasabahController::class, 'accepted']);
     Route::get('/nasabah/rejected', [NasabahController::class, 'rejected']);
     Route::post('/nasabah/store/rejected/{id}', [NasabahController::class, 'rejectingNasabah']);

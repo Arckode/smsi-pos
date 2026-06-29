@@ -77,20 +77,27 @@ class AffiliasiController extends Controller
         ]);
     }
 
-    public function show(UserAccess $userAccess)
+    public function show(Affiliasi $affiliasi)
     {
-        return response()->json($userAccess);
+        return response()->json([
+            'status' => true,
+            'data' => $affiliasi,
+        ]);
     }
 
-    public function update(Request $request, UserAccess $userAccess)
+    public function update(Request $request, Affiliasi $affiliasi)
     {
-        $userAccess->update($request->all());
-        return response()->json($userAccess);
+        $affiliasi->update($request->all());
+
+        return response()->json([
+            'status' => true,
+            'data' => $affiliasi,
+        ]);
     }
 
-    public function destroy(UserAccess $userAccess)
+    public function destroy(Affiliasi $affiliasi)
     {
-        $userAccess->delete();
+        $affiliasi->delete();
         return response()->json(null, 204);
     }
 }

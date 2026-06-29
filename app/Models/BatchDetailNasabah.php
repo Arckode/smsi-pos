@@ -19,4 +19,18 @@ class BatchDetailNasabah extends Model
         'status'
     ];
 
+    public function nasabah()
+    {
+        return $this->belongsTo(Nasabah::class, 'nasabah_id', 'id');
+    }
+
+    public function batch()
+    {
+        return $this->belongsTo(BatchNasabah::class, 'batch_id', 'id');
+    }
+
+    public function userPengaju()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
 }

@@ -18,4 +18,14 @@ class BatchNasabah extends Model
         'created_by',
     ];
 
+    public function details()
+    {
+        return $this->hasMany(BatchDetailNasabah::class, 'batch_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
 }

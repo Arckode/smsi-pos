@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('batch_id');
             $table->integer('nasabah_id');
             $table->boolean('status')->default(true);
+            $table->string('created_by')->nullable();
             $table->timestamps();
         });
     }

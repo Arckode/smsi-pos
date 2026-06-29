@@ -138,8 +138,8 @@
                     <span class="ms-2">finalTotal={{ progressVars.finalTotal }}</span>
                 </div> -->
 
-                <div class="toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 p-0 m-3" style="z-index: 110" role="alert" aria-live="assertive"
-                    aria-atomic="true" id="liveToast">
+                <div class="toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 p-0 m-3"
+                    style="z-index: 110" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast">
                     <div class="d-flex text-xxs">
                         <div class="toast-body">
                             Nasabah Found in the System
@@ -550,94 +550,230 @@
                                 placeholder="Search nasabah yang sudah pengajuan/menerima BI Checking"
                                 v-model="meta.search.submitted">
                         </div>
-                        <div v-if="loadContentSubmitted" class="d-flex justify-content-center p-4">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <div v-else class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
-                            <table class="table table-hover align-items-center mb-0" style="background-color: white;">
-                                <thead class="bg-white-100">
-                                    <tr>
-                                        <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
-                                        <th class="text-xxs font-weight-bold">Tanggal Pengajuan</th>
-                                        <th class="text-xxs font-weight-bold text-center">Status</th>
-                                        <th class="text-xxs font-weight-bold text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template v-if="collection.nasabah.submitted.data?.length > 0">
-                                        <tr v-for="item in collection.nasabah.submitted.data" :key="item.id">
-                                            <td class="align-middle text-lg">
-                                                <div class="d-flex px-3 py-1">
-                                                    <div class="d-flex flex-column justify-content-start ms-1">
-                                                        <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
-                                                            @click.prevent="editNasabah(item.id)">
-                                                            {{ item.nama_lengkap }}
+                        <ul class="nav nav-pills gx-3 mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item w-auto text-xs" role="presentation">
+                                <button class="nav-link active bg-white" id="pills-list-batch-details-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-list-batch-details" type="button"
+                                    role="tab" aria-controls="pills-list-batch-details" aria-selected="true">By
+                                    Nasabah</button>
+                            </li>
+                            <li class="nav-item w-auto text-xs" role="presentation">
+                                <button class="nav-link bg-white" id="pills-list-batch-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-list-batch" type="button" role="tab"
+                                    aria-controls="pills-list-batch" aria-selected="false">By Batch Lists</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div v-if="!loadContentSubmitted" class="tab-pane fade show active" id="pills-list-batch-details" role="tabpanel"
+                                aria-labelledby="pills-list-batch-details-tab">
+                                <div class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                                    <table class="table table-hover align-items-center mb-0"
+                                        style="background-color: white;">
+                                        <thead class="bg-white-100">
+                                            <tr>
+                                                <th class="text-xxs font-weight-bold">Nama Nasabah<br>Affiliasi</th>
+                                                <th class="text-xxs font-weight-bold">Nomor Pengajuan</th>
+                                                <th class="text-xxs font-weight-bold text-center">Tanggal Pengajuan</th>
+                                                <th class="text-xxs font-weight-bold text-center">Status</th>
+                                                <th class="text-xxs font-weight-bold text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template v-if="collection.nasabah.submittedDetails.data?.length > 0">
+                                                <tr v-for="item in collection.nasabah.submittedDetails.data"
+                                                    :key="item.id">
+                                                    <td class="align-middle text-lg">
+                                                        <div class="d-flex px-3 py-1">
+                                                            <div class="d-flex flex-column justify-content-start ms-1">
+                                                                <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
+                                                                    @click.prevent="editNasabah(item.nasabah.id)">
+                                                                    {{ item.nasabah.nama_lengkap }}
+                                                                </a>
+                                                                <p class="text-xxs text-secondary mb-0">
+                                                                    {{ item.nasabah.affiliasi ?
+                                                                        item.nasabah.affiliasi.nama_affiliasi :
+                                                                        '-'
+                                                                    }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="align-middle text-xxs">
+                                                        {{ item.batch ? item.batch.batch_number : '-' }}
+                                                        <br>
+                                                        Diajukan oleh {{ item.user_pengaju ? item.user_pengaju.name :
+                                                            '-' }}
+                                                    </td>
+                                                    <td class="align-middle text-center text-xxs">
+                                                        {{ item.created_at ? new
+                                                            Date(item.created_at).toLocaleDateString('id-ID', {
+                                                                day: '2-digit',
+                                                                month: 'long',
+                                                                year: 'numeric'
+                                                            }) : '-' }}
+                                                    </td>
+                                                    <td class="align-middle text-center text-lg">
+                                                        <a class="btn btn-sm mb-0 text-xxs"
+                                                            :class="item.nasabah.status_pengajuan == 'Submitted' ? 'btn-white' : 'btn-info'">
+                                                            {{ item.nasabah.status_pengajuan }}
                                                         </a>
-                                                        <p class="text-xxs text-secondary mb-0">
-                                                            {{ item.affiliasi ? item.affiliasi.nama_affiliasi : '-'
-                                                            }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="align-middle text-xxs">
-                                                {{ item.created_at ? new
-                                                    Date(item.created_at).toLocaleDateString('id-ID', {
-                                                        day: '2-digit',
-                                                        month: 'long',
-                                                        year: 'numeric'
-                                                    }) : '-' }}
-                                            </td>
-                                            <td class="align-middle text-center text-lg">
-                                                <a class="btn btn-sm mb-0 text-xxs"
-                                                    :class="item.status_pengajuan == 'Submitted' ? 'btn-white' : 'btn-info'">
-                                                    {{ item.status_pengajuan }}
-                                                </a>
-                                            </td>
-                                            <td class="align-middle text-center text-lg">
-                                                <div class="d-flex gap-2 justify-content-center">
-                                                    <a class="btn btn-sm mb-0 btn-warning text-xxs"
-                                                        @click.prevent="confirmRejectForm(item.id)">
-                                                        <span>Reject</span>
-                                                    </a>
-                                                    <a class="btn btn-sm mb-0 btn-success text-xxs"
-                                                        @click.prevent="confirmAcceptForm(item.id)">
-                                                        <span>Accept</span>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                            <div v-if="collection.nasabah.drafted.data?.length > 0"
-                                class="d-flex justify-content-between px-3 py-3 align-items-center flex-wrap"
-                                style="background-color: white;">
-                                <div class="d-flex flex-column">
-                                    <p class="font-weight-semibold mb-0 pb-0 text-dark text-xxs">Halaman {{
-                                        meta.page.drafted.current_page }} / {{
-                                            meta.page.drafted.last_page }}
-                                    </p>
-                                    <p class="font-weight-semibold mb-0 pt-0 text-secondary text-xxs">
-                                        Total: {{ meta.total.drafted }} Data
-                                    </p>
+                                                    </td>
+                                                    <td class="align-middle text-center text-lg">
+                                                        <div class="d-flex gap-2 justify-content-center">
+                                                            <a class="btn btn-sm mb-0 btn-warning text-xxs"
+                                                                @click.prevent="confirmRejectForm(item.nasabah.id)">
+                                                                <span>Reject</span>
+                                                            </a>
+                                                            <a class="btn btn-sm mb-0 btn-success text-xxs"
+                                                                @click.prevent="confirmAcceptForm(item.nasabah.id)">
+                                                                <span>Accept</span>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                    <!-- <div v-if="collection.nasabah.drafted.data?.length > 0"
+                                        class="d-flex justify-content-between px-3 py-3 align-items-center flex-wrap"
+                                        style="background-color: white;">
+                                        <div class="d-flex flex-column">
+                                            <p class="font-weight-semibold mb-0 pb-0 text-dark text-xxs">Halaman {{
+                                                meta.page.drafted.current_page }} / {{
+                                                    meta.page.drafted.last_page }}
+                                            </p>
+                                            <p class="font-weight-semibold mb-0 pt-0 text-secondary text-xxs">
+                                                Total: {{ meta.total.drafted }} Data
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <button v-if="collection.nasabah.drafted?.links"
+                                                v-for="(link, index) in collection.nasabah.submittedDetails.links" :key="index"
+                                                @click="changePageSubmittedNasabahList(link.url)"
+                                                class="btn btn-sm rounded-2 btn-white mb-0 text-xxs ms-1"
+                                                :disabled="link.active">
+                                                <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
+                                                <span
+                                                    v-else-if="index === (collection.nasabah.submittedDetails?.links?.length - 1)"><i
+                                                        class="fas fa-chevron-right"></i></span>
+                                                <span v-else>{{ link.label }}</span>
+                                            </button>
+                                        </div>
+                                    </div> -->
                                 </div>
-                                <div>
-                                    <button v-if="collection.nasabah.drafted?.links"
-                                        v-for="(link, index) in collection.nasabah.submitted.links" :key="index"
-                                        @click="changePageSubmittedNasabahList(link.url)"
-                                        class="btn btn-sm rounded-2 btn-white mb-0 text-xxs ms-1"
-                                        :disabled="link.active">
-                                        <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
-                                        <span v-else-if="index === (collection.nasabah.submitted?.links?.length - 1)"><i
-                                                class="fas fa-chevron-right"></i></span>
-                                        <span v-else>{{ link.label }}</span>
-                                    </button>
+                            </div>
+                            <div v-if="!loadContentSubmitted" class="tab-pane fade" id="pills-list-batch" role="tabpanel"
+                                aria-labelledby="pills-list-batch-tab">
+                                <div class="table-responsive" style="border: 1px solid #e0e0e0; border-radius: 8px;">
+                                    <table class="table table-hover align-items-center mb-0"
+                                        style="background-color: white;">
+                                        <thead class="bg-white-100">
+                                            <tr>
+                                                <th class="text-xxs font-weight-bold" style="width: 150px;">Nomor<br>Tanggal Pengajuan</th>
+                                                <th class="text-xxs font-weight-bold">Pengajuan Oleh<br>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template v-if="collection.nasabah.submittedBatch.data?.length > 0">
+                                                <tr v-for="item in collection.nasabah.submittedBatch.data"
+                                                    :key="item.id">
+                                                    <td class="align-middle text-lg">
+                                                        <div class="d-flex px-3 py-1">
+                                                            <div class="d-flex flex-column justify-content-start ms-1">
+                                                                <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
+                                                                    @click.prevent="editNasabah(item.id)">
+                                                                    {{ item.batch_number }}
+                                                                </a>
+                                                                <p class="text-xxs text-secondary mb-0">
+                                                                    {{ item.created_at ? new
+                                                                        Date(item.created_at).toLocaleDateString('id-ID', {
+                                                                            day: '2-digit',
+                                                                            month: 'long',
+                                                                            year: 'numeric'
+                                                                    }) : '-' }}
+                                                                </p>
+                                                            </div>
+
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-xxs">
+                                                        <p class="text-xxs ms-3 text-secondary mb-0">{{ item.user ?
+                                                            item.user.name : '-' }}</p>
+                                                        <div class="accordion" :id="`accordion-${item.id}`">
+                                                            <div class="accordion-item">
+                                                                <h2 class="accordion-header" :id="`heading-${item.id}`">
+                                                                    <button class="accordion-button text-xxs p-0 ms-3 text-info"
+                                                                        type="button" data-bs-toggle="collapse"
+                                                                        :data-bs-target="`#collapse-${item.id}`"
+                                                                        aria-expanded="true"
+                                                                        aria-controls="collapseOne">
+                                                                        {{ item.details.length }} Nasabah
+                                                                    </button>
+                                                                </h2>
+                                                            </div>
+                                                            <div :id="`collapse-${item.id}`"
+                                                                class="accordion-collapse collapse"
+                                                                aria-labelledby="headingOne"
+                                                                :data-bs-parent="`accordion-${item.id}`">
+                                                                <div class="accordion-body p-0">
+                                                                    <ul class="list-group list-group-flush">
+                                                                        <li v-for="detail in item.details"
+                                                                            :key="detail.id"
+                                                                            class="list-group-item d-flex justify-content-between align-items-center text-xxs p-0 ms-4 my-1 bg-transparent">
+                                                                            <p class="mb-0 text-xxs text-bold">{{ detail.nasabah.nama_lengkap }}<br>
+                                                                            <span class="text-xxs text-secondary text-normal">{{ detail.nasabah.affiliasi ?
+                                                                                detail.nasabah.affiliasi.nama_affiliasi :
+                                                                                '-' }}</span></p>
+                                                                            
+                                                                            <span
+                                                                                class="badge rounded-pill" :class="{
+                                                                                    'bg-success': detail.nasabah.status_pengajuan === 'Disetujui',
+                                                                                    'bg-warning': detail.nasabah.status_pengajuan === 'Dalam Proses',
+                                                                                    'bg-danger': detail.nasabah.status_pengajuan === 'Ditolak'
+                                                                                }">
+                                                                                {{ detail.nasabah.status_pengajuan ? detail.nasabah.status_pengajuan : '-' }}
+                                                                            </span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                    <!-- <div v-if="collection.nasabah.drafted.data?.length > 0"
+                                        class="d-flex justify-content-between px-3 py-3 align-items-center flex-wrap"
+                                        style="background-color: white;">
+                                        <div class="d-flex flex-column">
+                                            <p class="font-weight-semibold mb-0 pb-0 text-dark text-xxs">Halaman {{
+                                                meta.page.drafted.current_page }} / {{
+                                                    meta.page.drafted.last_page }}
+                                            </p>
+                                            <p class="font-weight-semibold mb-0 pt-0 text-secondary text-xxs">
+                                                Total: {{ meta.total.drafted }} Data
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <button v-if="collection.nasabah.drafted?.links"
+                                                v-for="(link, index) in collection.nasabah.submittedDetails.links" :key="index"
+                                                @click="changePageSubmittedNasabahList(link.url)"
+                                                class="btn btn-sm rounded-2 btn-white mb-0 text-xxs ms-1"
+                                                :disabled="link.active">
+                                                <span v-if="index === 0"><i class="fas fa-chevron-left"></i></span>
+                                                <span
+                                                    v-else-if="index === (collection.nasabah.submittedDetails?.links?.length - 1)"><i
+                                                        class="fas fa-chevron-right"></i></span>
+                                                <span v-else>{{ link.label }}</span>
+                                            </button>
+                                        </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <div v-show="meta.currentTab === 'rejected'" class="tab-pane fade show"
@@ -861,11 +997,11 @@ export default {
     created() {
         emitter.on('fetchUnvalidatedList', this.fetchUnvalidatedNasabahList);
         emitter.on('fetchDraftedList', this.fetchDraftedNasabahList);
-        emitter.on('fetchSubmittedList', this.fetchSubmittedNasabahList);
+        emitter.on('fetchSubmittedList', this.fetchSubmitted);
         emitter.on('fetchAcceptedList', this.fetchAcceptedNasabahList);
         emitter.on('fetchRejectedList', this.fetchRejectedNasabahList);
 
-        emitter.on('batchStored', [this.fetchSubmittedNasabahList, this.fetchDraftedNasabahList]);
+        emitter.on('batchStored', [this.fetchSubmitted, this.fetchDraftedNasabahList]);
 
 
     },
@@ -892,6 +1028,8 @@ export default {
                     notValidated: { current_page: 1, last_page: 1 },
                     drafted: { current_page: 1, last_page: 1 },
                     submitted: { current_page: 1, last_page: 1 },
+                    submittedDetails: { current_page: 1, last_page: 1 },
+                    submittedBatch: { current_page: 1, last_page: 1 },
                     accepted: { current_page: 1, last_page: 1 },
                     rejected: { current_page: 1, last_page: 1 },
                 },
@@ -922,6 +1060,8 @@ export default {
                     notValidated: { data: [], current_page: 1, last_page: 1 },
                     drafted: { data: [], current_page: 1, last_page: 1 },
                     submitted: { data: [], current_page: 1, last_page: 1 },
+                    submittedDetails: { data: [], current_page: 1, last_page: 1 },
+                    submittedBatch: { data: [], current_page: 1, last_page: 1 },
                     accepted: { data: [], current_page: 1, last_page: 1 },
                     rejected: { data: [], current_page: 1, last_page: 1 },
                 },
@@ -951,7 +1091,7 @@ export default {
             // await this.fetchUserListByStatus(this.meta.currentTab);
             await this.fetchUnvalidatedNasabahList();
             await this.fetchDraftedNasabahList();
-            await this.fetchSubmittedNasabahList();
+            await this.fetchSubmitted();
             await this.fetchRejectedNasabahList();
             await this.fetchAcceptedNasabahList();
             this.loadContent = false;
@@ -1510,9 +1650,18 @@ export default {
          * 
          * 
          */
-        async fetchSubmittedNasabahList() {
+        async fetchSubmitted() {
             this.loadContentSubmitted = true;
-            let endpoint = `${BASEURL}/api/nasabah/submitted`;
+            await this.fetchSubmittedNasabahList();
+
+            this.collection.nasabah.submitted.count = this.collection.nasabah.submittedDetails.count;
+            // console.log('Submitted count:', this.collection.nasabah.submittedDetails);
+            await this.fetchSubmittedBatchList();
+            this.loadContentSubmitted = false;
+        },
+        async fetchSubmittedNasabahList() {
+            // this.loadContentSubmitted = true;
+            let endpoint = `${BASEURL}/api/nasabah/submitted/details`;
             try {
                 let response = await axios.get(endpoint, {
                     headers: {
@@ -1524,43 +1673,95 @@ export default {
                         'unit': this.meta.unit,
                     }
                 });
-                this.collection.nasabah.submitted = response.data.data || response.data;
-                this.meta.total.submitted = this.collection.nasabah.submitted.total || 0;
-                this.meta.page.submitted.current_page = this.collection.nasabah.submitted.current_page || 1;
-                this.meta.page.submitted.last_page = this.collection.nasabah.submitted.last_page || 1;
-                this.loadContentSubmitted = false;
+                // this.collection.nasabah.submitted.count = response.data.data.count;
+                this.collection.nasabah.submittedDetails = response.data.data || response.data;
+                this.meta.total.submittedDetails = this.collection.nasabah.submittedDetails.total || 0;
+                this.meta.page.submittedDetails.current_page = this.collection.nasabah.submittedDetails.current_page || 1;
+                this.meta.page.submittedDetails.last_page = this.collection.nasabah.submittedDetails.last_page || 1;
+                // this.loadContentSubmitted = false;
             } catch (error) {
                 console.error("Error fetching submitted nasabah list: ", error);
                 this.loadContentSubmitted = false;
             }
         },
-        async changePageSubmittedNasabahList(url) {
-            if (url == null) {
-                return false
-            }
+        async fetchSubmittedBatchList() {
+            // this.loadContentSubmitted = true;
+            let endpoint = `${BASEURL}/api/nasabah/submitted/batch`;
             try {
-                Swal.fire({
-                    background: '#ffffff00',
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                })
-                let response = await axios.get(url, {
+                let response = await axios.get(endpoint, {
                     headers: {
                         Authorization: 'Bearer ' + this.$token(),
                     },
                     params: {
                         'search': this.meta.search.submitted,
+                        'role': this.meta.role,
+                        'unit': this.meta.unit,
                     }
                 });
-                this.collection.nasabah.submitted = response.data.data;
-                this.meta.page.submitted.current_page = this.collection.nasabah.submitted.current_page;
-                this.meta.page.submitted.last_page = this.collection.nasabah.submitted.last_page;
-                Swal.close()
+                this.collection.nasabah.submittedBatch = response.data.data || response.data;
+                this.meta.total.submittedBatch = this.collection.nasabah.submittedBatch.total || 0;
+                this.meta.page.submittedBatch.current_page = this.collection.nasabah.submittedBatch.current_page || 1;
+                this.meta.page.submittedBatch.last_page = this.collection.nasabah.submittedBatch.last_page || 1;
+                // this.loadContentSubmitted = false;
             } catch (error) {
-                console.error("Error fetching document list: ", error);
+                console.error("Error fetching submitted nasabah list: ", error);
+                this.loadContentSubmitted = false;
             }
         },
+        // async changePageSubmittedDetailsNasabahList(url) {
+        //     if (url == null) {
+        //         return false
+        //     }
+        //     try {
+        //         Swal.fire({
+        //             background: '#ffffff00',
+        //             didOpen: () => {
+        //                 Swal.showLoading();
+        //             }
+        //         })
+        //         let response = await axios.get(url, {
+        //             headers: {
+        //                 Authorization: 'Bearer ' + this.$token(),
+        //             },
+        //             params: {
+        //                 'search': this.meta.search.submitted,
+        //             }
+        //         });
+        //         this.collection.nasabah.submittedDetails = response.data.data;
+        //         this.meta.page.submitted.current_page = this.collection.nasabah.submittedDetails.current_page;
+        //         this.meta.page.submitted.last_page = this.collection.nasabah.submittedDetails.last_page;
+        //         Swal.close()
+        //     } catch (error) {
+        //         console.error("Error fetching document list: ", error);
+        //     }
+        // },
+        // async changePageSubmittedBatchNasabahList(url) {
+        //     if (url == null) {
+        //         return false
+        //     }
+        //     try {
+        //         Swal.fire({
+        //             background: '#ffffff00',
+        //             didOpen: () => {
+        //                 Swal.showLoading();
+        //             }
+        //         })
+        //         let response = await axios.get(url, {
+        //             headers: {
+        //                 Authorization: 'Bearer ' + this.$token(),
+        //             },
+        //             params: {
+        //                 'search': this.meta.search.submitted,
+        //             }
+        //         });
+        //         this.collection.nasabah.submittedBatch = response.data.data;
+        //         this.meta.page.submitted.current_page = this.collection.nasabah.submittedBatch.current_page;
+        //         this.meta.page.submitted.last_page = this.collection.nasabah.submittedBatch.last_page;
+        //         Swal.close()
+        //     } catch (error) {
+        //         console.error("Error fetching document list: ", error);
+        //     }
+        // },
 
 
         /**
@@ -1866,7 +2067,7 @@ export default {
     watch: {
         'meta.search.notValidated': 'fetchUnvalidatedNasabahList',
         'meta.search.drafted': 'fetchDraftedNasabahList',
-        'meta.search.submitted': 'fetchSubmittedNasabahList',
+        'meta.search.submitted': 'fetchSubmitted',
         'meta.search.accepted': 'fetchAcceptedNasabahList',
         'meta.search.rejected': 'fetchRejectedNasabahList',
         'meta.search.global': function (newVal) {

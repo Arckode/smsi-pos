@@ -85,7 +85,7 @@ class NasabahController extends Controller
                         ->orWhere('nik', 'like', '%' . request()->search . '%');
                 }
             )
-            ->paginate(10);
+            ->get();
 
         return response()->json([
             'status' => true,
@@ -126,6 +126,7 @@ class NasabahController extends Controller
                 $batchDetails[] = [
                     'batch_id' => $batch->id,
                     'nasabah_id' => $nasabahId,
+                    'created_by' => auth()->user()->id,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
@@ -175,26 +176,56 @@ class NasabahController extends Controller
             'data' => $data,
         ]);
     }
-    public function submitted()
+    public function submittedDetails()
     {
         // $this->authorizeSubmoduleAction('read');
         $relations = [
-            'affiliasi:id,nama_affiliasi',
+            // 'affiliasi:id,nama_affiliasi',
+            'batch',
+            'nasabah.affiliasi',
+            'userPengaju:id,name',
         ];
 
-        $paginator = Nasabah::with($relations)->wherein('status_pengajuan', ['Submitted', 'User Review'])
+        $paginator = BatchDetailNasabah::with($relations)->where('status', true)
             ->when(
                 request()->has('search') && request()->search != '',
                 function ($q) {
-                    $q->where('nama_lengkap', 'like', '%' . request()->search . '%')
-                        ->orWhere('nik', 'like', '%' . request()->search . '%');
+                    $q->whereHas('nasabah', function ($subQ) {
+                        $subQ->where('nama_lengkap', 'like', '%' . request()->search . '%');
+                    });
                 }
             )
             ->paginate(10);
         $data = $paginator->toArray();
 
         $data['count'] = Nasabah::wherein('status_pengajuan', ['Submitted', 'User Review'])->count();
-            return response()->json([
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+        ]);
+    }
+    public function submittedBatch()
+    {
+        // $this->authorizeSubmoduleAction('read');
+        $relations = [
+            // 'affiliasi:id,nama_affiliasi',
+            'details.nasabah.affiliasi',
+            'user:id,name',
+        ];
+        $paginator = BatchNasabah::with($relations)
+            ->when(
+                request()->has('search') && request()->search != '',
+                function ($q) {
+                    $q->whereHas('details.nasabah', function ($subQ) {
+                        $subQ->where('nama_lengkap', 'like', '%' . request()->search . '%');
+                    });
+                }
+            )
+            ->paginate(10);
+        $data = $paginator->toArray();
+
+        $data['count'] = Nasabah::wherein('status_pengajuan', ['Submitted', 'User Review'])->count();
+        return response()->json([
             'status' => true,
             'data' => $data,
         ]);
@@ -217,7 +248,7 @@ class NasabahController extends Controller
             ->paginate(10);
         $data = $paginator->toArray();
 
-        $data['count'] = Nasabah::where('status_pengajuan', 'Approved')->count();    
+        $data['count'] = Nasabah::where('status_pengajuan', 'Approved')->count();
         return response()->json([
             'status' => true,
             'data' => $data,
@@ -308,6 +339,13 @@ class NasabahController extends Controller
                 'created_by' => auth()->user()->id,
             ]);
 
+            $update_nasabah_batch_detail_status = BatchDetailNasabah::where('nasabah_id', $nasabah->id)->get();
+
+            foreach ($update_nasabah_batch_detail_status as $nasabah_batch_detail_status) {
+                $nasabah_batch_detail_status->status = false;
+                $nasabah_batch_detail_status->save();
+            }
+
             DB::commit();
 
             return response()->json([
@@ -349,6 +387,13 @@ class NasabahController extends Controller
                 'status_changed_at' => now(),
                 'created_by' => auth()->user()->id,
             ]);
+
+            $update_nasabah_batch_detail_status = BatchDetailNasabah::where('nasabah_id', $nasabah->id)->get();
+
+            foreach ($update_nasabah_batch_detail_status as $nasabah_batch_detail_status) {
+                $nasabah_batch_detail_status->status = false;
+                $nasabah_batch_detail_status->save();
+            }
 
             DB::commit();
 
