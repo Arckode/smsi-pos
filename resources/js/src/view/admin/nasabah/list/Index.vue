@@ -680,8 +680,7 @@
                                                     <td class="align-middle text-lg">
                                                         <div class="d-flex px-3 py-1">
                                                             <div class="d-flex flex-column justify-content-start ms-1">
-                                                                <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold"
-                                                                    @click.prevent="editNasabah(item.id)">
+                                                                <a class="mb-0 text-xxs font-weight-semibold text-primary text-bold">
                                                                     {{ item.batch_number }}
                                                                 </a>
                                                                 <p class="text-xxs text-secondary mb-0">

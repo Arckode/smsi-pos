@@ -21,4 +21,8 @@ class NasabahStatusLog extends Model
         'created_by',
     ];
 
+    public function nasabah()
+    {
+        return $this->belongsTo(Nasabah::class, 'id', 'nasabah_id');
+    }
 }

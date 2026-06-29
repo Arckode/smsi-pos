@@ -296,6 +296,14 @@ class NasabahController extends Controller
                 'payload_after' => json_encode($nasabah->toArray()),
                 'created_by' => auth()->user()->id,
             ]);
+            
+            NasabahStatusLog::create([
+                'nasabah_id' => $nasabah->id,
+                'status_before' => 'Unvalidated',
+                'status_after' => 'Drafted / Validated',
+                'status_changed_at' => now(),
+                'created_by' => auth()->user()->id,
+            ]);
 
             DB::commit();
 
@@ -321,7 +329,6 @@ class NasabahController extends Controller
 
             $nasabah = Nasabah::findOrFail($id);
             $nasabah->status_pengajuan = 'Rejected';
-            $nasabah->save();
 
             NasabahLog::create([
                 'action' => 'Reject',
@@ -338,6 +345,8 @@ class NasabahController extends Controller
                 'status_changed_at' => now(),
                 'created_by' => auth()->user()->id,
             ]);
+
+            $nasabah->save();
 
             $update_nasabah_batch_detail_status = BatchDetailNasabah::where('nasabah_id', $nasabah->id)->get();
 
@@ -370,7 +379,6 @@ class NasabahController extends Controller
 
             $nasabah = Nasabah::findOrFail($id);
             $nasabah->status_pengajuan = 'Approved';
-            $nasabah->save();
 
             NasabahLog::create([
                 'action' => 'Approved',
@@ -387,6 +395,8 @@ class NasabahController extends Controller
                 'status_changed_at' => now(),
                 'created_by' => auth()->user()->id,
             ]);
+
+            $nasabah->save();
 
             $update_nasabah_batch_detail_status = BatchDetailNasabah::where('nasabah_id', $nasabah->id)->get();
 
@@ -620,7 +630,14 @@ class NasabahController extends Controller
     {
         // $this->authorizeSubmoduleAction('read');
 
-        $user = Nasabah::findOrFail($id);
+        $relations = [
+            'affiliasi:id,nama_affiliasi',
+            'log_status' => function ($query) {
+                $query->orderBy('status_changed_at', 'desc');
+            },
+        ];
+
+        $user = Nasabah::with($relations)->findOrFail($id);
 
         return response()->json([
             'status' => true,

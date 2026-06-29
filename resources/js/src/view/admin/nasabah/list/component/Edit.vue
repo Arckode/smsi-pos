@@ -1656,6 +1656,7 @@ export default {
                 this.model.data_dokumen.dokumen_selfie = response.data.data.dokumen_selfie
                 this.model.data_dokumen.dokumen_surat_pernyataan = response.data.data.dokumen_surat_pernyataan
 
+                this.selectedDocs('dokumen_ktp')
 
                 console.log('Nasabah data:', this.model);
             } catch (error) {

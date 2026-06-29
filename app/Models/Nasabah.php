@@ -114,4 +114,9 @@ class Nasabah extends Model
     {
         return $this->belongsTo(Affiliasi::class, 'affiliasi_id');
     }
+
+    public function log_status()
+    {
+        return $this->hasMany(NasabahStatusLog::class, 'nasabah_id', 'id');
+    }
 }
