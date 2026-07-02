@@ -1552,7 +1552,7 @@ export default {
             }
         },
         async uploadFile() {
-            let endpoint = `${BASEURL}/api/nasabah/upload/`;
+            let endpoint = `${BASEURL}/api/nasabah/upload`;
             try {
                 let payload = {
                     id: this.userid,
@@ -1567,6 +1567,7 @@ export default {
                     },
                 });
                 console.log('Update response:', response);
+                await this.fetchDocuments(this.userid);
                 Swal.fire(
                     'Saved!',
                     'User has been saved.',
@@ -1581,6 +1582,32 @@ export default {
                 )
             }
 
+        },
+        async fetchDocuments(id) {
+            let endpoint = `${BASEURL}/api/nasabah/${id}/documents`;
+            try {
+                let response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$token(),
+                    },
+                });
+
+                const documents = response.data.data || [];
+                const docsMap = {};
+
+                documents.forEach((doc) => {
+                    docsMap[doc.doc_type] = doc.location_url;
+                });
+
+                this.model.data_dokumen = {
+                    ...this.model.data_dokumen,
+                    ...docsMap,
+                };
+
+                this.file_management.selected_preview = this.model.data_dokumen[this.file_management.selected_docs_section] || null;
+            } catch (error) {
+                console.error('Error fetching nasabah documents:', error);
+            }
         },
         async fetchNasabah(id) {
             let endpoint = `${BASEURL}/api/nasabah/${id}`;
@@ -1647,15 +1674,7 @@ export default {
                 this.model.data_kontak.alamat_kontak_darurat = response.data.data.alamat_kontak_darurat
                 this.model.data_kontak.no_hp_kontak_darurat = response.data.data.no_hp_kontak_darurat
 
-                this.model.data_dokumen.dokumen_ktp = response.data.data.dokumen_ktp
-                this.model.data_dokumen.dokumen_kartu_keluarga = response.data.data.dokumen_kartu_keluarga
-                this.model.data_dokumen.dokumen_npwp = response.data.data.dokumen_npwp
-                this.model.data_dokumen.dokumen_ktp_pasangan = response.data.data.dokumen_ktp_pasangan
-                this.model.data_dokumen.dokumen_asuransi = response.data.data.dokumen_asuransi
-                this.model.data_dokumen.dokumen_id_card_perusahaan = response.data.data.dokumen_id_card_perusahaan
-                this.model.data_dokumen.dokumen_selfie = response.data.data.dokumen_selfie
-                this.model.data_dokumen.dokumen_surat_pernyataan = response.data.data.dokumen_surat_pernyataan
-
+                await this.fetchDocuments(id);
                 this.selectedDocs('dokumen_ktp')
 
                 console.log('Nasabah data:', this.model);

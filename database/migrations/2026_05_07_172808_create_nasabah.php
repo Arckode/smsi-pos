@@ -81,29 +81,29 @@ return new class extends Migration
             $table->string('no_hp_kontak_darurat')->nullable();
 
             // Section H: Dokumen Pendukung (Menyimpan path/file name)
-            $table->string('dokumen_ktp')->nullable();
-            $table->integer('uploader_dokumen_ktp')->nullable();
+            // $table->string('dokumen_ktp')->nullable();
+            // $table->integer('uploader_dokumen_ktp')->nullable();
 
-            $table->string('dokumen_kartu_keluarga')->nullable();
-            $table->integer('uploader_dokumen_kartu_keluarga')->nullable();
+            // $table->string('dokumen_kartu_keluarga')->nullable();
+            // $table->integer('uploader_dokumen_kartu_keluarga')->nullable();
 
-            $table->string('dokumen_npwp')->nullable();
-            $table->integer('uploader_dokumen_npwp')->nullable();
+            // $table->string('dokumen_npwp')->nullable();
+            // $table->integer('uploader_dokumen_npwp')->nullable();
             
-            $table->string('dokumen_ktp_pasangan')->nullable();
-            $table->integer('uploader_dokumen_ktp_pasangan')->nullable();
+            // $table->string('dokumen_ktp_pasangan')->nullable();
+            // $table->integer('uploader_dokumen_ktp_pasangan')->nullable();
 
-            $table->string('dokumen_asuransi')->nullable();
-            $table->integer('uploader_dokumen_asuransi')->nullable();
+            // $table->string('dokumen_asuransi')->nullable();
+            // $table->integer('uploader_dokumen_asuransi')->nullable();
 
-            $table->string('dokumen_id_card_perusahaan')->nullable();
-            $table->integer('uploader_dokumen_id_card_perusahaan')->nullable();
+            // $table->string('dokumen_id_card_perusahaan')->nullable();
+            // $table->integer('uploader_dokumen_id_card_perusahaan')->nullable();
 
-            $table->string('dokumen_selfie')->nullable();
-            $table->integer('uploader_dokumen_selfie')->nullable();
+            // $table->string('dokumen_selfie')->nullable();
+            // $table->integer('uploader_dokumen_selfie')->nullable();
 
-            $table->string('dokumen_surat_pernyataan')->nullable();
-            $table->integer('uploader_dokumen_surat_pernyataan')->nullable();
+            // $table->string('dokumen_surat_pernyataan')->nullable();
+            // $table->integer('uploader_dokumen_surat_pernyataan')->nullable();
 
             // Status dan tracking
             $table->enum('status_pengajuan', ['Draft', 'Submitted', 'User Review', 'Approved', 'Rejected'])->default('Draft');

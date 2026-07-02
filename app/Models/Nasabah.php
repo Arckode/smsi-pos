@@ -79,29 +79,29 @@ class Nasabah extends Model
         'no_hp_kontak_darurat',
 
         // Section H: Data Dokumen Pendukung
-        'dokumen_ktp',
-        'uploader_dokumen_ktp',
+        // 'dokumen_ktp',
+        // 'uploader_dokumen_ktp',
 
-        'dokumen_kartu_keluarga',
-        'uploader_dokumen_kartu_keluarga',
+        // 'dokumen_kartu_keluarga',
+        // 'uploader_dokumen_kartu_keluarga',
         
-        'dokumen_npwp',
-        'uploader_dokumen_npwp',
+        // 'dokumen_npwp',
+        // 'uploader_dokumen_npwp',
         
-        'dokumen_ktp_pasangan',
-        'uploader_dokumen_ktp_pasangan',
+        // 'dokumen_ktp_pasangan',
+        // 'uploader_dokumen_ktp_pasangan',
         
-        'dokumen_asuransi',
-        'uploader_dokumen_asuransi',
+        // 'dokumen_asuransi',
+        // 'uploader_dokumen_asuransi',
         
-        'dokumen_id_card_perusahaan',
-        'uploader_dokumen_id_card_perusahaan',
+        // 'dokumen_id_card_perusahaan',
+        // 'uploader_dokumen_id_card_perusahaan',
         
-        'dokumen_selfie',
-        'uploader_dokumen_selfie',
+        // 'dokumen_selfie',
+        // 'uploader_dokumen_selfie',
         
-        'dokumen_surat_pernyataan',
-        'uploader_dokumen_surat_pernyataan',
+        // 'dokumen_surat_pernyataan',
+        // 'uploader_dokumen_surat_pernyataan',
         
         'validation',
         'validated_by',
@@ -118,5 +118,15 @@ class Nasabah extends Model
     public function log_status()
     {
         return $this->hasMany(NasabahStatusLog::class, 'nasabah_id', 'id');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(NasabahDocument::class, 'nasabah_id', 'id');
+    }
+
+    public function log_documents()
+    {
+        return $this->hasMany(NasabahDocumentLog::class, 'nasabah_id', 'id');
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAccessRequest;
 use App\Models\Nasabah;
+use App\Models\NasabahDocument;
+use App\Models\NasabahDocumentLog;
 use App\Models\NasabahLog;
 use App\Models\NasabahStatusLog;
 use App\Models\BatchNasabah;
@@ -16,6 +18,7 @@ use App\Models\MenuUserAccess;
 use App\Models\MenuUserSubmodulePermission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 use App\Mail\PengajuanMail;
 use Illuminate\Support\Facades\Mail;
@@ -632,12 +635,19 @@ class NasabahController extends Controller
 
         $relations = [
             'affiliasi:id,nama_affiliasi',
+            'documents' => function ($query) {
+                $query->orderBy('created_at', 'asc');
+            },
             'log_status' => function ($query) {
                 $query->orderBy('status_changed_at', 'desc');
             },
         ];
 
         $user = Nasabah::with($relations)->findOrFail($id);
+
+        foreach ($user->documents as $document) {
+            $user->setAttribute($document->doc_type, $document->location_url);
+        }
 
         return response()->json([
             'status' => true,
@@ -833,6 +843,56 @@ class NasabahController extends Controller
         return view('asuransi', ['data' => $nasabah]);
     }
 
+    public function listDocuments(Nasabah $nasabah)
+    {
+        $documents = $nasabah->documents()->orderBy('created_at', 'asc')->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $documents,
+        ]);
+    }
+
+    public function updateDocument(Request $request, Nasabah $nasabah, NasabahDocument $document)
+    {
+        $this->authorizeDocumentAccess($nasabah, $document);
+
+        $data = $request->validate([
+            'doc_type' => 'nullable|string',
+            'location_url' => 'nullable|string',
+            'status' => 'nullable|boolean',
+            'uploaded_by' => 'nullable|integer',
+        ]);
+
+        $document->fill($data);
+        $document->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Document updated successfully.',
+            'data' => $document,
+        ]);
+    }
+
+    public function deleteDocument(Nasabah $nasabah, NasabahDocument $document)
+    {
+        $this->authorizeDocumentAccess($nasabah, $document);
+
+        $document->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Document deleted successfully.',
+        ]);
+    }
+
+    private function authorizeDocumentAccess(Nasabah $nasabah, NasabahDocument $document): void
+    {
+        if ($document->nasabah_id !== $nasabah->id) {
+            abort(404);
+        }
+    }
+
     public function upload(Request $request)
     {
         try {
@@ -843,22 +903,50 @@ class NasabahController extends Controller
 
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-                $filename = date('dmY_Hi') . '_' . str_replace(' ', '', $nasabah->nama_lengkap) . '_' . $request->input('jenis_dokumen') . '.' . $file->getClientOriginalExtension();
+                $docType = $request->input('jenis_dokumen');
+                $uniqueId = Str::uuid()->toString();
+                $filename = date('dmY_Hi') . '_' . $uniqueId . '_' . str_replace(' ', '', $nasabah->nama_lengkap) . '_' . $docType . '.' . $file->getClientOriginalExtension();
                 $filePath = $file->storeAs('uploads', $filename, 'public');
 
-                $column = $request->input('jenis_dokumen');
-                $nasabah->$column = $filePath;
+                NasabahDocument::where('nasabah_id', $nasabah->id)
+                    ->where('doc_type', $docType)
+                    ->where('status', true)
+                    ->update(['status' => false]);
 
-                $logData = [
-                    'action' => 'Upload Document',
+                $document = NasabahDocument::create([
                     'nasabah_id' => $nasabah->id,
-                    'payload_before' => json_encode($nasabah->getOriginal($column)),
-                    'payload_after' => json_encode([$column => $filePath]),
-                    'created_by' => auth()->user()->id,
+                    'doc_type' => $docType,
+                    'location_url' => $filePath,
+                    'status' => true,
+                    'uploaded_by' => auth()->user()->id ?? null,
+                ]);
+
+                $previousDocument = NasabahDocument::where('nasabah_id', $nasabah->id)
+                ->where('status', false)
+                    ->where('doc_type', $docType)
+                    ->orderBy('id', 'desc')
+                    ->first();
+
+                $documentLogData = [
+                    'nasabah_id' => $nasabah->id,
+                    'document_type' => $docType,
+                    'value_before' => $previousDocument ? $previousDocument->location_url : null,
+                    'value_after' => $filePath,
+                    'created_by' => auth()->user()->id ?? null,
                 ];
+                $documentLog = NasabahDocumentLog::create($documentLogData);
+                
+                $nasabahLogData = [
+                    'action' => $previousDocument ? 'Update Document' : 'Upload Document',
+                    'nasabah_id' => $nasabah->id,
+                    'payload_before' => json_encode($previousDocument ? $previousDocument->toArray() : null),
+                    'payload_after' => json_encode($document->toArray()),
+                    'created_by' => auth()->user()->id ?? null,
+                ];
+                $nasabahLog = NasabahLog::create($nasabahLogData);
 
-                // NasabahLog::create($logData);
-
+                $nasabahLog->save();
+                $documentLog->save();
                 $nasabah->save();
 
                 DB::commit();
@@ -866,7 +954,10 @@ class NasabahController extends Controller
                 return response()->json([
                     'status' => true,
                     'message' => 'File uploaded successfully.',
-                    'data' => $nasabah,
+                    'data' => [
+                        'nasabah' => $nasabah,
+                        'document' => $document,
+                    ],
                 ]);
             } else {
                 DB::rollBack();

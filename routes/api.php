@@ -95,6 +95,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/asuransi/{id}', [NasabahController::class, 'showAsuransi']);
     Route::get('/dwasuransi/{id}', [NasabahController::class, 'DWshowAsuransi']);
     Route::post('/nasabah/upload', [NasabahController::class, 'upload']);
+    Route::get('/nasabah/{nasabah}/documents', [NasabahController::class, 'listDocuments']);
+    Route::put('/nasabah/{nasabah}/documents/{document}', [NasabahController::class, 'updateDocument']);
+    Route::delete('/nasabah/{nasabah}/documents/{document}', [NasabahController::class, 'deleteDocument']);
     Route::post('/nasabah/{id}/send-pengajuan', [NasabahController::class, 'sendPengajuan']);
 
     Route::apiResource('/nasabah', NasabahController::class);
