@@ -108,25 +108,36 @@
     <div
         class="page-container w-[210mm] h-[297mm] bg-white p-[8mm] text-[8px] text-black shadow-2xl relative overflow-hidden box-border flex flex-col leading-tight">
 
-        <div class="flex justify-between items-start border-b-[3px] border-red-600 pb-1 mb-1 shrink-0">
+        <div class="flex justify-between items-start shrink-0">
             <div class="flex items-start gap-1">
                 <div class="leading-none mt-1">
-                    <span class="text-[9px] font-normal tracking-widest lowercase text-black block">asuransi</span>
-                    <h1 class="text-xl font-black tracking-tighter text-red-600 uppercase leading-none m-0">simas jiwa
-                    </h1>
-                    <p class="text-[7.5px] font-bold mt-1">PT Asuransi Simas Jiwa</p>
-                    <p class="text-[6.5px] leading-tight max-w-[280px]">
-                        Jl. Lombok No. 73, Jakarta Pusat, 10350<br>
-                        Call Center: (021) 2854 7999 Fax: (021) 2139 3319 E-mail: CS@Simasjiwa.co.id
-                    </p>
-                </div>
-            </div>
-            <div class="text-right flex flex-col items-end pt-1">
-                <h2 class="text-[12px] font-bold uppercase tracking-tight text-black">Surat Pengajuan Asuransi Jiwa
-                    Kredit</h2>
-                <div class="mt-1 flex items-center gap-1">
-                    <span class="font-bold text-[8px]">DCIF:</span>
-                    {!! renderSpajBoxes($data->dcif ?? '', 10) !!}
+                    <div class="flex">
+
+                        <div class="flex flex-col items-center gap-1">
+                            <img src="{{ asset('images/Logo_Simas_Jiwa.png') }}" alt="Logo Simas Jiwa"
+                                class="w-[120px] h-auto mt-1">
+
+                        </div>
+
+                        <h2 class="text-[12px] font-bold tracking-tight text-black"
+                            style="margin-left: 70px; margin-top: 5px; font-size: 16px">Surat Pengajuan Asuransi Jiwa
+                            Kredit</h2>
+
+                        <div style="margin-left: 30px">
+                            <p class="text-[6.5px] font-bold mt-1">PT Asuransi Simas Jiwa</p>
+                            <p class="text-[6.5px] leading-tight max-w-[280px]">
+                                Jl. Lombok No. 73, Jakarta Pusat, 10350<br>
+                                Call Center: (021) 2854 7999 Fax: (021) 2139 3319 E-mail: CS@Simasjiwa.co.id
+                            </p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0px; margin-bottom: 15px">
+                        <div style="display: flex;align-items: flex-end;">
+                            <p>DCIF: </p>
+                            <input type="text" id="DCIF"
+                                style="width: 170px; height: 13px; margin-left: 6px; border: 1px solid rgb(169, 169, 169)" value="{{ $data->dcif ?? '' }}">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -152,7 +163,7 @@
                 </div>
 
                 <div class="flex items-center">
-                    <div class="w-[172px] shrink-0 font-bold" style="margin-left: 2px">2. Jenis Kelamin</div>
+                    <div class="w-[170px] shrink-0 font-bold" style="margin-left: 2px">2. Jenis Kelamin</div>
                     <div class="flex" style="align-items: center; gap: 6px"> :
                         <label class="flex items-center"><input type="checkbox" class="print-checkbox"
                                 {{ ($data->jenis_kelamin ?? '') == 'L' ? 'checked' : '' }}> Pria</label>
@@ -162,7 +173,7 @@
                 </div>
 
                 <div class="flex items-center">
-                    <div class="w-[172px] shrink-0 font-bold" style="margin-left: 2px">3. Tempat Tanggal Lahir</div>
+                    <div class="w-[170px] shrink-0 font-bold" style="margin-left: 2px">3. Tempat Tanggal Lahir</div>
                     <div class="flex">
                         : {!! renderSpajBoxes($data->tempat_lahir ?? '', 48) !!}
                     </div>
@@ -209,9 +220,11 @@
                         <label class="flex items-center"><input type="checkbox" class="print-checkbox"
                                 {{ ($data->status_perkawinan ?? '') == 'Kawin' ? 'checked' : '' }}> Menikah</label>
                         <label class="flex items-center"><input type="checkbox" class="print-checkbox"
-                                {{ ($data->status_perkawinan ?? '') == 'Belum Kawin' ? 'checked' : '' }}> Belum Menikah</label>
+                                {{ ($data->status_perkawinan ?? '') == 'Belum Kawin' ? 'checked' : '' }}> Belum
+                            Menikah</label>
                         <label class="flex items-center"><input type="checkbox" class="print-checkbox"
-                                {{ ($data->status_perkawinan ?? '') == 'Duda/Janda' ? 'checked' : '' }}> Janda/Duda</label>
+                                {{ ($data->status_perkawinan ?? '') == 'Duda/Janda' ? 'checked' : '' }}>
+                            Janda/Duda</label>
                     </div>
                 </div>
                 <div class="flex items-center">
@@ -356,7 +369,7 @@
                     </div>
                 </div>
                 <div class="flex items-start">
-                    <div class="w-[172px] shrink-0 font-bold"></div>
+                    <div class="w-[171px] shrink-0 font-bold"></div>
                     <div class="flex" style="align-items: center; margin-left: 9px; gap: 6px">
                         <label class="flex items-center"><input type="checkbox" class="print-checkbox"> &gt; Rp 250
                             Juta - Rp 500 Juta</label>
@@ -510,7 +523,8 @@
                 <tr>
                     <td class="border border-black p-0.5 text-center font-bold">1</td>
                     <td class="border border-black p-0.5">Apakah Anda dalam keadaan sehat? Jika "Tidak", jelaskan:
-                        <span class="border-b border-black inline-block w-40"></span></td>
+                        <span class="border-b border-black inline-block w-40"></span>
+                    </td>
                     <td class="border border-black p-0.5 text-center"><input type="checkbox" class="print-checkbox"
                             {{ ($data->sehat ?? '') == 'Ya' ? 'checked' : '' }}></td>
                     <td class="border border-black p-0.5 text-center"><input type="checkbox" class="print-checkbox"
