@@ -135,16 +135,17 @@
                         <div style="display: flex;align-items: flex-end;">
                             <p>DCIF: </p>
                             <input type="text" id="DCIF"
-                                style="width: 170px; height: 13px; margin-left: 6px; border: 1px solid rgb(169, 169, 169)" value="{{ $data->dcif ?? '' }}">
+                                style="width: 170px; height: 13px; margin-left: 6px; border: 1px solid rgb(169, 169, 169)"
+                                value="{{ $data->dcif ?? '' }}">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="border-[1px] border-black">
+        <div class="border-[1px] border-black" style="border-bottom: none;">
 
-            <div class="bg-red-600 text-white text-center text-[9px] uppercase shrink-0">
+            <div class="text-white text-center text-[9px] uppercase shrink-0" style="background-color: #e12727;">
                 I. <span style="margin-left:13px">DATA PESERTA</span>
             </div>
 
@@ -254,6 +255,7 @@
                         <label class="flex items-center"><input type="checkbox" class="print-checkbox"
                                 {{ ($data->pendidikan_terakhir ?? '') == 'S1' ? 'checked' : '' }}> S1</label>
                         <label class="flex items-center">
+                            <input type="checkbox" class="print-checkbox">
                             Lainnya:
                             <input type="text" class="border border-black"
                                 value="{{ in_array($data->pendidikan_terakhir ?? '', ['S2', 'S3']) ? $data->pendidikan_terakhir : '' }}">
@@ -351,9 +353,11 @@
                                 class="print-checkbox"> Hasil Investasi</label>
                         <label class="flex items-center" style="margin-right: 10px"><input type="checkbox"
                                 class="print-checkbox"> Warisan</label>
-                        <label class="flex items-center" style="margin-right: 10px"><input type="checkbox"
-                                class="print-checkbox"> Lainnya: <span
-                                class="inline-block w-10 border-b border-black"></span></label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="print-checkbox">
+                            Lainnya:
+                            <input type="text" class="border border-black">
+                        </label>
                     </div>
                 </div>
 
@@ -387,105 +391,120 @@
                         <label class="flex"><input type="checkbox" class="print-checkbox"> Hasil Usaha</label>
                         <label class="flex"><input type="checkbox" class="print-checkbox"> Hasil Investasi</label>
                         <label class="flex"><input type="checkbox" class="print-checkbox"> Warisan</label>
-                        <label class="flex"><input type="checkbox" class="print-checkbox"> Lainnya: <span
-                                class="inline-block w-10 border-b border-black"></span></label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="print-checkbox">
+                            Lainnya:
+                            <input type="text" class="border border-black">
+                        </label>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div
-            class="bg-red-600 text-white font-bold px-1 py-[2px] text-center text-[9px] uppercase mb-1 border border-black shrink-0">
+        <div class="text-white font-bold px-1 text-center text-[9px] uppercase shrink-0"
+            style="background-color: #e12727; border-left: 1px solid black; border-right: 1px solid black;">
             II. DATA ASURANSI
         </div>
 
-        <div class="flex flex-col gap-[3px] mb-1 shrink-0">
-            <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col shrink-0" style="border-left: 1px solid black; border-right: 1px solid black;">
+            <div class="flex items-center">
+                <div class="w-[170px] shrink-0 font-bold">1. Uang Pertanggungan</div>
+                <div class="flex" style="align-items: center;">:</div>
+                <div class="flex" style="align-items: center; margin-left: 6px">Menurun, Rp</div>
+                <div class="flex" style="align-items: center; margin-left: 6px">{!! renderSpajBoxes($data->up ?? '', 43) !!}</div>
+            </div>
+            
+            <div class="grid grid-cols-2">
                 <div class="flex items-center">
-                    <span class="w-[110px] font-bold">1. Uang Pertanggungan</span>
-                    <span>: Menurun, Rp <span
-                            class="font-bold">{{ number_format($data->up ?? 0, 0, ',', '.') }}</span></span>
+                    <span class="w-[170px] font-bold">2. Masa Asuransi</span>
+                    <div class="flex items-center">
+                        : {!! renderSpajBoxes($data->masa_asuransi_tahun ?? '', 2) !!} <span style="margin-left: 6px; margin-right: 2px">Tahun</span> dan
+                        {!! renderSpajBoxes($data->masa_asuransi_bulan ?? '', 2) !!} <span style="margin-left: 6px">Bulan</span>
+                    </div>
                 </div>
+            </div>
+            <div class="grid">
                 <div class="flex items-center">
-                    <span class="w-[110px] font-bold">4. Besar Premi</span>
-                    <span>: Rp <span
-                            class="font-bold">{{ number_format($data->premi ?? 0, 0, ',', '.') }}</span></span>
+                    <span class="w-[170px] shrink-0 font-bold">3. Periode Asuransi</span>
+                    <div class="flex items-center">
+                        : <span style="margin-left: 6px">Tanggal</span> {!! renderSpajBoxes($data->start_tgl ?? '', 2) !!}
+                        <span style="margin-left: 6px">Bulan</span> {!! renderSpajBoxes($data->start_bln ?? '', 2) !!}
+                        <span style="margin-left: 6px">Tahun</span> {!! renderSpajBoxes($data->start_thn ?? '', 4) !!}
+                        <span style="margin-left: 6px">s/d</span>
+                        <span style="margin-left: 2px">Tanggal</span> {!! renderSpajBoxes($data->end_tgl ?? '', 2) !!} 
+                        <span style="margin-left: 6px">Bulan</span> {!! renderSpajBoxes($data->end_bln ?? '', 2) !!} 
+                        <span style="margin-left: 6px">Tahun</span> {!! renderSpajBoxes($data->end_thn ?? '', 4) !!}
+                    </div>
+                </div>
+            </div>
+            <div class="grid gap-4">
+                <div class="flex items-center">
+                    <div class="w-[170px] shrink-0 font-bold">4. Besar Premi</div>
+                    <div class="flex items-center">: Rp {!! renderSpajBoxes($data->email ?? '', 47) !!}</div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid gap-4">
                 <div class="flex items-center">
-                    <span class="w-[110px] font-bold">2. Masa Asuransi</span>
-                    <div class="flex items-center gap-1">
-                        : {!! renderSpajBoxes($data->masa_asuransi_tahun ?? '', 2) !!} Tahun dan
-                        {!! renderSpajBoxes($data->masa_asuransi_bulan ?? '', 2) !!} Bulan
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-[110px] font-bold">5. Cara Pembayaran</span>
+                    <span class="w-[170px] shrink-0 font-bold">5. Cara Pembayaran</span>
                     <span>: Sekaligus</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div class="flex items-center">
-                    <span class="w-[110px] font-bold">3. Periode Asuransi</span>
-                    <div class="flex items-center gap-1">
-                        : Tanggal {!! renderSpajBoxes($data->start_tgl ?? '', 2) !!}
-                        Bulan {!! renderSpajBoxes($data->start_bln ?? '', 2) !!}
-                        Tahun {!! renderSpajBoxes($data->start_thn ?? '', 4) !!}
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <span class="w-[110px] text-center font-bold">s/d</span>
-                    <div class="flex items-center gap-1">
-                        Tanggal {!! renderSpajBoxes($data->end_tgl ?? '', 2) !!}
-                        Bulan {!! renderSpajBoxes($data->end_bln ?? '', 2) !!}
-                        Tahun {!! renderSpajBoxes($data->end_thn ?? '', 4) !!}
-                    </div>
+            <div class="flex items-center">
+                <div class="w-[170px] shrink-0 font-bold">6. Jenis Kredit</div>
+                <div class="flex">
+                    :
+                    <label class="flex items-center" style="margin-left: 3px"><input type="checkbox" class="print-checkbox"> KPR
+                        Karyawan</label>
+                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox" class="print-checkbox"> KPR
+                        Nasabah</label>
+                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox" class="print-checkbox"> KPM
+                        Karyawan</label>
+                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox" class="print-checkbox"> KPM
+                        Nasabah</label>
+                    <label class="flex items-center" style="margin-left: 6px">
+                        <input type="checkbox" class="print-checkbox">
+                        Lainnya:
+                        <input type="text" class="border border-black">
+                    </label>
                 </div>
             </div>
 
             <div class="flex items-center">
-                <div class="w-[110px] font-bold">6. Jenis Kredit</div>
-                <div class="flex gap-4">
-                    <label class="flex items-center"><input type="checkbox" class="print-checkbox"> KPR
-                        Karyawan</label>
-                    <label class="flex items-center"><input type="checkbox" class="print-checkbox"> KPR
-                        Nasabah</label>
-                    <label class="flex items-center"><input type="checkbox" class="print-checkbox"> KPM
-                        Karyawan</label>
-                    <label class="flex items-center"><input type="checkbox" class="print-checkbox"> KPM
-                        Nasabah</label>
-                    <label class="flex items-center"><input type="checkbox" class="print-checkbox"> Lainnya: <span
-                            class="inline-block w-12 border-b border-black"></span></label>
-                </div>
-            </div>
-
-            <div class="flex items-center">
-                <div class="w-[110px] font-bold">7. Uang Pertanggungan</div>
-                <div class="flex gap-4">
-                    <label class="flex items-center"><input type="checkbox" class="print-checkbox"> Tetap</label>
-                    <label class="flex items-center"><input type="checkbox" class="print-checkbox" checked>
+                <div class="w-[170px] shrink-0 font-bold">7. Uang Pertanggungan</div>
+                <div class="flex">
+                    :
+                    <label class="flex items-center" style="margin-left: 3px"><input type="checkbox" class="print-checkbox"> Tetap</label>
+                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox" class="print-checkbox" checked>
                         Menurun</label>
                 </div>
             </div>
 
             <div class="flex items-start">
-                <div class="w-[150px] font-bold">8. Yang Berhak Menerima Manfaat Asuransi:</div>
+                <div class="w-[170px] shrink-0 font-bold">8. Yang Berhak Menerima Manfaat Asuransi</div>
+                <div class="flex-1 flex flex-col gap-1">
+                    :
+                </div>
+            </div>
+            <div class="flex items-start" style="margin-left: 10px;">
                 <div class="flex-1 flex flex-col gap-1">
                     <div class="flex items-center gap-2">
                         <span class="w-[60px]">a. Kreditur</span>
-                        <span
-                            class="border-b border-black flex-1 h-3 font-bold">{{ $data->kreditur_nama ?? 'PT BANK KB BUKOPIN Tbk' }}</span>
-                        <span>Cabang</span>
-                        <span class="border-b border-black w-24 h-3">{{ $data->kreditur_cabang ?? '' }}</span>
+                        <span>:</span>
+                        <input type="text" style="width: 200px" class="border border-black" value="{{ $data->kreditur_nama ?? 'PT BANK KB BUKOPIN Tbk' }}">
+                        <span class="w-[100px]">Cabang</span>
+                        <span>:</span>
+                        <input type="text" style="width: 200px" class="border border-black" value="{{ $data->kreditur_cabang ?? '' }}">
+                        
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="w-[60px]">b. Yang Ditunjuk</span>
-                        <span class="border-b border-black flex-1 h-3"></span>
-                        <span>Hubungan dengan Peserta:</span>
-                        <span class="border-b border-black w-24 h-3"></span>
+                        <span>:</span>
+                        <input type="text" style="width: 200px" class="border border-black">
+                        <span class="w-[100px]">Hubungan dengan Peserta:</span>
+                        <span>:</span>
+                        <input type="text" style="width: 200px" class="border border-black">
                     </div>
                 </div>
             </div>
@@ -496,42 +515,35 @@
                     maupun di Perusahaan Asuransi lain? <span class="font-normal">(Jika "Ya" di Perusahaan Asuransi
                         mana, apakah dikenakan Ekstra Premi/Ditolak/Ditunda, dan alasannya) atau pernahkan Anda
                         mengajukan klaim terhadap polis Anda?</span></div>
-                <div class="flex gap-6 mt-0.5">
+                <div class="flex gap-6 mt-0.5" style="margin-left: 10px;">
                     <label class="flex items-center"><input type="checkbox" class="print-checkbox" checked>
                         Tidak</label>
                     <label class="flex items-center gap-1"><input type="checkbox" class="print-checkbox"> Ya,
-                        jelaskan: <span class="inline-block w-[300px] border-b border-black h-3"></span></label>
+                        jelaskan:</label>
+                        <input type="text" style="width: 200px" class="border border-black">
                 </div>
             </div>
         </div>
 
         <div
-            class="bg-red-600 text-white font-bold px-1 py-[2px] text-center text-[9px] uppercase mb-1 border border-black shrink-0">
+            class="bg-red-600 text-white font-bold px-1 py-[2px] text-center text-[9px] uppercase shrink-0" style="border-left: 1px solid black; border-right: 1px solid black;">
             III. DATA KESEHATAN
         </div>
 
-        <table class="w-full border-collapse border border-black text-[7.5px] leading-tight mb-1 shrink-0">
-            <thead>
-                <tr class="font-bold text-center">
-                    <th class="border border-black p-0.5 w-[15px]">No</th>
-                    <th class="border border-black p-0.5 text-left">Pertanyaan Medis / Kesehatan</th>
-                    <th class="border border-black p-0.5 w-[30px]">Ya</th>
-                    <th class="border border-black p-0.5 w-[30px]">Tidak</th>
-                </tr>
-            </thead>
+        <table class="w-full border-collapse border border-black text-[7.5px] leading-tight shrink-0">
             <tbody>
                 <tr>
-                    <td class="border border-black p-0.5 text-center font-bold">1</td>
+                    <td class="border border-black p-0.5 text-center font-bold" style="width: 15px">1.</td>
                     <td class="border border-black p-0.5">Apakah Anda dalam keadaan sehat? Jika "Tidak", jelaskan:
                         <span class="border-b border-black inline-block w-40"></span>
                     </td>
-                    <td class="border border-black p-0.5 text-center"><input type="checkbox" class="print-checkbox"
-                            {{ ($data->sehat ?? '') == 'Ya' ? 'checked' : '' }}></td>
-                    <td class="border border-black p-0.5 text-center"><input type="checkbox" class="print-checkbox"
-                            {{ ($data->sehat ?? '') == 'Tidak' ? 'checked' : '' }}></td>
+                    <td class="border border-black p-0.5" style="width: 90px"><input type="checkbox" class="print-checkbox"
+                            {{ ($data->sehat ?? '') == 'Ya' ? 'checked' : '' }}> Ya</td>
+                    <td class="border border-black p-0.5" style="width: 90px"><input type="checkbox" class="print-checkbox"
+                            {{ ($data->sehat ?? '') == 'Tidak' ? 'checked' : '' }}> Tidak</td>
                 </tr>
                 <tr>
-                    <td class="border border-black p-0.5 text-center font-bold align-top">2</td>
+                    <td class="border border-black p-0.5 text-center font-bold align-top">2.</td>
                     <td class="border border-black p-0.5">
                         a. Berat Badan: <span
                             class="font-bold border-b border-black px-1">{{ $data->bb ?? '   ' }}</span> Kg &nbsp;
@@ -541,13 +553,13 @@
                         penurunan/kenaikan dan penyebabnya: <span
                             class="border-b border-black inline-block w-32"></span>
                     </td>
-                    <td class="border border-black p-0.5 text-center align-bottom"><input type="checkbox"
-                            class="print-checkbox"></td>
-                    <td class="border border-black p-0.5 text-center align-bottom"><input type="checkbox"
-                            class="print-checkbox" checked></td>
+                    <td class="border border-black p-0.5" style="width: 90px"><input type="checkbox"
+                            class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5" style="width: 90px"><input type="checkbox"
+                            class="print-checkbox" checked> Tidak</td>
                 </tr>
                 <tr>
-                    <td class="border border-black p-0.5 text-center font-bold align-top">3</td>
+                    <td class="border border-black p-0.5 text-center font-bold align-top">3.</td>
                     <td class="border border-black p-0.5 text-justify">
                         Apakah Anda pernah menderita salah satu dari penyakit, gejala penyakit / kelainan atau melakukan
                         investigasi atau pemeriksaan medis, konsultasi, perawatan medis, atau menjalani pembedahan atau
@@ -562,13 +574,13 @@
                         penyakit pembuluh darah limfe, penyakit autoimmune, HIV/AIDS? Jika "YA", jelaskan nama penyakit,
                         kapan, obat yang diberikan, nama dan alamat dokter (serta lampirkan fotokopi hasil pemeriksaan).
                     </td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox"></td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox" checked></td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox" checked> Tidak</td>
                 </tr>
                 <tr>
-                    <td class="border border-black p-0.5 text-center font-bold align-top">4</td>
+                    <td class="border border-black p-0.5 text-center font-bold align-top">4.</td>
                     <td class="border border-black p-0.5 text-justify">
                         Apakah Anda sedang atau pernah menjalani konsultasi/rawat inap/operasi/biopsi/pemeriksaan
                         laboratorium/rontgen/EKG/Treadmill Echocardiography/USG/CT Scan/MRI/Papsmear/Mamografi atau
@@ -576,32 +588,30 @@
                         dilakukan, alasan dilakukan, pemeriksaan atau pengobatan tersebut (serta lampirkan fotokopi
                         hasil pemeriksaan).
                     </td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox"></td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox" checked></td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox" checked> Tidak</td>
                 </tr>
                 <tr>
-                    <td class="border border-black p-0.5 text-center font-bold align-top">5</td>
+                    <td class="border border-black p-0.5 text-center font-bold align-top">5.</td>
                     <td class="border border-black p-0.5 text-justify">
                         Apakah Anda memiliki aktifitas atau hobi yang berbahaya seperti surfing, berlayar, menyelam,
                         hiking, mendaki gunung, balapan, reli, motor cross, parasut, para layang dan kegiatan atau hobi
                         yang berbahaya atau ekstrem lainnya? Apabila ada, sebutkan dan jelaskan seberapa sering kegiatan
                         tersebut?
                     </td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox"></td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox" checked></td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox" checked> Tidak</td>
                 </tr>
                 <tr>
-                    <td class="border border-black p-0.5 text-center font-bold align-top">6</td>
+                    <td class="border border-black p-0.5 text-center font-bold align-top">6.</td>
                     <td class="border border-black p-0.5 text-justify">
                         Apakah Anda pernah atau memiliki kebiasaan mengkonsumsi:<br>
                         a. Merokok: <span class="border-b border-black w-8 inline-block"></span> batang/hari selama
-                        <span class="border-b border-black w-8 inline-block"></span> tahun. &nbsp; ( Ya <input
-                            type="checkbox" class="print-checkbox ml-1"> / Tidak <input type="checkbox"
-                            class="print-checkbox ml-1" checked> )<br>
+                        <span class="border-b border-black w-8 inline-block"></span> tahun.<br>
                         b. Alcohol: <span class="border-b border-black w-8 inline-block"></span> gelas/minggu selama
                         <span class="border-b border-black w-8 inline-block"></span> tahun.<br>
                         c. Narkotika atau zat adiktif lainnya: jenis narkoba <span
@@ -609,28 +619,32 @@
                             class="border-b border-black w-6 inline-block"></span> tahun, dan terakhir memakai adalah
                         <span class="border-b border-black w-16 inline-block"></span>
                     </td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox"></td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox" checked></td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox" checked> Tidak</td>
                 </tr>
                 <tr>
-                    <td class="border border-black p-0.5 text-center font-bold align-top">7</td>
+                    <td class="border border-black p-0.5 text-center font-bold align-top">7.</td>
                     <td class="border border-black p-0.5 text-justify">
                         Khusus untuk Wanita: Apakah Anda memiliki abnormalitas pada payudara, menstruasi, uterus, atau
                         riwayat persalinan seperti keguguran? Apakah Anda saat ini sedang hamil? Apabila "Iya" sudah
                         berapa minggu usia kehamilan Anda?
                     </td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox"></td>
-                    <td class="border border-black p-0.5 text-center align-top"><input type="checkbox"
-                            class="print-checkbox" checked></td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox"
+                            class="print-checkbox" checked> Tidak</td>
+                </tr>
+                <tr>
+                    <td class="border border-black p-0.5 text-justify" colspan="4" style="border-bottom: 0">Apabila dari data kesehatan Saya di atas Penanggung memandang perlu untuk dilakukan pemeriksaan kesehatan, saya bersedia untuk melakukan pemeriksaan kesehatan tersebut. Apabila berdasarkan hasil
+pemeriksaan kesehatan tersebut Penanggung memandang perlu dikenakannya Ekstra Premi, maka saya bersedia untuk membayar Ekstra Premi yang ditentukan oleh Penanggung.</td>
                 </tr>
             </tbody>
         </table>
 
         <div
-            class="bg-red-600 text-white font-bold px-1 py-[2px] text-[9px] uppercase mb-0.5 border border-black shrink-0">
+            class="bg-red-600 text-white font-bold px-1 text-center text-[9px] uppercase shrink-0" style="border-left: 1px solid black; border-right: 1px solid black;">
             IV. PERNYATAAN DAN PERSETUJUAN
         </div>
 
