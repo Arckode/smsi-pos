@@ -75,7 +75,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            /* padding: 20px; */
         }
 
         /* Kotak Checkbox Kustom bergaya Cetak Form */
@@ -105,8 +105,9 @@
 
 <body>
 
-    <div
-        class="page-container w-[210mm] h-[297mm] bg-white p-[8mm] text-[8px] text-black shadow-2xl relative overflow-hidden box-border flex flex-col leading-tight">
+    {{-- <div class="page-container w-[210mm] h-[297mm] bg-white p-[8mm] text-[8px] text-black shadow-2xl relative overflow-hidden box-border flex flex-col leading-tight" --}}
+    <div class="page-container w-[210mm] bg-white p-[8mm] text-[8px] text-black shadow-2xl relative overflow-hidden box-border flex flex-col leading-tight"
+        style="padding-top: 0; padding-bottom: 0;">
 
         <div class="flex justify-between items-start shrink-0">
             <div class="flex items-start gap-1">
@@ -413,7 +414,7 @@
                 <div class="flex" style="align-items: center; margin-left: 6px">Menurun, Rp</div>
                 <div class="flex" style="align-items: center; margin-left: 6px">{!! renderSpajBoxes($data->up ?? '', 43) !!}</div>
             </div>
-            
+
             <div class="grid grid-cols-2">
                 <div class="flex items-center">
                     <span class="w-[170px] font-bold">2. Masa Asuransi</span>
@@ -431,8 +432,8 @@
                         <span style="margin-left: 6px">Bulan</span> {!! renderSpajBoxes($data->start_bln ?? '', 2) !!}
                         <span style="margin-left: 6px">Tahun</span> {!! renderSpajBoxes($data->start_thn ?? '', 4) !!}
                         <span style="margin-left: 6px">s/d</span>
-                        <span style="margin-left: 2px">Tanggal</span> {!! renderSpajBoxes($data->end_tgl ?? '', 2) !!} 
-                        <span style="margin-left: 6px">Bulan</span> {!! renderSpajBoxes($data->end_bln ?? '', 2) !!} 
+                        <span style="margin-left: 2px">Tanggal</span> {!! renderSpajBoxes($data->end_tgl ?? '', 2) !!}
+                        <span style="margin-left: 6px">Bulan</span> {!! renderSpajBoxes($data->end_bln ?? '', 2) !!}
                         <span style="margin-left: 6px">Tahun</span> {!! renderSpajBoxes($data->end_thn ?? '', 4) !!}
                     </div>
                 </div>
@@ -455,13 +456,17 @@
                 <div class="w-[170px] shrink-0 font-bold">6. Jenis Kredit</div>
                 <div class="flex">
                     :
-                    <label class="flex items-center" style="margin-left: 3px"><input type="checkbox" class="print-checkbox"> KPR
+                    <label class="flex items-center" style="margin-left: 3px"><input type="checkbox"
+                            class="print-checkbox"> KPR
                         Karyawan</label>
-                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox" class="print-checkbox"> KPR
+                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox"
+                            class="print-checkbox"> KPR
                         Nasabah</label>
-                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox" class="print-checkbox"> KPM
+                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox"
+                            class="print-checkbox"> KPM
                         Karyawan</label>
-                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox" class="print-checkbox"> KPM
+                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox"
+                            class="print-checkbox"> KPM
                         Nasabah</label>
                     <label class="flex items-center" style="margin-left: 6px">
                         <input type="checkbox" class="print-checkbox">
@@ -475,8 +480,10 @@
                 <div class="w-[170px] shrink-0 font-bold">7. Uang Pertanggungan</div>
                 <div class="flex">
                     :
-                    <label class="flex items-center" style="margin-left: 3px"><input type="checkbox" class="print-checkbox"> Tetap</label>
-                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox" class="print-checkbox" checked>
+                    <label class="flex items-center" style="margin-left: 3px"><input type="checkbox"
+                            class="print-checkbox"> Tetap</label>
+                    <label class="flex items-center" style="margin-left: 6px"><input type="checkbox"
+                            class="print-checkbox" checked>
                         Menurun</label>
                 </div>
             </div>
@@ -492,11 +499,13 @@
                     <div class="flex items-center gap-2">
                         <span class="w-[60px]">a. Kreditur</span>
                         <span>:</span>
-                        <input type="text" style="width: 200px" class="border border-black" value="{{ $data->kreditur_nama ?? 'PT BANK KB BUKOPIN Tbk' }}">
+                        <input type="text" style="width: 200px" class="border border-black"
+                            value="{{ $data->kreditur_nama ?? 'PT BANK KB BUKOPIN Tbk' }}">
                         <span class="w-[100px]">Cabang</span>
                         <span>:</span>
-                        <input type="text" style="width: 200px" class="border border-black" value="{{ $data->kreditur_cabang ?? '' }}">
-                        
+                        <input type="text" style="width: 200px" class="border border-black"
+                            value="{{ $data->kreditur_cabang ?? '' }}">
+
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="w-[60px]">b. Yang Ditunjuk</span>
@@ -520,13 +529,13 @@
                         Tidak</label>
                     <label class="flex items-center gap-1"><input type="checkbox" class="print-checkbox"> Ya,
                         jelaskan:</label>
-                        <input type="text" style="width: 200px" class="border border-black">
+                    <input type="text" style="width: 200px" class="border border-black">
                 </div>
             </div>
         </div>
 
-        <div
-            class="bg-red-600 text-white font-bold px-1 py-[2px] text-center text-[9px] uppercase shrink-0" style="border-left: 1px solid black; border-right: 1px solid black;">
+        <div class="bg-red-600 text-white font-bold px-1 py-[2px] text-center text-[9px] uppercase shrink-0"
+            style="border-left: 1px solid black; border-right: 1px solid black;">
             III. DATA KESEHATAN
         </div>
 
@@ -537,10 +546,10 @@
                     <td class="border border-black p-0.5">Apakah Anda dalam keadaan sehat? Jika "Tidak", jelaskan:
                         <span class="border-b border-black inline-block w-40"></span>
                     </td>
-                    <td class="border border-black p-0.5" style="width: 90px"><input type="checkbox" class="print-checkbox"
-                            {{ ($data->sehat ?? '') == 'Ya' ? 'checked' : '' }}> Ya</td>
-                    <td class="border border-black p-0.5" style="width: 90px"><input type="checkbox" class="print-checkbox"
-                            {{ ($data->sehat ?? '') == 'Tidak' ? 'checked' : '' }}> Tidak</td>
+                    <td class="border border-black p-0.5" style="width: 60px"><input type="checkbox"
+                            class="print-checkbox" {{ ($data->sehat ?? '') == 'Ya' ? 'checked' : '' }}> Ya</td>
+                    <td class="border border-black p-0.5" style="width: 60px"><input type="checkbox"
+                            class="print-checkbox" {{ ($data->sehat ?? '') == 'Tidak' ? 'checked' : '' }}> Tidak</td>
                 </tr>
                 <tr>
                     <td class="border border-black p-0.5 text-center font-bold align-top">2.</td>
@@ -553,10 +562,9 @@
                         penurunan/kenaikan dan penyebabnya: <span
                             class="border-b border-black inline-block w-32"></span>
                     </td>
-                    <td class="border border-black p-0.5" style="width: 90px"><input type="checkbox"
-                            class="print-checkbox"> Ya</td>
-                    <td class="border border-black p-0.5" style="width: 90px"><input type="checkbox"
-                            class="print-checkbox" checked> Tidak</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox" checked>
+                        Tidak</td>
                 </tr>
                 <tr>
                     <td class="border border-black p-0.5 text-center font-bold align-top">3.</td>
@@ -574,10 +582,9 @@
                         penyakit pembuluh darah limfe, penyakit autoimmune, HIV/AIDS? Jika "YA", jelaskan nama penyakit,
                         kapan, obat yang diberikan, nama dan alamat dokter (serta lampirkan fotokopi hasil pemeriksaan).
                     </td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox"> Ya</td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox" checked> Tidak</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox" checked>
+                        Tidak</td>
                 </tr>
                 <tr>
                     <td class="border border-black p-0.5 text-center font-bold align-top">4.</td>
@@ -588,10 +595,9 @@
                         dilakukan, alasan dilakukan, pemeriksaan atau pengobatan tersebut (serta lampirkan fotokopi
                         hasil pemeriksaan).
                     </td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox"> Ya</td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox" checked> Tidak</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox" checked>
+                        Tidak</td>
                 </tr>
                 <tr>
                     <td class="border border-black p-0.5 text-center font-bold align-top">5.</td>
@@ -601,10 +607,9 @@
                         yang berbahaya atau ekstrem lainnya? Apabila ada, sebutkan dan jelaskan seberapa sering kegiatan
                         tersebut?
                     </td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox"> Ya</td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox" checked> Tidak</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox" checked>
+                        Tidak</td>
                 </tr>
                 <tr>
                     <td class="border border-black p-0.5 text-center font-bold align-top">6.</td>
@@ -619,10 +624,9 @@
                             class="border-b border-black w-6 inline-block"></span> tahun, dan terakhir memakai adalah
                         <span class="border-b border-black w-16 inline-block"></span>
                     </td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox"> Ya</td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox" checked> Tidak</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox" checked>
+                        Tidak</td>
                 </tr>
                 <tr>
                     <td class="border border-black p-0.5 text-center font-bold align-top">7.</td>
@@ -631,54 +635,80 @@
                         riwayat persalinan seperti keguguran? Apakah Anda saat ini sedang hamil? Apabila "Iya" sudah
                         berapa minggu usia kehamilan Anda?
                     </td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox"> Ya</td>
-                    <td class="border border-black p-0.5"><input type="checkbox"
-                            class="print-checkbox" checked> Tidak</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox"> Ya</td>
+                    <td class="border border-black p-0.5"><input type="checkbox" class="print-checkbox" checked>
+                        Tidak</td>
                 </tr>
                 <tr>
-                    <td class="border border-black p-0.5 text-justify" colspan="4" style="border-bottom: 0">Apabila dari data kesehatan Saya di atas Penanggung memandang perlu untuk dilakukan pemeriksaan kesehatan, saya bersedia untuk melakukan pemeriksaan kesehatan tersebut. Apabila berdasarkan hasil
-pemeriksaan kesehatan tersebut Penanggung memandang perlu dikenakannya Ekstra Premi, maka saya bersedia untuk membayar Ekstra Premi yang ditentukan oleh Penanggung.</td>
+                    <td class="border border-black p-0.5 text-justify" colspan="4" style="border-bottom: 0">
+                        Apabila dari data kesehatan Saya di atas Penanggung memandang perlu untuk dilakukan pemeriksaan
+                        kesehatan, saya bersedia untuk melakukan pemeriksaan kesehatan tersebut. Apabila berdasarkan
+                        hasil
+                        pemeriksaan kesehatan tersebut Penanggung memandang perlu dikenakannya Ekstra Premi, maka saya
+                        bersedia untuk membayar Ekstra Premi yang ditentukan oleh Penanggung.</td>
                 </tr>
             </tbody>
         </table>
 
-        <div
-            class="bg-red-600 text-white font-bold px-1 text-center text-[9px] uppercase shrink-0" style="border-left: 1px solid black; border-right: 1px solid black;">
+        <div class="bg-red-600 text-white font-bold px-1 text-center text-[9px] uppercase shrink-0"
+            style="border-left: 1px solid black; border-right: 1px solid black;">
             IV. PERNYATAAN DAN PERSETUJUAN
         </div>
 
-        <div class="text-[7.2px] text-justify leading-tight flex-1">
-            1. Saya/Kami memahami bahwa Saya/Kami memiliki kewajiban untuk bertindak dengan itikad terbaik (utmost good
-            faith) dalam setiap pengajuan/permohonan asuransi. Oleh karena itu, Saya/Kami memahami bahwa Saya/Kami wajib
-            mengungkapkan secara benar dan lengkap semua fakta material, yaitu data, informasi, jawaban, keterangan,
-            keadaan, pernyataan dan fakta ("Informasi Konsumen") yang dapat mempengaruhi pertimbangan PT Asuransi Simas
-            Jiwa dalam menerima atau menolak pengajuan tersebut dan/atau menetapkan jumlah premi.<br>
-            2. Saya/Kami menyatakan dan menjamin bahwa semua Informasi Konsumen yang Saya/Kami berikan dalam SPAJ ini,
-            serta setiap formulir dan dokumen lainnya yang disyaratkan oleh PT Asuransi Simas Jiwa ("Dokumen
-            Permohonan") sebagai bagian dari pengajuan/permohonan asuransi adalah lengkap, benar, akurat, terkini,
-            sesuai dengan kenyataan sebenarnya dan konsisten antara satu dengan lainnya, dan tidak ada Informasi
-            Konsumen Saya/Kami sembunyikan, dengan menandatangani SPAJ ini, Saya SEPAKAT dan MENYETUJUI jika PT Asuransi
-            Simas jiwa melakukan hal-hal berikut:
-            a. Menolak setiap klaim Manfaat Asuransi yang diajukan dan tidak membayarkan seluruh atau sebagian Manfaat
-            Asuransi;
-            b. Membatalkan Polis dengan pengembalian Premi yang telah dibayarkan setelah dikurangi dengan biaya internal
-            pemeriksaan kesehatan, Manfaat asuransi yang telah dibayarkan dan biaya-biaya yang timbul pada saat
-            penerbitan Polis (jika ada);
-            c. Mengakhiri Polis tanpa kewajiban untuk mengembalikan premi dan/atau Biaya Asuransi, apabila terdapat
-            unsur penipuan, pemalsuan, atau kesalahan yang disengaja dalam pemberian setiap Informasi Konsumen.
+        <div class="text-[7.2px]" style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+            <ol start="1" style="list-style-type: decimal; padding-left: 10px; margin: 0">
+                <li>Saya/Kami memahami bahwa Saya/Kami memiliki kewajiban untuk bertindak dengan itikad terbaik
+                    (utmost good
+                    faith) dalam setiap pengajuan/permohonan asuransi. Oleh karena itu, Saya/Kami memahami bahwa
+                    Saya/Kami wajib
+                    mengungkapkan secara benar dan lengkap semua fakta material, yaitu data, informasi, jawaban,
+                    keterangan,
+                    keadaan, pernyataan dan fakta ("Informasi Konsumen") yang dapat mempengaruhi pertimbangan PT
+                    Asuransi Simas
+                    Jiwa dalam menerima atau menolak pengajuan tersebut dan/atau menetapkan jumlah premi.</li>
+                <li>Saya/Kami menyatakan dan menjamin bahwa semua Informasi Konsumen yang Saya/Kami berikan dalam
+                    SPAJ ini,
+                    serta setiap formulir dan dokumen lainnya yang disyaratkan oleh PT Asuransi Simas Jiwa ("Dokumen
+                    Permohonan") sebagai bagian dari pengajuan/permohonan asuransi adalah lengkap, benar, akurat,
+                    terkini,
+                    sesuai dengan kenyataan sebenarnya dan konsisten antara satu dengan lainnya, dan tidak ada Informasi
+                    Konsumen Saya/Kami sembunyikan, dengan menandatangani SPAJ ini, Saya SEPAKAT dan MENYETUJUI jika PT
+                    Asuransi
+                    Simas jiwa melakukan hal-hal berikut:
+                    <ol start="a" style="list-style-type: lower-alpha; margin-left: 10px">
+                        <li>
+                            Menolak setiap klaim Manfaat Asuransi yang diajukan dan tidak membayarkan seluruh atau
+                            sebagian Manfaat
+                            Asuransi;
+                        </li>
+                        <li>
+                            Membatalkan Polis dengan pengembalian Premi yang telah dibayarkan setelah dikurangi
+                            dengan biaya internal
+                            pemeriksaan kesehatan, Manfaat asuransi yang telah dibayarkan dan biaya-biaya yang timbul
+                            pada saat
+                            penerbitan Polis (jika ada);
+                        </li>
+                        <li>
+                            Mengakhiri Polis tanpa kewajiban untuk mengembalikan premi dan/atau Biaya Asuransi,
+                            apabila terdapat
+                            unsur penipuan, pemalsuan, atau kesalahan yang disengaja dalam pemberian setiap Informasi
+                            Konsumen.
+                        </li>
+                    </ol>
+                </li>
+            </ol>
         </div>
 
-        <div class="absolute bottom-1 right-2 text-[6.5px] text-black">
+        <div class="text-[6.5px] text-black">
             <span>SPAJ/AJK/KB BUKOPIN/06/2025/Ver-1</span>
         </div>
 
     </div>
 
-    <div class="no-print mt-4">
+    {{-- <div class="no-print mt-4">
         <button onclick="window.print()"
             class="bg-red-600 text-white font-bold px-6 py-2 rounded shadow text-sm">Cetak A4 SPAJ</button>
-    </div>
+    </div> --}}
 
 </body>
 
