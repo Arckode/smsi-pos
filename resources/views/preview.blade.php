@@ -47,18 +47,19 @@
         
         /* Tables */
         table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 10px; }
-        td { border: 1px solid #000; padding: 3px 5px; vertical-align: top; }
-        .bg-yellow { background-color: #FFC000; font-weight: bold; font-size: 8.5px; }
+        td { border: 0.8px solid #000; padding: 3px 5px; vertical-align: top; }
+        .bg-yellow { background-color: #FFC000; font-weight: bold; font-size: 11px; }
         
         /* Column Widths */
-        .label { width: 18%; font-weight: bold; }
-        .value { width: 32%; }
+        .label { width: 18%; font-weight: bold; font-size: 10px; }
+        .value { width: 32%; font-weight: bold; font-size: 9px; }
         
         /* Checkboxes & Form Elements */
         .cb-container { display: flex; flex-wrap: wrap; gap: 2px; }
         .cb-item { display: flex; align-items: center; width: 45%; margin-bottom: 2px; }
         .cb-item.full { width: 100%; }
-        .box { width: 7px; height: 7px; border: 1px solid #000; margin-right: 4px; display: inline-block; flex-shrink: 0; }
+        .box { margin-right: 4px; display: inline-block; flex-shrink: 0; }
+        /* .box { width: 7px; height: 7px; border: 1px solid #000; margin-right: 4px; display: inline-block; flex-shrink: 0; } */
         
         /* Specific Page 2 Styles */
         .text-red-italic { color: #d00; font-style: italic; font-size: 8.5px; text-align: justify; line-height: 1.4; margin-top: 15px; }
@@ -79,9 +80,9 @@
     <div class="page">
         <div class="header">
             <div class="logo-area">
-                <span class="logo-star">✳</span> <span class="logo-main">KB Bank</span>
-                <span class="logo-sub">PT Bank KB Indonesia Tbk</span>
-                <div class="address-text">
+                <img src="{{ asset('images/Logo_Kbbank.png') }}" alt="Logo KB Bank" style="width: 160px ">
+                <div class="address-text" style="margin-top: 0px; margin-left: 50px">
+                    PT Bank KB Indonesia Tbk <br>
                     KB Bank Head Office, Jl. MT. Haryono Kav. 50-51 Jakarta Selatan - Indonesia 12770<br>
                     P. (+62)21 7988266, 7989837<br>
                     www.kbbank.co.id
@@ -89,7 +90,7 @@
             </div>
         </div>
 
-        <div class="form-title" style="border: none; font-size: 14px; margin-bottom: 15px">FORMULIR APLIKASI KREDIT CORPORATE BENEFIT PROGRAM<br>PT. BANK KB INDONESIA, TBK.</div>
+        <div class="form-title" style="border: none; font-size: 14px; margin-bottom: 5px">FORMULIR APLIKASI KREDIT CORPORATE BENEFIT PROGRAM<br>PT. BANK KB INDONESIA, TBK.</div>
         <table style="margin-bottom: 0;">
             <tr>
                 <td colspan="2" class="bg-yellow">A. DATA PEMOHON</td>
@@ -186,7 +187,7 @@
                         <div class="cb-item full"><input type="checkbox" class="box">Duda/Janda</div>
                     </div>
                 </td>
-                <td class="label">Penghasilan Bulanan<br>(Take Home Pay)</td><td class="value"><strong>Rp</strong></td>
+                <td class="label">Penghasilan Bulanan<br>(Take Home Pay)</td><td class="value">Rp</td>
             </tr>
             <tr>
                 <td colspan="4" class="bg-yellow">C. DATA PASANGAN PEMOHON</td>
@@ -237,7 +238,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="label">Plafond Kredit</td><td class="value"><strong>Rp</strong></td>
+                <td class="label">Plafond Kredit</td><td class="value">Rp</td>
                 <td class="label">Nomor Rekening</td><td class="value"></td>
             </tr>
             <tr>
@@ -290,9 +291,9 @@
     <div class="page page-break">
         <div class="header">
             <div class="logo-area">
-                <span class="logo-star">✳</span> <span class="logo-main">KB Bank</span>
-                <span class="logo-sub">PT Bank KB Indonesia Tbk</span>
-                <div class="address-text">
+                <img src="{{ asset('images/Logo_Kbbank.png') }}" alt="Logo KB Bank" style="width: 160px ">
+                <div class="address-text" style="margin-top: 0px; margin-left: 50px">
+                    PT Bank KB Indonesia Tbk <br>
                     KB Bank Head Office, Jl. MT. Haryono Kav. 50-51 Jakarta Selatan - Indonesia 12770<br>
                     P. (+62)21 7988266, 7989837<br>
                     www.kbbank.co.id
@@ -315,27 +316,27 @@
         <div class="section-title">G. DOKUMEN PENDUKUNG</div>
         <table>
             <tr>
-                <td style="width: 25%;"><input type="checkbox" class="box">KTP Pemohon</td>
+                <td style="width: 25%; font-weight: bold"><input type="checkbox" class="box">KTP Pemohon</td>
                 <td style="width: 25%;" class="mandatory-text">Mandatori</td>
-                <td style="width: 25%;"><input type="checkbox" class="box">Formulir Asuransi</td>
-                <td style="width: 25%;" class="mandatory-text">Mandatori</td>
+                <td style="width: 30%; font-weight: bold"><input type="checkbox" class="box">Formulir Asuransi</td>
+                <td style="width: 20%;" class="mandatory-text">Mandatori</td>
             </tr>
             <tr>
-                <td><input type="checkbox" class="box">NPWP Pemohon</td>
+                <td style="font-weight: bold"><input type="checkbox" class="box">NPWP Pemohon</td>
                 <td class="mandatory-text">Mandatori</td>
-                <td><input type="checkbox" class="box">Foto ID Card Karyawan</td>
-                <td class="mandatory-text">Mandatori</td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" class="box">Kartu Keluarga</td>
-                <td class="mandatory-text">Mandatori</td>
-                <td><input type="checkbox" class="box">Foto Selfie Karyawan</td>
+                <td style="font-weight: bold"><input type="checkbox" class="box">Foto ID Card Karyawan</td>
                 <td class="mandatory-text">Mandatori</td>
             </tr>
             <tr>
-                <td><input type="checkbox" class="box">KTP Pasangan</td>
+                <td style="font-weight: bold"><input type="checkbox" class="box">Kartu Keluarga</td>
+                <td class="mandatory-text">Mandatori</td>
+                <td style="font-weight: bold"><input type="checkbox" class="box">Foto Selfie Karyawan</td>
+                <td class="mandatory-text">Mandatori</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold"><input type="checkbox" class="box">KTP Pasangan</td>
                 <td class="sub-text">Apabila sudah menikah / bila sudah bercerai lampirkan Surat Cerai</td>
-                <td><input type="checkbox" class="box">Surat Pernyataan & Kuasa Potong Gaji</td>
+                <td style="font-weight: bold"><input type="checkbox" class="box">Surat Pernyataan & Kuasa Potong Gaji</td>
                 <td class="mandatory-text">Mandatori</td>
             </tr>
         </table>
