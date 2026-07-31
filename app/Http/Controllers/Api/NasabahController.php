@@ -934,7 +934,7 @@ class NasabahController extends Controller
                     'value_after' => $filePath,
                     'created_by' => auth()->user()->id ?? null,
                 ];
-                $documentLog = NasabahDocumentLog::create($documentLogData);
+                // $documentLog = NasabahDocumentLog::create($documentLogData);
                 
                 $nasabahLogData = [
                     'action' => $previousDocument ? 'Update Document' : 'Upload Document',
@@ -946,7 +946,7 @@ class NasabahController extends Controller
                 $nasabahLog = NasabahLog::create($nasabahLogData);
 
                 $nasabahLog->save();
-                $documentLog->save();
+                // $documentLog->save();
                 $nasabah->save();
 
                 DB::commit();

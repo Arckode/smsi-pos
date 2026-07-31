@@ -1,10 +1,10 @@
 {
   "_router-!~{005}~.js": {
-    "file": "assets/router-DlsyB92h.css",
+    "file": "assets/router-ByotX_mw.css",
     "src": "_router-!~{005}~.js"
   },
-  "_router-CGlkpwI1.js": {
-    "file": "assets/router-CGlkpwI1.js",
+  "_router-CQszH4fn.js": {
+    "file": "assets/router-CQszH4fn.js",
     "name": "router",
     "dynamicImports": [
       "node_modules/dompurify/dist/purify.es.js",
@@ -12,7 +12,7 @@
       "resources/js/src/Auth.vue"
     ],
     "css": [
-      "assets/router-DlsyB92h.css"
+      "assets/router-ByotX_mw.css"
     ]
   },
   "_sweetalert2.min-!~{006}~.js": {
@@ -27,12 +27,12 @@
     ]
   },
   "node_modules/canvg/lib/index.es.js": {
-    "file": "assets/index.es-oUSbXt4U.js",
+    "file": "assets/index.es-C6LuWhYQ.js",
     "name": "index.es",
     "src": "node_modules/canvg/lib/index.es.js",
     "isDynamicEntry": true,
     "imports": [
-      "_router-CGlkpwI1.js"
+      "_router-CQszH4fn.js"
     ]
   },
   "node_modules/dompurify/dist/purify.es.js": {
@@ -48,45 +48,48 @@
     "isEntry": true
   },
   "resources/js/admin.js": {
-    "file": "assets/admin-BUQl8XD2.js",
+    "file": "assets/admin-BtuSESFA.js",
     "name": "admin",
     "src": "resources/js/admin.js",
     "isEntry": true,
     "imports": [
-      "_router-CGlkpwI1.js",
+      "_router-CQszH4fn.js",
       "_sweetalert2.min-B5fr_zzt.js"
     ],
     "css": [
-      "assets/admin-uvbS2UUC.css"
+      "assets/admin-BVY1qByo.css"
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-Xh-_f2_f.js",
+    "file": "assets/app-BugFypkK.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_router-CGlkpwI1.js"
+      "_router-CQszH4fn.js"
+    ],
+    "css": [
+      "assets/app-BoLcRJnV.css"
     ]
   },
   "resources/js/auth.js": {
-    "file": "assets/auth-WpR5Hayg.js",
+    "file": "assets/auth-BLupR2ti.js",
     "name": "auth",
     "src": "resources/js/auth.js",
     "isEntry": true,
     "imports": [
-      "_router-CGlkpwI1.js",
+      "_router-CQszH4fn.js",
       "_sweetalert2.min-B5fr_zzt.js",
       "resources/js/src/Auth.vue"
     ]
   },
   "resources/js/src/Auth.vue": {
-    "file": "assets/Auth-CxFlmnmq.js",
+    "file": "assets/Auth-BVO3RW71.js",
     "name": "Auth",
     "src": "resources/js/src/Auth.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_router-CGlkpwI1.js"
+      "_router-CQszH4fn.js"
     ]
   }
 }
